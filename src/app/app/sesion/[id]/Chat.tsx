@@ -12,14 +12,17 @@ type Msg = {
 export default function Chat({
   sessionId,
   initialMessages,
+  initialReady = false,
 }: {
   sessionId: string;
   initialMessages: Msg[];
+  initialReady?: boolean;
 }) {
   const [messages, setMessages] = useState<Msg[]>(initialMessages);
   const [text, setText] = useState("");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [ready, setReady] = useState(initialReady);
 
   async function send() {
     const value = text.trim();
@@ -40,6 +43,7 @@ export default function Chat({
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Error");
       setMessages((m) => [...m, ...data.messages]);
+      setReady(Boolean(data.ready));
     } catch (e) {
       setError(e instanceof Error ? e.message : "Algo salió mal");
     } finally {
@@ -79,6 +83,21 @@ export default function Chat({
         <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2 mt-2">
           {error}
         </p>
+      )}
+
+      {ready && (
+        <div className="mt-3 rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-3 flex items-center justify-between gap-3">
+          <p className="text-sm text-emerald-800">
+            <span className="font-semibold">¡Listo!</span> Tengo todo lo necesario para tu documento.
+          </p>
+          <button
+            disabled
+            title="El generador de documentos se activa en el siguiente paso"
+            className="rounded-full bg-[color:var(--mc-navy)] text-white px-4 py-2 text-sm font-semibold opacity-50 cursor-not-allowed whitespace-nowrap"
+          >
+            Generar documento
+          </button>
+        </div>
       )}
 
       <div className="mt-3 border-t border-[color:var(--mc-border)] pt-3">

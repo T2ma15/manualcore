@@ -54,6 +54,26 @@ export async function POST(req: Request) {
     content: text,
   });
 
+  // Cargar la conversación completa (ya incluye el mensaje recién insertado)
+  // para que el brain acumule entendimiento turno a turno.
+  const { data: history } = await supabase
+    .from("chat_messages")
+    .select("role, content")
+    .eq("session_id", sessionId)
+    .order("created_at", { ascending: true })
+    .limit(60);
+
+  const isFirstTurn = (history ?? []).filter((m) => m.role === "brain").length === 0;
+
+  const convo = (history ?? []).map((m) => ({
+    role: m.role === "engineer" ? ("user" as const) : ("assistant" as const),
+    content: m.content,
+  }));
+  // El esquema exige terminar en turno de usuario; garantizarlo.
+  if (convo.length === 0 || convo[convo.length - 1].role !== "user") {
+    convo.push({ role: "user", content: text });
+  }
+
   // 2) Llamar al brain (Claude Opus 4.8) con salida estructurada
   let extraction: Extraction;
   try {
@@ -71,7 +91,7 @@ export async function POST(req: Request) {
       output_config: {
         format: { type: "json_schema", schema: EXTRACTION_SCHEMA },
       },
-      messages: [{ role: "user", content: text }],
+      messages: convo,
     });
 
     const block = resp.content.find((b) => b.type === "text");
@@ -96,7 +116,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: `El asistente falló: ${msg}` }, { status: 502 });
   }
 
-  // 3) Persistir extracciones + construir mensajes de chat del brain
+  // 3) Reemplazar el estado de extracción con el ESTADO COMPLETO actual
+  //    (el brain devuelve todo lo acumulado cada turno).
+  await supabase.from("brain_extractions").delete().eq("session_id", sessionId);
   if (extraction.extracted?.length) {
     await supabase.from("brain_extractions").insert(
       extraction.extracted.map((x) => ({
@@ -109,20 +131,19 @@ export async function POST(req: Request) {
     );
   }
 
+  // 4) Construir los mensajes del brain para el chat
   const messages: { role: string; msg_type: string; content: string; options?: unknown }[] = [];
 
-  // Confirmación: resumen + lo extraído
+  // Confirmación: en el primer turno muestra el resumen + lo extraído;
+  // en turnos siguientes solo el resumen de lo que cambió.
   const confirmationLines = [extraction.summary];
-  if (extraction.extracted?.length) {
-    confirmationLines.push(
-      "",
-      ...extraction.extracted.map((x) => `• ${x.field}: ${x.value}`),
-    );
+  if (isFirstTurn && extraction.extracted?.length) {
+    confirmationLines.push("", ...extraction.extracted.map((x) => `• ${x.field}: ${x.value}`));
   }
   messages.push({ role: "brain", msg_type: "confirmation", content: confirmationLines.join("\n") });
 
-  // Documentos relacionados (sugerencia, no asunción)
-  if (extraction.related_docs?.length) {
+  // Documentos relacionados: solo en el primer turno (sugerencia, no asunción)
+  if (isFirstTurn && extraction.related_docs?.length) {
     for (const d of extraction.related_docs) {
       messages.push({
         role: "brain",
@@ -145,6 +166,15 @@ export async function POST(req: Request) {
     });
   }
 
+  // Si quedó listo, un mensaje de sistema celebrando
+  if (extraction.ready_to_generate && ordered.length === 0) {
+    messages.push({
+      role: "brain",
+      msg_type: "system",
+      content: "✅ Tengo todo lo necesario. Ya puedes generar tu documento.",
+    });
+  }
+
   // Guardar mensajes del brain
   await supabase.from("chat_messages").insert(
     messages.map((m) => ({
@@ -157,11 +187,19 @@ export async function POST(req: Request) {
     })),
   );
 
-  // Actualizar estado de la sesión
+  // 5) Estado de la sesión: confirmed si está lista, si no review
   await supabase
     .from("sessions")
-    .update({ status: "review", process_name: extraction.process_name })
+    .update({
+      status: extraction.ready_to_generate ? "confirmed" : "review",
+      process_name: extraction.process_name,
+    })
     .eq("id", sessionId);
 
-  return NextResponse.json({ ok: true, extraction, messages });
+  return NextResponse.json({
+    ok: true,
+    extraction,
+    messages,
+    ready: extraction.ready_to_generate,
+  });
 }

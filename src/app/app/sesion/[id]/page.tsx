@@ -45,7 +45,11 @@ export default async function SesionPage({
           <p className="text-xs uppercase tracking-wide text-[color:var(--mc-steel)] mt-1 mb-4">
             Asistente de documentación
           </p>
-          <Chat sessionId={session.id} initialMessages={initialMessages} />
+          <Chat
+            sessionId={session.id}
+            initialMessages={initialMessages}
+            initialReady={session.status === "confirmed"}
+          />
         </section>
 
         {/* Vista previa del documento */}

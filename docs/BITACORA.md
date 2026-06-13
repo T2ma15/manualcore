@@ -47,7 +47,16 @@
 - ✅ **PRUEBA EN VIVO EXITOSA** (`tools/brain-test.mjs`): con un proceso informal de planta, Opus 4.8 extrajo 11 campos, hizo 6 preguntas (5 críticas de seguridad/calidad que el operador no mencionó: EPP, bloqueos, presión, qué hacer fuera de rango, calibración), sugirió 3 docs relacionados, todo en español. Costo: $0.0366/documento (~4 centavos). Comportamiento Lean confirmado.
 - ⏳ Falta: prueba click-through en navegador del flujo completo (registro→nuevo→chat) — Chrome bloquea localhost, lo hace Tania. El brain core ya está probado; la ruta usa exactamente la misma llamada.
 
-**Mañana (Día 4) toca:** Brain parte 2 — persistir respuestas a preguntas, re-extracción incremental, detección de "campos completos" para habilitar generación. Antes: que Tania pruebe el chat en su navegador + commit Día 3. Día 5 = generador SOP Manufactura (DOCX).
+## 12 jun 2026 (madrugada) — DÍA 4: el cerebro CONVERSA ✅ (probado en vivo)
+- ✅ Día 3 commiteado+pusheado (commit 06c66c6)
+- ✅ Schema extendido: `still_missing[]` + `ready_to_generate` (boolean)
+- ✅ Prompt multi-turno: estado acumulado en `extracted`, `summary` solo cambios, no repetir preguntas respondidas, declarar listo
+- ✅ Ruta API: ahora carga la conversación completa (hasta 60 msgs) y la pasa a Claude → el brain acumula; reemplaza brain_extractions con el estado completo; related_docs solo en 1er turno; status='confirmed' cuando listo
+- ✅ Chat.tsx: banner verde "¡Listo!" + botón "Generar documento" (deshabilitado hasta Día 5); initialReady desde session.status
+- ✅ **PRUEBA MULTI-TURNO EXITOSA** (`tools/brain-test-multiturn.mjs`): turno 1 → listo=false, 3 faltantes, 4 preguntas; turno 2 (usuario responde) → listo=TRUE, 0 preguntas, 20 campos acumulados (subió de 11), resumen solo de lo nuevo + felicitación. Comportamiento Lean confirmado.
+- ⏳ Falta: prueba click-through en navegador (Tania) + apagar email confirmation en Supabase.
+
+**Próximo (Día 5) toca:** Generador SOP Manufactura (DOCX en español, con `docx` npm) — leer brain_extractions → producir el Word formal con membrete, numeración, bloque de aprobación. Habilitar el botón "Generar documento".
 
 ### Recordatorios de día para Tania (comercial, ~30 min)
 - Emails de oro HOY: CompetISO (capacitacion@aneih.org.do) y LEAN CONSULTING RD (info@leanconsultingrd.com)

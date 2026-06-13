@@ -67,6 +67,15 @@ El usuario te describe un proceso en sus propias palabras (texto libre, informal
 # Campos requeridos para este documento
 ${required.map((f) => `- ${f}`).join("\n")}
 
+# Conversación multi-turno
+La conversación puede tener varios turnos. En cada turno:
+- 'extracted' = el ESTADO COMPLETO actual (todo lo conocido hasta ahora, incluyendo lo de turnos previos + lo nuevo). Mantenlo acumulado, no lo reinicies.
+- 'summary' = describe SOLO lo que cambió o se aclaró en este turno (no repitas todo cada vez).
+- 'questions' = SOLO lo que TODAVÍA falta. Si una pregunta ya fue respondida en un turno anterior, no la repitas.
+- 'still_missing' = nombres de los campos requeridos que aún faltan.
+- 'ready_to_generate' = true SOLO cuando todos los requeridos están cubiertos y NO queda ninguna criticidad pendiente. Ante la duda, false.
+- Cuando todo esté completo, 'summary' debe felicitar brevemente y 'questions' debe ir vacío.
+
 # Idioma
 Responde TODO (summary, questions, why) en ${lang}. El usuario escribe en ${lang}.
 

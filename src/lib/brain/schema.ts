@@ -63,8 +63,27 @@ export const EXTRACTION_SCHEMA = {
         required: ["name", "reason"],
       },
     },
+    still_missing: {
+      type: "array",
+      description:
+        "Lista breve de los campos requeridos que TODAVÍA faltan tras esta conversación (vacío si ya está completo).",
+      items: { type: "string" },
+    },
+    ready_to_generate: {
+      type: "boolean",
+      description:
+        "true SOLO cuando todos los campos requeridos están cubiertos y NO queda ninguna criticidad pendiente. Si dudas, false.",
+    },
   },
-  required: ["process_name", "summary", "extracted", "questions", "related_docs"],
+  required: [
+    "process_name",
+    "summary",
+    "extracted",
+    "questions",
+    "related_docs",
+    "still_missing",
+    "ready_to_generate",
+  ],
 } as const;
 
 export type Extraction = {
@@ -73,4 +92,6 @@ export type Extraction = {
   extracted: { field: string; value: string; category: string; confidence: string }[];
   questions: { field: string; question: string; why: string; is_critical: boolean }[];
   related_docs: { name: string; reason: string }[];
+  still_missing: string[];
+  ready_to_generate: boolean;
 };
