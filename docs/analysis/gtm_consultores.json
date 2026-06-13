@@ -1,0 +1,197 @@
+﻿{
+    "hallazgos":  [
+                      {
+                          "hallazgo":  "CompetISO es un programa de ANEIH (no una firma independiente) y confirma la concentración del canal: 62% de las PyMEs certificadas ISO 9001 en RD lo lograron vía CompetISO, con equipo de consultores Six Sigma Black Belt, Lean Master y auditores líderes ISO 9001/14001. Proyectos de ~7 meses, 80 horas de formación, tarifas grupales y gestión de cooperación no reembolsable que reduce el costo hasta 60%.",
+                          "evidencia":  "Página oficial de ANEIH: \u0027Desde 2007... 62% de las PYMES certificadas en ISO 9001 en República Dominicana lo han logrado a través de CompetISO\u0027. Contacto publicado: capacitacion@aneih.org.do, 809-560-2160 ext. 3, Ave. Tiradentes 14, Ens. Naco.",
+                          "fuente":  "https://aneih.org.do/competiso/"
+                      },
+                      {
+                          "hallazgo":  "El programa MICM-UE es más grande de lo estimado: presupuesto total €12.4MM (€11MM del Fondo Europeo de Desarrollo + €1MM del Estado dominicano + €415K para cadenas de valor) para certificar ~250 mipymes en normas de calidad, ambiente y género. La implementación la lidera el consorcio AESA-AENOR-UNE, que entrenó a los asesores de los Centros MIPYMES con metodología \u0027aprender haciendo\u0027 (300+ horas).",
+                          "evidencia":  "elDinero: \u0027MICM y Unión Europea impulsan la certificación de 250 mipymes en normas de calidad\u0027; MICM confirma el consorcio AESA-AENOR-UNE y la formación de asesores de los Centros MIPYMES.",
+                          "fuente":  "https://eldinero.com.do/136393/micm-y-union-europea-impulsan-la-certificacion-de-250-mipymes-en-normas-de-calidad/ y https://www.micm.gob.do/noticias/titular-del-micm-y-embajador-de-ue-aseguran-republica-dominicana-avanza-hacia-la-cultura-de-la-calidad"
+                      },
+                      {
+                          "hallazgo":  "La red de Centros MIPYMES opera dentro de universidades (PUCMM, INTEC, UASD, Universidad ISA Santiago, UNPHU, UCATECI, UCNE, Barna Business School, Cámara de Comercio de Puerto Plata): sus asesores son generalistas SIN expertise documental profundo que deben acompañar mipymes hacia certificación — exactamente la persona para la que está diseñado ManualCore.",
+                          "evidencia":  "MICM publica la lista de centros y un contacto institucional: Víctor Rodríguez, Encargado de Competitividad de Pymes, Viceministerio de Fomento a las PYMES, (809) 567-7192 ext. 1041 (dato publicado en la web del MICM, no inventado).",
+                          "fuente":  "https://micm.gob.do/viceministerios/fomento-a-las-pymes/implementacion-de-centros-de-servicios-de-apoyo-integral-a-las-pymes-en-republica-dominicana/"
+                      },
+                      {
+                          "hallazgo":  "INFOTEP tiene dos vehículos directamente relevantes: (1) Programa Lean 100 para zonas francas (INFOTEP financia 75% del costo de formación, la empresa 25% administrado vía la asociación de zonas francas) que forma \u0027Champions\u0027 internos de mejora continua que deben documentar trabajo estándar; (2) el convenio INFOTEP-ADOZONA (desde 1992) destina 35% de los aportes de las empresas de zonas francas a capacitación, con plan operativo 2026 en elaboración.",
+                          "evidencia":  "OIT/Cinterfor documenta el Lean 100 y su estructura de financiamiento; prensa de Presidencia/INFOTEP confirma 2,594 acciones formativas en el último cuatrienio bajo INFOTEP-ADOZONA y que Ondina Marte (Planificación INFOTEP) prepara el plan 2026.",
+                          "fuente":  "https://www.cinterfor.org/programa-lean-100-infotep-rep%C3%BAblica-dominicana y https://presidencia.gob.do/noticias/mas-de-46000-trabajadores-de-zonas-francas-han-sido-capacitados-en-los-ultimos-cuatro-anos"
+                      },
+                      {
+                          "hallazgo":  "El ecosistema ERP dominicano es denso y localizado: el directorio oficial de Odoo lista ~70+ partners en RD (Gold: Grow IT con 113 referencias; Silver: iterativo con 85, Consultoría Henca con 76, CHAI, CAPW, CODEC, ASET, Infinity). En SAP Business One operan CEO Consultoría, Addvisory Group Caribe, Grupo Inforum, DTS y GuruSoft. Todo implementador ERP necesita levantar y documentar procesos del cliente antes de configurar — dolor que ManualCore acelera.",
+                          "evidencia":  "Directorio oficial de partners Odoo para República Dominicana con niveles y referencias; resultados de búsqueda de partners SAP B1 con webs propias dominicanas (.do).",
+                          "fuente":  "https://www.odoo.com/partners/country/dominican-republic-60"
+                      },
+                      {
+                          "hallazgo":  "Las certificadoras presentes en RD (EQA Dominicana, AENOR RD, SGS) NO son canal de venta: por independencia no pueden consultar sobre lo que certifican. Eso refuerza que el canal correcto son los consultores implementadores, y que las certificadoras/organismos sirven solo como vitrina (ej. Premio INDOCAL a la Calidad, 2da edición celebrada nov 2025 en el Hotel Embajador, abierto a pymes).",
+                          "evidencia":  "EQA se describe como \u0027líderes en el servicio de certificación de sistemas de gestión\u0027 (certificadora, no consultora); INDOCAL anunció la segunda edición de su Premio a la Calidad para organizaciones incluyendo pymes.",
+                          "fuente":  "https://eqa.com.do/ y https://indocal.gob.do/indocal-premia-el-compromiso-sobresaliente-con-la-calidad-la-excelencia-y-la-sostenibilidad/"
+                      },
+                      {
+                          "hallazgo":  "Existe al menos una consultora ISO dominicana con modelo de suscripción mensual (planes Básico/Premium/Platino con visitas semanales y consultas ilimitadas): LEAN CONSULTING RD SRL. Este modelo es el encaje perfecto para revender ManualCore como herramienta dentro de un retainer — el consultor sube su margen sin sumar horas.",
+                          "evidencia":  "Web de LEAN CONSULTING RD: planes de suscripción para gestión del sistema de calidad, equipo nombrado (Ing. Fausto Ramírez Valdez, CEO; Ing. Melvin Díaz Almonte; Ing. Francisco Julio Vargas; Ing. Oscar Salvador Payano), 140+ clientes, 8+ años.",
+                          "fuente":  "http://leanconsultingrd.com/"
+                      },
+                      {
+                          "hallazgo":  "Qualitypoint Management School (fundada 2007, Santo Domingo) está contratando \u0027Consultor en Sistema de Gestión ISO\u0027 vía LinkedIn en 2025-2026, señal de cartera creciente y de presión por capacidad de consultores — el dolor exacto (velocidad documental) que ManualCore resuelve.",
+                          "evidencia":  "Vacante pública en LinkedIn: \u0027Consultor en Sistema de Gestión ISO at Qualitypoint Management School, Santo Domingo\u0027; web propia con líneas de consultoría ISO 9001/14001/45001/27001, acompañamiento y mantenimiento ISO.",
+                          "fuente":  "https://do.linkedin.com/jobs/view/consultor-en-sistema-de-gesti%C3%B3n-iso-at-qualitypoint-management-school-4288969604 y https://qualitypoint.com.do/consultoria/consultoria-iso/"
+                      },
+                      {
+                          "hallazgo":  "AMCHAMDR mantiene agenda activa de comités y eventos donde ManualCore puede presentarse (Comité TIC con paneles de transformación digital; \u0027Visión de Negocios 2026\u0027 celebrado el 11 jun 2026 en el Hotel El Embajador; AMCHAMDR Talks mensuales). Es vitrina, no canal directo.",
+                          "evidencia":  "Cobertura de elDinero del foro Visión de Negocios 2026 y página de AMCHAMDR sobre panel de transformación digital de su Comité TIC.",
+                          "fuente":  "https://eldinero.com.do/367905/amchamdr-analiza-riesgos-reacomodos-y-oportunidades-para-la-economia-dominicana-en-vision-de-negocios-2026/ y https://amcham.org.do/en/debaten-sobre-la-transformacion-digital-de-los-negocios-en-panel-de-amchamdr/"
+                      }
+                  ],
+    "prospectos":  [
+                       {
+                           "nombre":  "CompetISO / ANEIH (Asociación Nacional de Empresas e Industrias Herrera)",
+                           "tipo":  "Organismo-canal (programa de consultoría ISO)",
+                           "descripcion":  "Programa de consultoría y certificación ISO 9001 de ANEIH activo desde 2007; concentra el 62% de las PyMEs certificadas ISO 9001 del país, con equipo de consultores Six Sigma BB/Lean Master y proyectos grupales de ~7 meses.",
+                           "por_que":  "Es el nodo del canal hipotético principal: un acuerdo con CompetISO pone ManualCore en manos del equipo consultor que más PyMEs certifica en RD. ManualCore reduce el cuello de botella documental de sus proyectos de 7 meses (manuales, SOPs, lista maestra) y ANEIH además está certificada ISO 9001:2015 ella misma.",
+                           "como_abordar":  "Email institucional publicado (capacitacion@aneih.org.do, 809-560-2160 ext. 3) proponiendo demo al equipo CompetISO; alternativa: asistir a actos de ANEIH como el Premio Nacional a la Calidad del Sector Privado.",
+                           "fuente":  "https://aneih.org.do/competiso/"
+                       },
+                       {
+                           "nombre":  "Qualitypoint Management School",
+                           "tipo":  "Consultora ISO / escuela de calidad",
+                           "descripcion":  "Firma de Santo Domingo fundada en 2007 (15+ años), experta en gestión de calidad, normas ISO y gestión por procesos: consultoría, acompañamiento y mantenimiento ISO (9001, 14001, 45001, 27001), KPIs y formación.",
+                           "por_que":  "Su portafolio incluye \u0027mantenimiento ISO\u0027 recurrente y documentación de procesos — ManualCore les da velocidad y un entregable estandarizado. Están contratando consultores ISO (vacante en LinkedIn), señal de demanda que ManualCore puede absorber sin contratar.",
+                           "como_abordar":  "LinkedIn de la empresa (do.linkedin.com/company/qualitypointrd) con mensaje a su dirección; también formulario web. No se encontró email público de dirección — no inventar.",
+                           "fuente":  "https://qualitypoint.com.do/consultoria/consultoria-iso/ y https://do.linkedin.com/company/qualitypointrd"
+                       },
+                       {
+                           "nombre":  "SMG Consulting",
+                           "tipo":  "Consultora ISO / OEA",
+                           "descripcion":  "Consultora de Santo Domingo (Evaristo Morales) que acompaña certificaciones desde ISO 9001 hasta ISO 28000 y certificación OEA (Operador Económico Autorizado) para empresas de comercio exterior.",
+                           "por_que":  "Los expedientes OEA y multi-norma son intensivos en procedimientos documentados y control documental; ManualCore les permite producir SOPs y análisis de riesgos bilingües más rápido para clientes exportadores/zonas francas (segmento de US$99-149).",
+                           "como_abordar":  "Contacto publicado en su propia web: gerencia@smgconsultingrd.com / +1-829-741-7372; proponer piloto de 7 días con un expediente real.",
+                           "fuente":  "https://www.smgconsultingrd.com/"
+                       },
+                       {
+                           "nombre":  "LEAN CONSULTING RD SRL (Ing. Fausto Ramírez Valdez, CEO)",
+                           "tipo":  "Consultora ISO / lean",
+                           "descripcion":  "Firma de Santo Domingo Este (8+ años, 140+ clientes) de asesoría, auditoría interna y capacitación en ISO 9001/14001/22000/45001, con planes de suscripción mensual (Básico/Premium/Platino) que incluyen gestión del sistema de calidad del cliente.",
+                           "por_que":  "Su modelo de retainer mensual es el encaje comercial perfecto: ManualCore (US$49/mes) se integra al plan como motor documental y multiplica cuántos clientes puede atender el mismo equipo (4 consultores nombrados en su web).",
+                           "como_abordar":  "Email publicado en su web: info@leanconsultingrd.com / +1 (809) 805-5634, dirigido al Ing. Fausto Ramírez Valdez; ofrecer demo enfocada en sus planes de suscripción.",
+                           "fuente":  "http://leanconsultingrd.com/"
+                       },
+                       {
+                           "nombre":  "Ymaya Lean Academy",
+                           "tipo":  "Consultora / academia de mejora continua",
+                           "descripcion":  "Centro de excelencia operacional en Santo Domingo: certificaciones lean (sistema de producción Toyota), diagnósticos organizacionales, diseño de procesos y sistemas de mejora continua; alianzas con ILSSI, INTEC, FUNDAPEC y Shinka Management.",
+                           "por_que":  "Sus egresados y clientes deben documentar trabajo estándar, flujos y procedimientos tras cada proyecto lean — ManualCore convierte ese conocimiento capturado en SOPs y flujogramas formales; además puede integrarse a su currículo como herramienta.",
+                           "como_abordar":  "Email publicado en su web: Info@ymayaleanacademy.org / 809-807-6347; proponer alianza academia-herramienta (licencias para alumnos certificados).",
+                           "fuente":  "https://www.ymayaleanacademy.org/"
+                       },
+                       {
+                           "nombre":  "Consultores de Productividad",
+                           "tipo":  "Consultora de productividad / reingeniería (Santiago)",
+                           "descripcion":  "Firma de Santiago de los Caballeros fundada en 2011 (11-50 empleados): estrategia empresarial, gestión de talento y reingeniería de procesos productivos y de servicios, enfocada en la zona norte del país.",
+                           "por_que":  "Cubre el corredor Santiago/zona norte (donde se concentran zonas francas) que las firmas de Santo Domingo no dominan; la reingeniería de procesos termina en documentación formal — ManualCore es su entregable acelerado y abre el tier zonas francas.",
+                           "como_abordar":  "LinkedIn de empresa (do.linkedin.com/company/consultores-de-productividad) o formulario de su web consultoresdeproductividad.com; dirección publicada: Calle Estado de Israel, Edif. 4, Suite 3, Santiago.",
+                           "fuente":  "https://consultoresdeproductividad.com/ y https://do.linkedin.com/company/consultores-de-productividad"
+                       },
+                       {
+                           "nombre":  "iterativo (Progressa Group)",
+                           "tipo":  "Implementador ERP (Odoo Silver)",
+                           "descripcion":  "Partner Odoo Silver dominicano con 85 referencias y 8 expertos certificados; mantiene la localización oficial dominicana de Odoo (DGII, NCF, facturación electrónica certificada desde 2020, nómina/TSS); clientes en retail, manufactura y farma.",
+                           "por_que":  "Cada implementación Odoo exige levantar procesos del cliente; ManualCore documenta esos procesos en formato formal ANTES y DESPUÉS del go-live (SOPs de uso del ERP), reduciendo horas no facturables y rescatando implementaciones fallidas (servicio que ellos ofrecen).",
+                           "como_abordar":  "Web propia odoo.iterativo.io / progressa.group (formulario) o perfil oficial en odoo.com; mencionar co-selling a sus 25 clientes de retail y 10 de manufactura.",
+                           "fuente":  "https://www.odoo.com/partners/iterativo-1099255"
+                       },
+                       {
+                           "nombre":  "Grow IT",
+                           "tipo":  "Implementador ERP (Odoo Gold)",
+                           "descripcion":  "Único partner Odoo Gold de República Dominicana según el directorio oficial: 113 referencias, 93% satisfacción, 6 expertos certificados; asesoría estratégica en transformación digital y gestión empresarial desde Santo Domingo.",
+                           "por_que":  "Es el implementador Odoo con más volumen del país: un acuerdo de referidos pone ManualCore frente a 113+ empresas que ya digitalizan su gestión y carecen de documentación formal de procesos.",
+                           "como_abordar":  "Formulario en growit.com.do o perfil oficial Odoo; gancho: \u0027documentación de procesos lista antes del kickoff de implementación\u0027.",
+                           "fuente":  "https://www.odoo.com/partners/grow-it-1236042 y https://growit.com.do/"
+                       },
+                       {
+                           "nombre":  "Grupo de Consultoría Henca (Juliano Henríquez, fundador)",
+                           "tipo":  "Implementador ERP (Odoo Silver) / consultora TI",
+                           "descripcion":  "Consultora TI dominicana fundada en 2011 por Juliano Henríquez; partner Odoo Silver con 76 referencias, contribuye a la localización dominicana de Odoo (NCF en backend y POS); clientes públicos y privados.",
+                           "por_que":  "Mismo racional que iterativo/Grow IT: sus proyectos ERP en sector público y privado exigen procedimientos documentados (sobre todo en instituciones que luego buscan NORDOM-ISO 9001); ManualCore acelera ese entregable.",
+                           "como_abordar":  "LinkedIn de empresa (linkedin.com/company/grupo-de-consultoria-henca-gch-) o web consultoriahenca.com; mencionar su trabajo de localización como punto en común técnico.",
+                           "fuente":  "https://www.odoo.com/partners/consultoria-henca-449159 y https://www.consultoriahenca.com/"
+                       },
+                       {
+                           "nombre":  "CEO Consultoría",
+                           "tipo":  "Implementador ERP (SAP Business One)",
+                           "descripcion":  "Partner SAP de Naco, Santo Domingo; afirma ser el partner con más implementaciones de SAP Business One HANA del Caribe; ofrece implementación, capacitación especializada y soporte.",
+                           "por_que":  "SAP B1 apunta a PyMEs medianas y zonas francas en crecimiento — exactamente el tier de US$99-149; los blueprints de procesos que levantan en cada proyecto pueden generarse/formalizarse con ManualCore y dejarse como documentación viva del cliente.",
+                           "como_abordar":  "Formulario de contacto en ceo.do; gancho: documentación de procesos como servicio complementario post go-live que ellos revenden.",
+                           "fuente":  "https://ceo.do/sap-business-one/"
+                       },
+                       {
+                           "nombre":  "Addvisory Group Caribe",
+                           "tipo":  "Implementador ERP (SAP Business One Gold Partner)",
+                           "descripcion":  "Gold Partner de SAP Business One con 14+ años en República Dominicana; único partner regional reconocido por SAP como \u0027Intelligent Enterprise\u0027 por proyectos con elementos de transformación digital.",
+                           "por_que":  "Su posicionamiento \u0027transformación digital\u0027 encaja con sumar IA documental a su oferta; sus clientes manufactureros/zonas francas necesitan SOPs y control documental que el ERP no genera.",
+                           "como_abordar":  "Formulario en advisorygc.com o LinkedIn de la firma; proponer alianza de servicios complementarios (ellos procesos transaccionales, ManualCore procesos documentados).",
+                           "fuente":  "https://advisorygc.com/sap-business-one-bak/"
+                       },
+                       {
+                           "nombre":  "KCP Dynamics",
+                           "tipo":  "Implementador ERP (Microsoft Dynamics 365)",
+                           "descripcion":  "Microsoft Gold Certified Partner desde 2002 especializado en Dynamics ERP en la nube Microsoft, con operación en República Dominicana (teléfono local publicado: +1 809 332 1603) y alcance LATAM.",
+                           "por_que":  "Dynamics 365 Business Central ya tiene localización dominicana (DGII); KCP atiende organizaciones medianas que requieren procedimientos formales para auditorías — ManualCore complementa cada rollout con la capa documental.",
+                           "como_abordar":  "Web kcpdynamics.com (formulario y teléfono RD publicado); gancho bilingüe ES/EN porque operan multi-país.",
+                           "fuente":  "https://kcpdynamics.com/en/about-us/"
+                       },
+                       {
+                           "nombre":  "FBrugal Consultores (Frank Brugal A., CEO)",
+                           "tipo":  "Consultora de negocio / compliance",
+                           "descripcion":  "Firma de Santo Domingo con 38+ años y 500+ empresas asesoradas: planificación estratégica, compliance, reestructuración y optimización de procesos para PyMEs y corporaciones (turismo, manufactura, construcción, tecnología).",
+                           "por_que":  "Su práctica de compliance y optimización de procesos produce manuales y políticas — ManualCore es el motor que las genera con control documental; su cartera multi-sector valida el posicionamiento \u0027cualquier rubro\u0027.",
+                           "como_abordar":  "Contacto publicado en su propia web: +1 (829) 342-4652 / fb.brugal@gmail.com; proponer demo aplicada a un caso de compliance.",
+                           "fuente":  "https://fbrugalconsultores.com/consultor-empresarial-republica-dominicana/"
+                       },
+                       {
+                           "nombre":  "Centros MIPYMES (red MICM-universidades)",
+                           "tipo":  "Organismo-canal institucional",
+                           "descripcion":  "Red nacional de centros de asesoría a mipymes alojados en PUCMM, INTEC, UASD, Universidad ISA, UNPHU, UCATECI, UCNE, Barna y la Cámara de Comercio de Puerto Plata; sus asesores fueron entrenados por el consorcio AESA-AENOR-UNE del programa MICM-UE para acompañar la certificación de ~250 mipymes.",
+                           "por_que":  "Es el multiplicador más grande disponible: si ManualCore se vuelve herramienta de los asesores de los centros, llega de golpe a las 250 mipymes del programa de €12.4MM — usuarios sin expertise documental, el ICP exacto.",
+                           "como_abordar":  "Contacto institucional publicado por el MICM: Viceministerio de Fomento a las PYMES, Víctor Rodríguez, Encargado de Competitividad de Pymes, (809) 567-7192 ext. 1041; en paralelo, acercarse a un centro individual (ej. Centro MIPYMES PUCMM o INTEC) para piloto local.",
+                           "fuente":  "https://micm.gob.do/viceministerios/fomento-a-las-pymes/implementacion-de-centros-de-servicios-de-apoyo-integral-a-las-pymes-en-republica-dominicana/"
+                       },
+                       {
+                           "nombre":  "INFOTEP (programas Lean 100 e INFOTEP-ADOZONA)",
+                           "tipo":  "Organismo de formación",
+                           "descripcion":  "Instituto Nacional de Formación Técnico Profesional: Lean 100 forma \u0027Champions\u0027 de mejora continua en zonas francas (INFOTEP financia 75%); el convenio INFOTEP-ADOZONA destina 35% de los aportes de zonas francas a capacitación, con plan operativo 2026 en preparación y meta de impactar 4,000+ empresas en 2025.",
+                           "por_que":  "Los facilitadores y Champions del Lean 100 deben documentar trabajo estándar y procedimientos — ManualCore puede entrar como herramienta del programa; el tier zonas francas (US$99-149) coincide con su población objetivo.",
+                           "como_abordar":  "Vía institucional (infotep.gob.do) y vía ADOZONA como contraparte del convenio; presentarse cuando se discuta el plan operativo 2026 del programa INFOTEP-ADOZONA.",
+                           "fuente":  "https://www.cinterfor.org/programa-lean-100-infotep-rep%C3%BAblica-dominicana y https://presidencia.gob.do/noticias/infotep-proyecta-impactar-mas-de-4000-empresas-en-2025"
+                       },
+                       {
+                           "nombre":  "INDOCAL (Instituto Dominicano para la Calidad)",
+                           "tipo":  "Organismo normalizador",
+                           "descripcion":  "Organismo nacional de normalización: emite las NORDOM (incluida una norma de sistema de gestión para mipymes de cualquier sector), firma acuerdos de implementación ISO 9001 con instituciones (ej. CTC) y organiza el Premio INDOCAL a la Calidad (2da edición nov 2025, abierta a pymes).",
+                           "por_que":  "No es cliente directo pero sí legitimador: alinear las plantillas de ManualCore con NORDOM-ISO 9001 y aparecer en el ecosistema del Premio INDOCAL da credibilidad ante consultores y pymes sin prometer \u0027ISO-ready\u0027.",
+                           "como_abordar":  "Canal institucional en indocal.gob.do (servicios de normalización/capacitación) y asistencia al Premio INDOCAL a la Calidad 2026 como vitrina.",
+                           "fuente":  "https://indocal.gob.do/indocal-premia-el-compromiso-sobresaliente-con-la-calidad-la-excelencia-y-la-sostenibilidad/"
+                       },
+                       {
+                           "nombre":  "AMCHAMDR (Cámara Americana de Comercio de la RD)",
+                           "tipo":  "Cámara empresarial",
+                           "descripcion":  "Cámara con comités activos (TIC, Legal) y agenda densa de eventos: paneles de transformación digital del Comité TIC, AMCHAMDR Talks mensuales y el foro anual Visión de Negocios (edición 2026 celebrada el 11 jun en el Hotel El Embajador).",
+                           "por_que":  "Vitrina ante el segmento exportador/zonas francas y sus consultores; el Comité TIC es el espacio natural para demostrar un SaaS dominicano de IA aplicada a documentación industrial.",
+                           "como_abordar":  "Membresía o participación como invitada en eventos del Comité TIC vía amcham.org.do; apuntar a un AMCHAMDR Talk como espacio de demo.",
+                           "fuente":  "https://amcham.org.do/en/debaten-sobre-la-transformacion-digital-de-los-negocios-en-panel-de-amchamdr/"
+                       }
+                   ],
+    "implicaciones":  [
+                          "La hipótesis del canal queda validada y con punto de entrada único: CompetISO no es una firma sino un programa de ANEIH — un solo acuerdo (capacitacion@aneih.org.do) da acceso al equipo consultor que certifica al 62% de las PyMEs ISO del país. Prioridad 1 antes del lanzamiento del 21 de junio.",
+                          "El encaje comercial más rápido son consultores con modelo de retainer/suscripción (LEAN CONSULTING RD con planes mensuales, Qualitypoint con \u0027mantenimiento ISO\u0027): ManualCore a US$49/mes se revende dentro del plan y el pitch es margen y capacidad, no tecnología. La vacante abierta de consultor ISO en Qualitypoint es evidencia de escasez de capacidad que ManualCore resuelve sin contratar.",
+                          "El multiplicador institucional más grande es la red de Centros MIPYMES: sus asesores (formados por el consorcio AESA-AENOR-UNE del programa MICM-UE de €12.4MM) acompañan a las ~250 mipymes a certificar. Conviene atacar por dos vías: la institucional (Viceministerio, contacto publicado) y un piloto directo con un centro universitario (PUCMM o INTEC) que sirva de caso de éxito replicable.",
+                          "Los implementadores ERP son un segundo canal real y subestimado: 70+ partners Odoo en RD más el ecosistema SAP B1/Dynamics. Su dolor (levantamiento de procesos pre-implementación y SOPs post go-live, horas no facturables) es distinto al del consultor ISO, así que el pitch debe ser \u0027documentación lista antes del kickoff\u0027, no \u0027calidad\u0027.",
+                          "Las certificadoras (EQA, AENOR, SGS) no pueden ser canal por independencia certificador/consultor — pero el hecho de que AENOR (vía consorcio AESA-AENOR-UNE) entrene a los asesores mipymes confirma que el estándar documental que ManualCore genere debe ser compatible con lo que esos asesores aprendieron.",
+                          "Santiago/zona norte es un segundo beachhead desatendido: Consultores de Productividad (Santiago) más la concentración de zonas francas y el programa INFOTEP-ADOZONA (35% de aportes a formación, plan operativo 2026 en elaboración) alinean con el tier US$99-149.",
+                          "Calendario de visibilidad 2026: Premio INDOCAL a la Calidad (nov), Premio Nacional a la Calidad del Sector Privado de ANEIH, AMCHAMDR Talks/Comité TIC. Son vitrinas, no canales: el cierre de ventas seguirá siendo 1:1 con consultores.",
+                          "Nota de datos: solo se incluyeron emails/teléfonos publicados en las webs de cada organización (SMG, LEAN CONSULTING RD, Ymaya, FBrugal, ANEIH, MICM, KCP). Para Qualitypoint, Grow IT, Henca, CEO Consultoría y Addvisory no hay contacto directo público verificable — abordar por LinkedIn o formulario web, no inventar correos."
+                      ]
+}

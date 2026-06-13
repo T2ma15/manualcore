@@ -1,0 +1,157 @@
+﻿{
+    "hallazgos":  [
+                      {
+                          "hallazgo":  "El programa MICM-UE (\u0027Proyecto de implantación de normas y sistemas de gestión en calidad, medioambiente y género\u0027) certifica ~250 mipymes en ISO 9001, ISO 22000, ISO 22716, ISO 27001/ITIL (TIC), BPM, GlobalGAP, orgánica y comercio justo, con +300 horas de formación \u0027learning by doing\u0027. Lo implementa el consorcio AESA-AENOR-UNE. NO existe lista pública de beneficiarias: en prensa solo aparecen nombradas ClusterSoft y Prime SRL (Sayma Féliz).",
+                          "evidencia":  "Artículo de elDinero detalla el programa, el consorcio implementador y nombra solo a esas dos beneficiarias. El MICM publica teléfono institucional del Viceministerio de Fomento a las Pymes: (809) 567-7192 ext. 1041.",
+                          "fuente":  "https://eldinero.com.do/136393/micm-y-union-europea-impulsan-la-certificacion-de-250-mipymes-en-normas-de-calidad/ y https://micm.gob.do/viceministerios/fomento-a-las-pymes/normativa-de-calidad-para-micro-pequena-y-mediana-empresas-mipymes/"
+                      },
+                      {
+                          "hallazgo":  "Existe una base de datos pública y descargable (XLSX) de mipymes certificadas por el MICM 2019-2025, con RNC, nombre de empresa, fechas, clasificación y actividad — utilizable como base de prospección segmentada por rubro.",
+                          "evidencia":  "El Portal de Datos Abiertos de RD lista el recurso \u0027Micro, pequeñas y medianas empresas certificadas 2019-2025\u0027 organizado por RNC, Empresa, Fecha Emisión, Clasificación y Actividad. (Es la certificación/clasificación mipyme administrativa, no ISO — pero identifica empresas en proceso de formalización).",
+                          "fuente":  "https://datos.gob.do/dataset/micro-pequenas-y-medianas-empresas-certificadas/resource/e8b9c502-ce8c-4755-83c6-b3e6df3d2889"
+                      },
+                      {
+                          "hallazgo":  "BASC Dominicana es un ecosistema concentrado de dolor documental recurrente: 144 empresas certificadas en el país, 162 auditorías en 2025, y el certificado vence CADA AÑO (renovación anual = re-documentación anual). En el Congreso Nacional BASC 2025 se certificaron por primera vez: Helados BON, Agente Aduanal Rodríguez Abreu \u0026 Asociados, Servicio Especializado de Seguridad USP, Taurus Security Services, Major Logistics SRL e Ibero Security; recertificaron Laboratorios Rowe, MC Logistics, Molinos del Ozama, Pier 17 Group, Quala Dominicana, RODEMSA, Sans Souci Ports, Sparber Dominicana, GOYA Santo Domingo, entre otras (+35 empresas).",
+                          "evidencia":  "Notas de prensa del Congreso Nacional BASC 2025 con nombres de empresas certificadas y recertificadas; la web de BASC RD confirma vigencia de 1 año del certificado.",
+                          "fuente":  "https://basc.org.do/9104/entrega-certificados-cnb25 y https://7dias.com.do/2026/03/25/basc-rd-fortalece-seguridad-logistica-con-la-entrega-de-nuevas-certificaciones-internacionales/ y https://basc.org.do/certificacion/empresas-basc/empresas-certificadas"
+                      },
+                      {
+                          "hallazgo":  "La revista pública de AENOR funciona como directorio de PyMEs/medianas dominicanas \u0027orgullosas de su calidad\u0027 (publican su certificación): Global Pack (plásticos, grupo Multiquímica, ISO 9001), NAPCO DR (sistemas de seguridad/eléctrico, San Gregorio de Nigua, ISO 9001:2015), Peravia Industrial y Jaja Agroindustrial (primeras conserveras del país con ISO 9001), Bojos Tanning (procesamiento de pieles, renovó ISO 9001), Ravi Caribe (empaques, renovó ISO 9001+14001+45001).",
+                          "evidencia":  "Artículos individuales en revista.aenor.com nombran cada empresa, su alcance certificado y ubicación; AENOR opera filial local (aenordominicana.com).",
+                          "fuente":  "https://revista.aenor.com/375/global-pack-logra-la-iso-9001.html ; https://revista.aenor.com/375/apuesta-por-la-calidad-en-napco.html ; https://revista.aenor.com/372/iso-9001-para-peravia-industrial-y-jaja-agroindustrial.html ; https://revista.aenor.com/384/iso-9001-para-bojos-tanning.html ; https://revista.aenor.com/384/posicion-de-referencia-en-republica-dominicana.html"
+                      },
+                      {
+                          "hallazgo":  "Zonas francas: los dispositivos médicos aportan ~25% de las exportaciones del sector (mayor rubro, US$1,358.7MM de inversión acumulada, 27%); tabaco acumula US$995.9MM (20%); calzado ~3.9% de la actividad. El sector siguió creciendo en 2025 con 82 nuevas empresas y 10 parques aprobados. El directorio oficial es del CNZFE (cnzfe.gob.do) y el gremio es ADOZONA.",
+                          "evidencia":  "Estadísticas oficiales CNZFE y nota de Presidencia sobre aprobaciones 2025. Nota: cnzfe.gob.do tiene datos abiertos en datos.gob.do; adozona.org y micm.gob.do devuelven 403 a fetch automatizado (consultar manualmente).",
+                          "fuente":  "https://cnzfe.gob.do/categoria/noticias/equipos-medicos-aportan-un-25-de-las-exportaciones-de-zonas-francas-dominicanas y https://presidencia.gob.do/noticias/zonas-francas-consolidan-su-dinamismo-en-2025-con-82-empresas-y-10-nuevos-parques y https://datos.gob.do/organization/consejo-nacional-de-zonas-francas-de-exportacion-cnzfe"
+                      },
+                      {
+                          "hallazgo":  "Sector BPO/contact center: mercado de ~US$750MM con ~36,000 empleados. Su lenguaje de calidad NO es ISO sino compliance de clientes de EE.UU. (HIPAA, PCI DSS, SOC 2), que igualmente exige políticas y procedimientos documentados. UNO (United Nearshore Operations), en Santiago, ~1,200 empleados, es HIPAA/PCI DSS/SOC 2 y domina ~70% del mercado local de Santiago.",
+                          "evidencia":  "Directorios y perfiles del sector BPO dominicano; web de UNO declara sus certificaciones HIPAA · PCI DSS · SOC 2.",
+                          "fuente":  "https://www.customerserv.com/dominican-republic-call-center ; https://www.uno.com.do/ ; https://theorg.com/org/uno-call-center ; https://www.outsource-consultants.com/outsourcing-countries/call-centers-in-the-dominican-republic/"
+                      },
+                      {
+                          "hallazgo":  "Clúster tabacalero de Tamboril (Santiago): RD fabrica +196 millones de cigarros hechos a mano al año exportados a 148 países, con ~3,000 empleados en procesos manuales (clasificación de hoja, torcido, empaque) — procesos artesanales con altísima dependencia de conocimiento tácito. Operan allí La Aurora (1903, la mayor), Intercigar S.A. (gestión holandesa, premium hand-made) y Dominican Big Leaguer, entre otras; INTABACO asesora a fábricas pequeñas en fermentación y mejora de calidad.",
+                          "evidencia":  "Directorio Livio de tabacaleras y artículos del sector confirman empresas, ubicación en zona franca de Tamboril y volúmenes.",
+                          "fuente":  "https://www.livio.com/directorio/negocios-y-economia/tabacaleras/ ; https://cigarcountry.com/blog/produccion-de-tabaco-en-republica-dominicana/ ; https://intabaco.gob.do/"
+                      },
+                      {
+                          "hallazgo":  "Hay un \u0027efecto contagio de la primera certificada\u0027: empresas dominicanas publicitan ser \u0027la primera de su sector\u0027 en certificarse (Peravia/Jaja primeras conserveras; Sanut primera de su sector en insumos para alimento animal, ISO 9001 vía SGS). El relato \u0027sé la primera de tu sector\u0027 resuena culturalmente y es ángulo de venta directo para ManualCore.",
+                          "evidencia":  "Sanut (insumos y materias primas para alimento balanceado animal, Santo Domingo) recibió ISO 9001 de SGS como primera de su sector; Peravia/Jaja primeras del sector conservas.",
+                          "fuente":  "https://almomento.net/empresa-sanut-recibe-certificacion-internacional-de-calidad-iso-9001/ y https://revista.aenor.com/372/iso-9001-para-peravia-industrial-y-jaja-agroindustrial.html"
+                      },
+                      {
+                          "hallazgo":  "El Estado dominicano está empujando cultura de calidad de forma visible (señal de mercado): el MICM se certificó en 5 normas ISO, EGEHID recibió ISO 9001 de INDOCAL (2025), e INDOCAL ofrece la certificación NORDOM 774 de gestión de calidad específica para mipymes — un estándar \u0027puerta de entrada\u0027 más barato que ISO 9001 que también requiere procedimientos documentados.",
+                          "evidencia":  "Notas oficiales MICM/INDOCAL y prensa sobre EGEHID (mayo 2025).",
+                          "fuente":  "https://micm.gob.do/micm-se-convierte-en-el-primer-ministerio-en-obtener-la-certificacion-en-cinco-normas-internacionales-iso/ ; https://n.com.do/2025/05/21/egehid-recibe-certificacion-de-la-norma-iso-9001-a-la-calidad/ ; https://indocal.gob.do/certificacion-gestion-de-calidad-para-micros-pequenas-y-medianas-empresas-mipymes/"
+                      }
+                  ],
+    "prospectos":  [
+                       {
+                           "nombre":  "Jaja Agroindustrial",
+                           "tipo":  "Manufactura local PyME — alimentos (conservas)",
+                           "descripcion":  "Conservera dominicana; junto a Peravia Industrial fue la primera del sector de conservas alimenticias del país en lograr ISO 9001 (AENOR, alcance: diseño, producción, comercialización y distribución de conservas).",
+                           "por_que":  "PyME alimentaria con QMS vivo que debe mantener y re-auditar anualmente sin un departamento documental grande: SOPs de producción, análisis de riesgos (inocuidad) y lista maestra son exactamente el output de ManualCore. Además ya \u0027compró\u0027 la idea de certificarse — no hay que evangelizar.",
+                           "como_abordar":  "Búsqueda en LinkedIn (\u0027Jaja Agroindustrial\u0027) al responsable de calidad; alternativamente vía el ecosistema AENOR Dominicana (aenordominicana.com) que la certificó. No se encontró web corporativa propia — confirmar contacto manualmente.",
+                           "fuente":  "https://revista.aenor.com/372/iso-9001-para-peravia-industrial-y-jaja-agroindustrial.html"
+                       },
+                       {
+                           "nombre":  "Global Pack (Grupo Multiquímica)",
+                           "tipo":  "Manufactura local — plásticos/empaques",
+                           "descripcion":  "Fabricante y distribuidor dominicano de empaques plásticos flexibles y rígidos (marca Tinacom de tinacos), parte del grupo Multiquímica desde 2009. Certificada ISO 9001:2015 con AENOR.",
+                           "por_que":  "Manufactura de proceso continuo con múltiples líneas de producto: necesita SOPs operativos, control de cambios y numeración controlada. Tamaño mediano = decisión rápida; el grupo Multiquímica puede replicar a otras filiales (cuenta expandible).",
+                           "como_abordar":  "Web: https://globalpack.com.do/ ; LinkedIn: https://www.linkedin.com/company/globalpack.com.do y grupo matriz https://do.linkedin.com/company/multiquimica — contactar gerencia de calidad/operaciones.",
+                           "fuente":  "https://revista.aenor.com/375/global-pack-logra-la-iso-9001.html y https://www.aenordominicana.com/Paginas/Noticias/aenor-dominicana-certifica-a-la-empresa-global-pack-del-grupo-multiquimica.aspx"
+                       },
+                       {
+                           "nombre":  "NAPCO DR",
+                           "tipo":  "Zona franca — eléctrico/electrónica (San Gregorio de Nigua)",
+                           "descripcion":  "Planta dominicana que fabrica sistemas de seguridad: alarmas contra incendio/robo, accesorios y controles de acceso (cerraduras electrónicas y mecánicas). Certificada ISO 9001:2015 con AENOR (2021). Filial del grupo estadounidense NAPCO Security Technologies.",
+                           "por_que":  "Perfil exacto del tier zonas francas (US$99-149): manufactura electrónica con casa matriz en EE.UU. que exige documentación bilingüe ES/EN y trazabilidad — el bilingüismo de ManualCore es diferenciador directo. Planta local mediana sin gran estructura documental propia.",
+                           "como_abordar":  "LinkedIn: buscar \u0027NAPCO DR\u0027 / plant manager o quality manager en San Gregorio de Nigua; web corporativa del grupo: napcosecurity.com. Abordar a la gerencia local de calidad, no al corporativo.",
+                           "fuente":  "https://revista.aenor.com/375/apuesta-por-la-calidad-en-napco.html"
+                       },
+                       {
+                           "nombre":  "Bojos Tanning",
+                           "tipo":  "Zona franca / cadena del calzado — procesamiento de pieles",
+                           "descripcion":  "Empresa dominicana de diseño y procesamiento de pieles (curtiduría), proveedora de la cadena de calzado/marroquinería. Renovó su certificado ISO 9001 con AENOR (revista nº 384).",
+                           "por_que":  "Procesos químico-artesanales (curtido) con criticidades de seguridad y ambientales que viven en la cabeza de pocos técnicos; la renovación periódica de ISO 9001 le exige mantener procedimientos al día. PyME del rubro calzado que la investigación priorizó.",
+                           "como_abordar":  "Búsqueda LinkedIn \u0027Bojos Tanning\u0027 (gerencia/calidad); alternativamente vía AENOR Dominicana que emitió el certificado. No se verificó web propia — confirmar manualmente.",
+                           "fuente":  "https://revista.aenor.com/384/iso-9001-para-bojos-tanning.html"
+                       },
+                       {
+                           "nombre":  "Ravi Caribe",
+                           "tipo":  "Manufactura local — empaques",
+                           "descripcion":  "Empresa líder en soluciones de empaques para República Dominicana, Haití y el Caribe. Renovó simultáneamente tres certificados AENOR: ISO 9001 (calidad), ISO 14001 (ambiental) e ISO 45001 (seguridad y salud).",
+                           "por_que":  "Sistema integrado de gestión (3 normas) = triple carga documental con auditorías cruzadas; una herramienta que genera y controla documentos con estados y aprobaciones ataca su dolor más caro. Ya invierte en calidad de forma sostenida (renovaciones).",
+                           "como_abordar":  "Búsqueda LinkedIn \u0027Ravi Caribe\u0027 (responsable SIG/calidad); web localizable vía Google. También accesible vía AENOR Dominicana.",
+                           "fuente":  "https://revista.aenor.com/384/posicion-de-referencia-en-republica-dominicana.html"
+                       },
+                       {
+                           "nombre":  "Sanut",
+                           "tipo":  "Manufactura/distribución local — insumos para alimentación animal",
+                           "descripcion":  "Suplidora dominicana (Santo Domingo) de ingredientes y materias primas para alimento balanceado animal. Primera de su sector en RD en certificar ISO 9001 (SGS, 2019); también con acreditación ANAB.",
+                           "por_que":  "PyME B2B que usa la calidad como diferenciador comercial y debe mantener su QMS con personal limitado; sector agro-alimentario con análisis de riesgos (inocuidad de insumos) que ManualCore cubre en V0. El ángulo \u0027primera de su sector\u0027 indica liderazgo receptivo a innovación.",
+                           "como_abordar":  "Búsqueda LinkedIn \u0027Sanut República Dominicana\u0027; el vicepresidente público en prensa es Pedro Chávez. No se encontró email/teléfono público verificable — confirmar manualmente.",
+                           "fuente":  "https://almomento.net/empresa-sanut-recibe-certificacion-internacional-de-calidad-iso-9001/"
+                       },
+                       {
+                           "nombre":  "Major Logistics SRL",
+                           "tipo":  "Servicios — logística (recién formalizada en BASC)",
+                           "descripcion":  "Operador logístico dominicano que obtuvo POR PRIMERA VEZ la certificación BASC en el Congreso Nacional BASC 2025 — es decir, acaba de pasar por el proceso de documentar procedimientos de seguridad de la cadena de suministro.",
+                           "por_que":  "El certificado BASC vence cada año: deberá re-auditar y actualizar toda su documentación en 12 meses. Empresa pequeña (SRL) sin estructura documental — dolor fresco y recurrente, ciclo de venta corto. Encaja en el plan de US$49/mes.",
+                           "como_abordar":  "Búsqueda LinkedIn \u0027Major Logistics SRL República Dominicana\u0027; alternativamente vía el capítulo BASC Dominicana (basc.org.do) que publica su membresía.",
+                           "fuente":  "https://basc.org.do/9104/entrega-certificados-cnb25 y https://7dias.com.do/2026/03/25/basc-rd-fortalece-seguridad-logistica-con-la-entrega-de-nuevas-certificaciones-internacionales/"
+                       },
+                       {
+                           "nombre":  "Agente Aduanal Rodríguez Abreu \u0026 Asociados",
+                           "tipo":  "Servicios — agencia aduanal (recién formalizada en BASC)",
+                           "descripcion":  "Agencia de aduanas dominicana certificada BASC por primera vez en 2025. Los agentes aduanales viven de procedimientos: gestión documental de despachos, controles de seguridad, trazabilidad de operaciones.",
+                           "por_que":  "Negocio de servicios pequeño cuyo activo certificable SON sus procedimientos escritos; renovación BASC anual + posibles requisitos OEA (Operador Económico Autorizado) de la DGA. Piloto ideal del segmento servicios a US$49/mes.",
+                           "como_abordar":  "Búsqueda LinkedIn/Google \u0027Rodríguez Abreu \u0026 Asociados agente aduanal\u0027; o vía eventos de BASC Dominicana, donde se congregan todas las certificadas.",
+                           "fuente":  "https://basc.org.do/9104/entrega-certificados-cnb25"
+                       },
+                       {
+                           "nombre":  "UNO — United Nearshore Operations",
+                           "tipo":  "Servicios — BPO/contact center (Santiago)",
+                           "descripcion":  "El mayor BPO de Santiago (~1,200 empleados, fundado en 2004, ~70% del mercado local), bilingüe, certificado HIPAA, PCI DSS y SOC 2. Servicios: customer care, ventas, soporte técnico, back office.",
+                           "por_que":  "Los frameworks que ya cumple (HIPAA/PCI/SOC 2) exigen \u0027policies \u0026 procedures\u0027 documentadas y actualizadas en inglés — exactamente lo que ManualCore genera bilingüe. Es grande para piloto de US$49, pero perfecto para demo del tier alto o como cuenta ancla/testimonio del sector BPO; su depto. de compliance es interlocutor sofisticado.",
+                           "como_abordar":  "Web: https://www.uno.com.do/ ; LinkedIn: https://www.linkedin.com/company/united-nearshore-operations-uno- — abordar compliance/quality manager con mensaje en inglés sobre \u0027audit-ready P\u0026Ps\u0027.",
+                           "fuente":  "https://www.uno.com.do/ y https://theorg.com/org/uno-call-center"
+                       },
+                       {
+                           "nombre":  "Intercigar S.A.",
+                           "tipo":  "Zona franca — tabaco premium (Tamboril, Santiago)",
+                           "descripcion":  "Fabricante de cigarros premium hechos a mano en la zona franca de Tamboril, con gerencia holandesa y exportación mundial. Tamaño medio (no es La Aurora ni Tabacalera de García).",
+                           "por_que":  "Producción artesanal de exportación donde el conocimiento (fermentación, torcido, control de calidad de hoja) es 100% tácito y los compradores europeos piden consistencia documentada. Gerencia europea = receptiva a estandarización. Representa el segmento tabaco que la investigación priorizó.",
+                           "como_abordar":  "Aparece en el directorio Livio de tabacaleras; buscar \u0027Intercigar\u0027 en LinkedIn/Google para web y gerencia. Alternativa: abordar el clúster vía INTABACO (intabaco.gob.do), que asesora fábricas pequeñas del rubro.",
+                           "fuente":  "https://www.livio.com/directorio/negocios-y-economia/tabacaleras/ y https://intabaco.gob.do/"
+                       },
+                       {
+                           "nombre":  "ClusterSoft (Cluster de Software Dominicana)",
+                           "tipo":  "Canal/asociación — beneficiaria nombrada del programa MICM-UE",
+                           "descripcion":  "Asociación sin fines de lucro de empresas de desarrollo de software y servicios TIC de RD (incluye PyMEs y academia, aliada de INTEC). Es una de las dos únicas beneficiarias del programa MICM-UE nombradas en prensa (vertical ISO 27001/ITIL para TIC).",
+                           "por_que":  "No es un cliente final sino una PUERTA al lote de mipymes TIC del programa MICM-UE: una demo a la asociación llega a decenas de empresas que están documentando procesos para ISO 27001/ITIL ahora mismo. Las software factories además documentan onboarding y soporte — caso de uso natural.",
+                           "como_abordar":  "Web: https://clustersoft.org.do/ (página de contacto pública) ; LinkedIn: https://www.linkedin.com/company/clustersoftrd/ — proponer demo colectiva para sus miembros.",
+                           "fuente":  "https://eldinero.com.do/136393/micm-y-union-europea-impulsan-la-certificacion-de-250-mipymes-en-normas-de-calidad/ y https://clustersoft.org.do/"
+                       },
+                       {
+                           "nombre":  "Helados BON",
+                           "tipo":  "Manufactura local — alimentos (referencia/demo, no piloto de US$49)",
+                           "descripcion":  "Marca dominicana icónica de helados; obtuvo su PRIMERA certificación BASC en 2025 (seguridad de cadena de suministro/exportación), lo que indica expansión de su sistema documental más allá de inocuidad.",
+                           "por_que":  "Probablemente demasiado grande para el plan PyME, pero su certificación BASC fresca implica documentación nueva por mantener; sirve como cuenta de prestigio para demo del dashboard admin y como referencia que arrastre a sus suplidores PyME (efecto cadena: certificadas exigen certificación a proveedores).",
+                           "como_abordar":  "Web pública de Helados BON y LinkedIn corporativo; interlocutor: gerencia de calidad/cadena de suministro. Abordaje alterno vía BASC Dominicana.",
+                           "fuente":  "https://7dias.com.do/2026/03/25/basc-rd-fortalece-seguridad-logistica-con-la-entrega-de-nuevas-certificaciones-internacionales/"
+                       }
+                   ],
+    "implicaciones":  [
+                          "No persigas a las 250 mipymes del programa MICM-UE una por una: no hay lista pública. Entra por arriba — el consorcio implementador AESA-AENOR-UNE y el Viceministerio de Fomento a las Mipymes del MICM (teléfono público (809) 567-7192 ext. 1041) — y por las dos beneficiarias nombradas (ClusterSoft, Prime SRL). AENOR es a la vez certificadora, formadora del programa y dueña de la revista donde las PyMEs presumen sus certificados: es el nodo más valioso del ecosistema para una alianza.",
+                          "BASC Dominicana es el canal de dolor recurrente más concreto encontrado: 144 empresas con certificado que VENCE CADA AÑO y un congreso anual que las reúne. Una alianza o charla en eventos BASC (\u0027renueva tu certificación sin rehacer tus documentos\u0027) pone a ManualCore frente a decenas de PyMEs logísticas, aduanales y de seguridad de una sola vez.",
+                          "La revista AENOR y las notas de prensa de certificación son una máquina de leads gratuita: cada empresa que publica \u0027logramos/renovamos ISO 9001\u0027 tiene un QMS vivo, presupuesto de calidad y re-auditorías programadas. Monitorear revista.aenor.com, aenordominicana.com, INDOCAL y prensa local (elDinero, alMomento, 7días) debería ser rutina semanal de prospección.",
+                          "El mensaje \u0027sé la primera de tu sector\u0027 resuena culturalmente en RD (Peravia/Jaja primeras conserveras, Sanut primera de su rubro, MICM primer ministerio con 5 ISO): úsalo como gancho de campaña para PyMEs no certificadas, y \u0027mantén tu certificación sin contratar un departamento de calidad\u0027 para las ya certificadas.",
+                          "En BPO/contact centers el lenguaje no es ISO sino HIPAA/PCI DSS/SOC 2 (policies \u0026 procedures en inglés exigidas por clientes de EE.UU.): valida la decisión bilingüe ES/EN de ManualCore y exige material de venta en inglés para ese segmento. El INDOCAL NORDOM 774 (gestión de calidad específica para mipymes, más barata que ISO 9001) es otro vocabulario local a incorporar al pitch.",
+                          "En zonas francas, los gigantes de dispositivos médicos (25% de las exportaciones) tienen QMS corporativos propios; la entrada realista del tier US$99-149 son plantas medianas tipo NAPCO DR (eléctrico), curtidurías/calzado (Bojos Tanning), tabacaleras medianas de Tamboril (Intercigar) y los SUPLIDORES locales de las grandes — a quienes las certificadas ya empiezan a exigir certificación (efecto cascada documentado por G-CERTI).",
+                          "Hay una base de prospección gratuita lista para usar: el XLSX de datos.gob.do con todas las mipymes certificadas por el MICM 2019-2025 (RNC, empresa, actividad). Cruzarlo por actividad (alimentos, plásticos, logística) genera listas segmentadas para outreach del piloto del 21 de junio.",
+                          "Limitación operativa: micm.gob.do, adozona.org y gcerti.org bloquean acceso automatizado (HTTP 403); los directorios CNZFE/ADOZONA deben consultarse manualmente o vía datos.gob.do. No se encontraron emails ni teléfonos directos verificables de las empresas prospecto (solo webs/LinkedIn citados); cualquier dato de contacto individual debe confirmarse manualmente antes del outreach."
+                      ]
+}

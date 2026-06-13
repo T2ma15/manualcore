@@ -1,0 +1,156 @@
+﻿{
+    "top_prospectos":  [
+                           {
+                               "nombre":  "CompetISO / ANEIH",
+                               "tipo":  "Organismo-canal (programa de consultoría ISO de ANEIH)",
+                               "prioridad":  "alta",
+                               "razon":  "Un solo acuerdo da acceso al equipo que certifica al 62% de las PyMEs ISO 9001 del país. Sus proyectos grupales de ~7 meses tienen el cuello de botella exacto que ManualCore elimina: manuales, SOPs y lista maestra. Contacto directo publicado.",
+                               "primer_paso":  "Enviar email HOY a capacitacion@aneih.org.do (cc llamada al 809-560-2160 ext. 3) proponiendo demo de 20 min al equipo CompetISO antes del 21 jun, con asunto tipo: \u0027Herramienta para acortar la fase documental de sus proyectos ISO\u0027.",
+                               "fuente":  "https://aneih.org.do/competiso/"
+                           },
+                           {
+                               "nombre":  "LEAN CONSULTING RD SRL (Ing. Fausto Ramírez Valdez)",
+                               "tipo":  "Consultora ISO con retainer mensual",
+                               "prioridad":  "alta",
+                               "razon":  "Encaje comercial más rápido del mapa: ya venden planes de suscripción mensual (Básico/Premium/Platino). ManualCore a US$49/mes se integra al plan y multiplica clientes por consultor (4 consultores, 140+ clientes). El pitch es margen, no tecnología.",
+                               "primer_paso":  "Email a info@leanconsultingrd.com dirigido al Ing. Fausto Ramírez Valdez: \u0027Cómo atender más clientes de su plan Platino con el mismo equipo\u0027 + propuesta de demo de 15 min esta semana.",
+                               "fuente":  "http://leanconsultingrd.com/"
+                           },
+                           {
+                               "nombre":  "SMG Consulting",
+                               "tipo":  "Consultora ISO / OEA (comercio exterior)",
+                               "prioridad":  "alta",
+                               "razon":  "Expedientes OEA y multi-norma son intensivos en procedimientos documentados, a menudo bilingües — diferenciador directo de ManualCore. Tiene email de gerencia publicado, lo que permite outreach inmediato sin intermediarios.",
+                               "primer_paso":  "Email a gerencia@smgconsultingrd.com (o WhatsApp al +1-829-741-7372) ofreciendo piloto de 7 días aplicado a un expediente OEA real de un cliente exportador.",
+                               "fuente":  "https://www.smgconsultingrd.com/"
+                           },
+                           {
+                               "nombre":  "Qualitypoint Management School",
+                               "tipo":  "Consultora ISO / escuela de calidad",
+                               "prioridad":  "alta",
+                               "razon":  "Está contratando consultor ISO vía LinkedIn (2025-2026): evidencia pública de que les falta capacidad. ManualCore absorbe esa demanda sin contratar. Su línea de \u0027mantenimiento ISO\u0027 es ingreso recurrente que ManualCore abarata de servir.",
+                               "primer_paso":  "Mensaje LinkedIn a la página de empresa (do.linkedin.com/company/qualitypointrd) y a su dirección: \u0027Vi que buscan consultor ISO — ¿y si su equipo actual produjera el doble de documentación sin sumar nómina?\u0027. No inventar emails: no hay correo público verificable.",
+                               "fuente":  "https://do.linkedin.com/jobs/view/consultor-en-sistema-de-gesti%C3%B3n-iso-at-qualitypoint-management-school-4288969604"
+                           },
+                           {
+                               "nombre":  "Centros MIPYMES (red MICM-universidades: PUCMM, INTEC, UASD, etc.)",
+                               "tipo":  "Organismo-canal institucional / multiplicador",
+                               "prioridad":  "alta",
+                               "razon":  "El multiplicador más grande disponible: asesores generalistas SIN expertise documental (el ICP exacto) que acompañan a ~250 mipymes del programa MICM-UE de €12.4MM. Ciclo de venta lento — por eso hay que arrancarlo YA, en paralelo a todo lo demás.",
+                               "primer_paso":  "Llamar a Víctor Rodríguez, Encargado de Competitividad de Pymes del MICM, (809) 567-7192 ext. 1041, y en paralelo escribir al Centro MIPYMES de PUCMM o INTEC proponiendo un piloto local con 1-2 asesores como caso replicable.",
+                               "fuente":  "https://micm.gob.do/viceministerios/fomento-a-las-pymes/implementacion-de-centros-de-servicios-de-apoyo-integral-a-las-pymes-en-republica-dominicana/"
+                           },
+                           {
+                               "nombre":  "ClusterSoft (Cluster de Software Dominicana)",
+                               "tipo":  "Asociación — puerta al lote TIC del programa MICM-UE",
+                               "prioridad":  "alta",
+                               "razon":  "Una de las dos únicas beneficiarias nombradas del programa MICM-UE: una sola demo colectiva llega a decenas de empresas TIC documentando procesos para ISO 27001/ITIL ahora mismo. Las software factories además entienden SaaS — ciclo corto.",
+                               "primer_paso":  "Contactar vía formulario de clustersoft.org.do y LinkedIn (linkedin.com/company/clustersoftrd) proponiendo una demo colectiva de 30 min para sus miembros: \u0027documenten sus políticas ISO 27001 en días, no meses\u0027.",
+                               "fuente":  "https://eldinero.com.do/136393/micm-y-union-europea-impulsan-la-certificacion-de-250-mipymes-en-normas-de-calidad/ y https://clustersoft.org.do/"
+                           },
+                           {
+                               "nombre":  "Major Logistics SRL",
+                               "tipo":  "Empresa piloto — logística, recién certificada BASC",
+                               "prioridad":  "alta",
+                               "razon":  "Dolor fresco y recurrente: acaba de documentar todo para su primera certificación BASC y el certificado vence CADA AÑO. Empresa pequeña sin estructura documental = ciclo de venta corto y fit perfecto con el plan de US$49/mes. Candidata ideal para piloto del 22 jun.",
+                               "primer_paso":  "Buscar en LinkedIn \u0027Major Logistics SRL República Dominicana\u0027 y escribir a gerencia con el gancho: \u0027Renueva tu BASC el próximo año sin rehacer tus documentos desde cero\u0027.",
+                               "fuente":  "https://basc.org.do/9104/entrega-certificados-cnb25"
+                           },
+                           {
+                               "nombre":  "Global Pack (Grupo Multiquímica)",
+                               "tipo":  "Empresa piloto — manufactura de empaques, ISO 9001:2015",
+                               "prioridad":  "alta",
+                               "razon":  "Manufactura mediana con QMS vivo (re-auditorías anuales), múltiples líneas de producto que exigen SOPs y control de cambios, decisión rápida, y cuenta expandible al resto del grupo Multiquímica. Candidata a piloto de manufactura para el 22 jun.",
+                               "primer_paso":  "Mensaje LinkedIn a gerencia de calidad/operaciones (linkedin.com/company/globalpack.com.do) ofreciendo piloto de 7 días: \u0027mantén tu ISO 9001 al día sin un departamento documental\u0027.",
+                               "fuente":  "https://revista.aenor.com/375/global-pack-logra-la-iso-9001.html y https://globalpack.com.do/"
+                           },
+                           {
+                               "nombre":  "NAPCO DR (San Gregorio de Nigua)",
+                               "tipo":  "Empresa piloto — zona franca, electrónica/seguridad, ISO 9001:2015",
+                               "prioridad":  "media",
+                               "razon":  "Perfil exacto del tier US$99-149: planta de zona franca con casa matriz en EE.UU. que exige documentación bilingüe ES/EN y trazabilidad — el bilingüismo de ManualCore es diferenciador directo. Abre el caso de éxito \u0027zonas francas\u0027.",
+                               "primer_paso":  "Buscar en LinkedIn al plant manager o quality manager de NAPCO DR en San Gregorio de Nigua y abordar a la gerencia LOCAL (no al corporativo) con pitch bilingüe.",
+                               "fuente":  "https://revista.aenor.com/375/apuesta-por-la-calidad-en-napco.html"
+                           },
+                           {
+                               "nombre":  "Ravi Caribe",
+                               "tipo":  "Empresa piloto — empaques, sistema integrado ISO 9001+14001+45001",
+                               "prioridad":  "media",
+                               "razon":  "Triple norma = triple carga documental con auditorías cruzadas; el control documental (estados, numeración, aprobaciones) de ManualCore ataca su dolor más caro. Renueva certificados de forma sostenida: presupuesto de calidad ya existente.",
+                               "primer_paso":  "Buscar en LinkedIn al responsable del Sistema Integrado de Gestión de Ravi Caribe y proponer demo enfocada en mantener 3 normas con una sola herramienta.",
+                               "fuente":  "https://revista.aenor.com/384/posicion-de-referencia-en-republica-dominicana.html"
+                           },
+                           {
+                               "nombre":  "iterativo (Progressa Group)",
+                               "tipo":  "Implementador ERP (Odoo Silver, 85 referencias)",
+                               "prioridad":  "media",
+                               "razon":  "Segundo canal con pitch distinto: cada implementación Odoo exige levantar procesos antes y documentar SOPs de uso después. Mantienen la localización dominicana oficial de Odoo y tienen 25 clientes retail + 10 manufactura para co-selling.",
+                               "primer_paso":  "Formulario en odoo.iterativo.io / progressa.group con gancho: \u0027documentación de procesos lista antes del kickoff y SOPs del ERP post go-live — horas no facturables que recuperas\u0027.",
+                               "fuente":  "https://www.odoo.com/partners/iterativo-1099255"
+                           },
+                           {
+                               "nombre":  "Grow IT",
+                               "tipo":  "Implementador ERP (único Odoo Gold de RD, 113 referencias)",
+                               "prioridad":  "media",
+                               "razon":  "El implementador Odoo con más volumen del país: un acuerdo de referidos pone ManualCore frente a 113+ empresas que ya digitalizan su gestión y carecen de documentación formal de procesos.",
+                               "primer_paso":  "Formulario en growit.com.do o perfil oficial en odoo.com proponiendo acuerdo de referidos; mismo gancho \u0027docs listos antes del kickoff\u0027. Atacar después de validar el pitch ERP con iterativo.",
+                               "fuente":  "https://www.odoo.com/partners/grow-it-1236042 y https://growit.com.do/"
+                           },
+                           {
+                               "nombre":  "FBrugal Consultores (Frank Brugal A.)",
+                               "tipo":  "Consultora de negocio / compliance",
+                               "prioridad":  "media",
+                               "razon":  "38+ años y 500+ empresas asesoradas en compliance y optimización de procesos — su práctica produce manuales y políticas que ManualCore genera con control documental. Su cartera multi-sector valida el posicionamiento \u0027cualquier rubro\u0027. Contacto directo publicado.",
+                               "primer_paso":  "Email a fb.brugal@gmail.com (o +1-829-342-4652) proponiendo demo aplicada a un caso real de compliance de su cartera.",
+                               "fuente":  "https://fbrugalconsultores.com/consultor-empresarial-republica-dominicana/"
+                           },
+                           {
+                               "nombre":  "Ymaya Lean Academy",
+                               "tipo":  "Consultora / academia de mejora continua",
+                               "prioridad":  "media",
+                               "razon":  "Sus egresados y clientes deben documentar trabajo estándar tras cada proyecto lean; ManualCore puede entrar al currículo como herramienta (licencias para alumnos certificados) — un canal de distribución que se renueva con cada cohorte.",
+                               "primer_paso":  "Email a Info@ymayaleanacademy.org (809-807-6347) proponiendo alianza academia-herramienta: ManualCore como entregable estándar de sus certificaciones lean.",
+                               "fuente":  "https://www.ymayaleanacademy.org/"
+                           },
+                           {
+                               "nombre":  "Consultores de Productividad (Santiago)",
+                               "tipo":  "Consultora de productividad / reingeniería — zona norte",
+                               "prioridad":  "media",
+                               "razon":  "Abre el beachhead Santiago/zona norte (concentración de zonas francas, tier US$99-149) que las firmas capitalinas no dominan. La reingeniería de procesos termina en documentación formal: ManualCore es su entregable acelerado.",
+                               "primer_paso":  "Mensaje LinkedIn a la empresa (do.linkedin.com/company/consultores-de-productividad) o formulario en consultoresdeproductividad.com proponiendo demo orientada a sus proyectos de reingeniería.",
+                               "fuente":  "https://consultoresdeproductividad.com/ y https://do.linkedin.com/company/consultores-de-productividad"
+                           }
+                       ],
+    "plan_ads":  "NO enciendas ads todavía. La investigación de keywords vino vacía (no hay datos de CPC ni volumen para RD), tu canal principal es venta 1:1 a consultores —que no se captan con search ads— y con 2 horas/día cada peso y minuto rinde más en outreach directo. Calendario: (1) Del 12 jun al 11 jul: US$0 en ads; lo único pagado aceptable es LinkedIn Premium/Sales Navigator (~US$80-100/mes) si los mensajes a Qualitypoint, NAPCO y Ravi Caribe se topan con límites de InMail. (2) Post-pilotos (mediados de julio), SOLO si ya tienes 2-3 testimonios y un caso de éxito publicable: enciende Google Search con presupuesto micro de US$10-15/día (~US$300-450/mes), geo República Dominicana + 2-3 países LatAm de prueba, apuntando a keywords de dolor documental en español: \"manual de procedimientos empresa\", \"como hacer un SOP\", \"plantilla procedimiento operativo estándar\", \"documentación ISO 9001 pyme\", \"software control de documentos\", \"levantamiento de procesos\"; y un ad group pequeño en inglés para BPO/zonas francas: \"SOP software\", \"policy and procedure software\". Evita pujar por \"QMS software\" o \"eQMS\": contradice tu posicionamiento (NO eres un QMS) y te mete en subastas caras contra incumbents. Antes de gastar un dólar, corre una validación de keywords real (Google Keyword Planner es gratis con la cuenta de Ads) porque estas keywords son hipótesis, no datos. LinkedIn Ads: descartado por ahora — el ticket de US$49/mes no soporta CPCs de US$8-15; usa LinkedIn orgánico (2-3 posts/semana mostrando un SOP generándose en vivo) que es gratis y alimenta el mismo embudo.",
+    "secuencia_30_dias":  [
+                              "Jun 12 — Disparar los 2 emails con contacto directo verificado: CompetISO/ANEIH (capacitacion@aneih.org.do) y LEAN CONSULTING RD (info@leanconsultingrd.com, Atn. Ing. Fausto Ramírez). Son tus dos tiros más valiosos; van primero.",
+                              "Jun 12-13 — Preparar el kit mínimo de venta (1 sesión de 2h): demo guiada de 15 min con un SOP real generándose en vivo + one-pager en español para consultores (\u0027atiende 3x clientes con el mismo equipo\u0027) + versión del gancho para empresas (\u0027mantén tu certificación sin departamento de calidad\u0027).",
+                              "Jun 13 — Email a SMG Consulting (gerencia@smgconsultingrd.com) y FBrugal (fb.brugal@gmail.com); mensaje LinkedIn a Qualitypoint citando su vacante de consultor ISO.",
+                              "Jun 14 — Llamada a Víctor Rodríguez, MICM (809) 567-7192 ext. 1041 por los Centros MIPYMES; contacto a ClusterSoft (formulario + LinkedIn) proponiendo demo colectiva para sus miembros TIC.",
+                              "Jun 15 — Descargar el XLSX de mipymes certificadas 2019-2025 de datos.gob.do y filtrar por actividad (alimentos, plásticos, logística): construir lista de 50 empresas para la segunda ola post-lanzamiento. 1 hora, máximo.",
+                              "Jun 16-17 — Outreach LinkedIn a las 4 empresas piloto: Global Pack, Major Logistics, NAPCO DR y Ravi Caribe. Un mensaje personalizado por día de 2-3 párrafos; nada de plantilla genérica.",
+                              "Jun 18 — Toque 2 (seguimiento corto) a todos los no respondidos de la semana. La mayoría de respuestas llegan en el follow-up, no en el primer mensaje.",
+                              "Jun 19-20 — Agendar todas las demos para la semana del 22; definir por escrito el guion del piloto de 7 días: qué documento real van a producir, criterio de éxito, y fecha/condición de conversión a pago acordada desde el día 1.",
+                              "Jun 21 — LANZAMIENTO V0. Post de lanzamiento en LinkedIn personal mostrando un SOP generándose en vivo (es tu mejor demo y es gratis).",
+                              "Jun 22-26 — Ejecutar demos agendadas y arrancar máximo 3-5 pilotos simultáneos (tu límite real con 2h/día). Prioriza: 1 consultor ISO + 1 empresa BASC/logística + 1 manufactura.",
+                              "Jun 24 — Activar el segundo canal: formularios a iterativo y Grow IT con el pitch ERP (\u0027documentación lista antes del kickoff\u0027), distinto al pitch de calidad.",
+                              "Jun 27 - Jul 3 — Acompañamiento diario de pilotos: check-in de 15 min por piloto, destrabar bloqueos el mismo día. En el primer momento \u0027wow\u0027 de cada piloto, pedir el testimonio ahí mismo (texto o video de 30 seg).",
+                              "Jul 1 — Instaurar rutina semanal permanente (15 min): revisar revista.aenor.com, aenordominicana.com, basc.org.do y prensa local (elDinero, alMomento) buscando empresas que anuncien certificación/renovación — cada nota es un lead con presupuesto de calidad activo.",
+                              "Jul 4-8 — Cierre de conversión: pilotos → US$49/mes (o tier zonas francas US$99-149). A los consultores que pilotearon, proponer acuerdo de partner/revendedor con precio preferente dentro de sus retainers.",
+                              "Jul 9-11 — Retrospectiva comercial: medir el embudo (contactados → respuesta → demo → piloto → pago), decidir con datos si enciendes Google Ads, y lanzar la segunda ola de outreach usando la lista del XLSX + el primer caso de éxito como prueba social."
+                          ],
+    "advertencias":  [
+                         "NO prometas \u0027ISO-ready\u0027 ni certificación garantizada — nunca. Es tu regla de posicionamiento validada y además te quema con consultores y certificadoras, que detectan esa promesa como señal de amateur.",
+                         "NO pierdas tiempo en certificadoras (EQA, AENOR, SGS) como canal de venta: por independencia no pueden consultar sobre lo que certifican. Son vitrina y fuente de leads (revista AENOR), nunca canal.",
+                         "NO persigas a las 250 mipymes del programa MICM-UE una por una: no existe lista pública. Entra por arriba (MICM/Centros MIPYMES, ClusterSoft) o quemarás tus 2 horas diarias en búsquedas estériles.",
+                         "NO inventes ni \u0027adivines\u0027 emails de contacto: solo usa los publicados en las webs oficiales (ANEIH, LEAN CONSULTING, SMG, FBrugal, Ymaya, MICM). Para el resto, LinkedIn o formulario. Verifica cada dato antes de enviar — la investigación puede estar desactualizada.",
+                         "NO le pitchees tecnología/IA a los consultores. A un consultor ISO le vendes margen y capacidad (\u0027más clientes con el mismo equipo\u0027); a un implementador ERP le vendes horas no facturables recuperadas; a un BPO le hablas en inglés de \u0027audit-ready policies \u0026 procedures\u0027. Tres canales, tres mensajes — el error típico de founder técnico es un solo pitch de features para todos.",
+                         "NO hagas demos genéricas: cada demo debe generar un documento REAL del prospecto (un SOP de SU proceso). La demo con plantilla de ejemplo mata la magia del producto.",
+                         "NO arranques pilotos sin fecha de fin ni condición de conversión acordada por escrito el día 1. \u0027Piloto de 7 días\u0027 sin cierre pactado se convierte en gratis-para-siempre, el error clásico.",
+                         "NO aceptes más de 3-5 pilotos simultáneos. Con 2 horas/día, el piloto número 6 degrada a todos los demás y te quedas sin testimonios buenos.",
+                         "NO conviertas el feedback de pilotos en compromisos de roadmap. Anota todo, promete nada: tus noches son para terminar V0 hasta el 21 jun, no para features a medida del primer prospecto que las pida.",
+                         "NO enciendas ads antes de tener pilotos convertidos y testimonios, y NO pagues LinkedIn Ads con un ticket de US$49/mes — la matemática no cierra. La investigación de ads vino vacía: las keywords sugeridas son hipótesis sin datos de CPC; valida en Keyword Planner antes de gastar.",
+                         "NO te escondas detrás del email. En RD el negocio se cierra por teléfono y WhatsApp: si hay número publicado (ANEIH, SMG, MICM, Ymaya, FBrugal), llama al segundo o tercer día, no esperes la respuesta escrita.",
+                         "NO dejes que lo institucional (MICM, INFOTEP, INDOCAL, AMCHAMDR) consuma tus 2 horas: son apuestas de ciclo largo que se inician con una llamada y se cultivan en segundo plano. Tu caja de julio sale de consultores y empresas BASC/AENOR, no de organismos."
+                     ]
+}

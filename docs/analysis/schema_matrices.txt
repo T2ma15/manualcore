@@ -1,0 +1,406 @@
+===== SHEET: Schema Overview =====
+Row 1 | A: MANUALCORE — DATABASE SCHEMA v1.0
+Row 3 | A: SOURCE KEY | B: B = Brain writes (auto)   E = Engineer confirms   S = System generates   C = Calculated   N = Nullable
+Row 5 | A: CORE ENTITY TABLES
+Row 6 | A: tenants | B: Multi-tenant root. One row per customer account. Holds subscription tier, industry profile, branding.
+Row 7 | A: users | B: All users within a tenant. Roles: platform_owner, process_owner, approver, qa, operator, viewer.
+Row 8 | A: sessions | B: One session = one process documentation project. Tracks node, industry profile, input files, status.
+Row 9 | A: nodes | B: One node = one process or operation. Belongs to a session. Has type, parent node, and link type to next node.
+Row 10 | A: MATRIX 1 — MASTER DATA
+Row 11 | A: operations | B: One row per operation within a node. Holds op_id, sequence, description, takt inputs, allowance, trained_operator_required.
+Row 12 | A: steps | B: One row per step within an operation. Description, material, critical parameter, quality gate flag, safety flag.
+Row 13 | A: materials | B: All materials used across steps. Name, SKU, qty_per_op, repetitions, total_qty (computed), unit, notes.
+Row 14 | A: product_specs | B: Characteristic, nominal, USL, LSL, unit, measurement method. Linked to steps via quality gate.
+Row 15 | A: process_specs | B: Process parameter, value, limits, control method. Linked to operations.
+Row 16 | A: specs_5m | B: Man, Machine, Material, Method, Measurement fields. One row per operation.
+Row 17 | A: photos | B: Photo or drawing linked to a step. Classification (TWI, WI, safety, drawing), caption, annotation JSON.
+Row 18 | A: time_study_observations | B: Raw stopwatch readings. N observations per step. Analyst, rating factor, allowance, derived standard time.
+Row 19 | A: MATRIX 2 — DOCUMENT RELATIONSHIPS
+Row 20 | A: documents | B: Every generated document. Type, title, doc_number, revision, status, effective_date, review_date.
+Row 21 | A: document_relationships | B: Source doc → related doc. Relationship type, shared fields, criticality, last impact check.
+Row 22 | A: related_documents_display | B: Denormalised view used by WI and SOP related-docs section. One row per doc-to-doc link for display.
+Row 23 | A: MATRIX 3 — OWNERSHIP & APPROVAL
+Row 24 | A: ownership | B: Process owner, approver, QA per document. Signature dates. Trainable positions. Training due date.
+Row 25 | A: reviewers | B: Many reviewers per document. Name, initials, review date, comment summary.
+Row 26 | A: training_records | B: Operator × operation certification. Status C/T/X/N. Certified date. TWI reference. Plateau flag.
+Row 27 | A: MATRIX 4 — REVISION & AUDIT
+Row 28 | A: revisions | B: One row per revision event. Reason, what changed (brain-generated summary), created_by, approved_by.
+Row 29 | A: print_events | B: Every print action. User, copy number, total copies, timestamp, document revision at time of print.
+Row 30 | A: access_grants | B: Who has access to which document, at what level (view / print / edit).
+Row 31 | A: audit_log | B: Immutable append-only log. Every field write, conflict resolution, status change, and brain action.
+Row 32 | A: BRAIN & SESSION TABLES
+Row 33 | A: input_files | B: Every file uploaded to a session. Type, language, transcript/OCR result, confidence score.
+Row 34 | A: brain_extractions | B: Every field the brain extracted. Source file, extracted value, confidence, status (confirmed/pending/conflict).
+Row 35 | A: conflicts | B: Conflict between two extractions. Field name, value_a, source_a, value_b, source_b, resolution, resolved_by.
+Row 36 | A: chat_messages | B: Every message in the brain chat. Role (brain/engineer), content, linked conflict or extraction, timestamp.
+Row 37 | A: generation_jobs | B: Document generation request. Status, requested_docs, generated_at, output_file_path.
+Row 38 | A: DIAGRAM & OUTPUT TABLES
+Row 39 | A: diagram_nodes | B: One row per shape in a flowchart or material flowchart. Type, label, position, linked step.
+Row 40 | A: diagram_edges | B: Arrow between two diagram nodes. Type (sequential/material/decision-yes/decision-no), label.
+Row 41 | A: gantt_tasks | B: One row per Gantt task. Node, task name, type, owner, start_day, end_day, dependency.
+Row 42 | A: vsm_data_blocks | B: One row per VSM process box. Cycle time, changeover, uptime, operators, WIP, link type.
+Row 43 | A: output_files | B: Generated file records. Format (docx/xlsx/html), path, generated_at, revision snapshot.
+Row 45 | A: Total tables: 29   |   Schema version 1.0   |   ManualCore MVP — Manufacturing profile
+
+
+===== SHEET: Core Tables =====
+Row 1 | A: CORE ENTITY TABLES — tenants · users · sessions · nodes
+Row 3 | A: TABLE.COLUMN | B: DATA TYPE | C: PK / FK | D: NULL? | E: SOURCE | F: INDEX | G: DESCRIPTION / RULES | H: TEMPLATE FIELDS POPULATED | I: VALIDATION
+Row 4 | A: tenants
+Row 5 | A: TABLE.COLUMN | B: DATA TYPE | C: PK / FK | D: NULL? | E: SOURCE | F: INDEX | G: DESCRIPTION / RULES | H: TEMPLATE FIELDS POPULATED | I: VALIDATION
+Row 6 | A: tenants.id | B: UUID | C: PK | D: NO | E: S | F: PK | G: Auto-generated. Root identifier for all tenant data. | H: All document headers: [COMPANY NAME] | I: UUID v4, unique
+Row 7 | A: tenants.name | B: VARCHAR(200) | C: 88 | E: E | F: IDX | G: Legal company name. Used on all document headers. | H: Company name field in all templates | I: Non-empty
+Row 8 | A: tenants.slug | B: VARCHAR(80) | C: 88 | E: S | F: UNQ | G: URL-safe tenant identifier. Auto-generated from name. | H: — | I: Lowercase, no spaces, unique
+Row 9 | A: tenants.subscription | B: ENUM | C: 88 | E: E | F: 108 | H: — | I: Must match tier enum
+Row 10 | A: tenants.industry_profile | B: ENUM | C: 88 | E: E | F: IDX | G: manufacturing | food_beverage | field_service | logistics | healthcare. Drives field labels. | H: All template field labels | I: Must match profile enum
+Row 11 | A: tenants.logo_url | B: TEXT | C: 116 | E: E | F: 117 | H: Logo slot in SOP, WI, TWI, BOM headers | I: URL or null
+Row 12 | A: tenants.brand_colors | B: JSONB | C: 116 | E: E | F: 122 | H: — | I: Valid hex values or null
+Row 13 | A: tenants.created_at | B: TIMESTAMPTZ | C: 88 | E: S | F: 126 | H: — | I: Auto
+Row 14 | A: tenants.is_active | B: BOOLEAN | C: 88 | E: S | F: 130 | H: — | I: Default true
+Row 16 | A: users
+Row 17 | A: TABLE.COLUMN | B: DATA TYPE | C: PK / FK | D: NULL? | E: SOURCE | F: INDEX | G: DESCRIPTION / RULES | H: TEMPLATE FIELDS POPULATED | I: VALIDATION
+Row 18 | A: users.id | B: UUID | C: PK | D: NO | E: S | F: PK | G: Auto-generated user ID. | H: Approval blocks, ownership matrix | I: UUID v4
+Row 19 | A: users.tenant_id | B: UUID | C: FK→tenants | D: NO | E: S | F: IDX | G: Every user belongs to exactly one tenant. | H: — | I: Must exist in tenants
+Row 20 | A: users.email | B: VARCHAR(320) | C: 88 | E: E | F: UNQ | G: Login email. Unique within tenant. | H: — | I: Valid email, unique per tenant
+Row 21 | A: users.full_name | B: VARCHAR(200) | C: 88 | E: E | F: 145 | H: Process owner, approver, QA, trainer fields | I: Non-empty
+Row 22 | A: users.position | B: VARCHAR(200) | C: 116 | E: E | F: 148 | H: Ownership matrix position column | I: Nullable
+Row 23 | A: users.role | B: ENUM | C: 88 | E: E | F: IDX | G: platform_owner|process_owner|approver|qa|operator|viewer. Controls permissions. | H: — | I: Must match role enum
+Row 24 | A: users.print_auth | B: BOOLEAN | C: 88 | E: E | F: 155 | H: Print traceability footer | I: Default false
+Row 25 | A: users.is_active | B: BOOLEAN | C: 88 | E: S | F: 159 | H: — | I: Default true
+Row 26 | A: users.created_at | B: TIMESTAMPTZ | C: 88 | E: S | F: 161 | H: — | I: Auto
+Row 28 | A: sessions
+Row 29 | A: TABLE.COLUMN | B: DATA TYPE | C: PK / FK | D: NULL? | E: SOURCE | F: INDEX | G: DESCRIPTION / RULES | H: TEMPLATE FIELDS POPULATED | I: VALIDATION
+Row 30 | A: sessions.id | B: UUID | C: PK | D: NO | E: S | F: PK | G: One session = one process documentation project. | H: — | I: UUID v4
+Row 31 | A: sessions.tenant_id | B: UUID | C: FK→tenants | D: NO | E: S | F: IDX | G: Tenant that owns this session. | H: — | I: Must exist
+Row 32 | A: sessions.created_by | B: UUID | C: FK→users | D: NO | E: S | F: IDX | G: User who started the session. | H: — | I: Must exist
+Row 33 | A: sessions.process_name | B: VARCHAR(300) | C: 88 | E: B | F: IDX | G: Brain extracts from first input. Engineer confirms. | H: All document titles | I: Non-empty after confirmation
+Row 34 | A: sessions.node_id | B: UUID | C: FK→nodes | D: YES | E: S | F: IDX | G: Primary node for this session. Set when node is created. | H: Op ID on all documents | I: Nullable until node created
+Row 35 | A: sessions.industry_profile | B: ENUM | C: 88 | E: E | F: 182 | H: All field labels | I: Must match profile enum
+Row 36 | A: sessions.status | B: ENUM | C: 88 | E: S | F: IDX | G: input|extracting|review|confirmed|generating|complete|error | H: — | I: State machine — ordered
+Row 37 | A: sessions.requested_docs | B: JSONB | C: 116 | E: E | F: 188 | H: — | I: Valid doc type codes
+Row 38 | A: sessions.takt_time_min | B: DECIMAL(8,3) | C: 116 | E: E | F: 192 | H: OBC takt cell, VSM takt display | I: Positive decimal or null
+Row 39 | A: sessions.available_time | B: DECIMAL(8,1) | C: 116 | E: E | F: 197 | H: OBC capacity formula | I: Positive decimal or null
+Row 40 | A: sessions.created_at | B: TIMESTAMPTZ | C: 88 | E: S | F: 200 | H: — | I: Auto
+Row 41 | A: sessions.completed_at | B: TIMESTAMPTZ | C: 116 | E: S | F: 202 | H: — | I: Nullable until complete
+Row 43 | A: nodes
+Row 44 | A: TABLE.COLUMN | B: DATA TYPE | C: PK / FK | D: NULL? | E: SOURCE | F: INDEX | G: DESCRIPTION / RULES | H: TEMPLATE FIELDS POPULATED | I: VALIDATION
+Row 45 | A: nodes.id | B: UUID | C: PK | D: NO | E: S | F: PK | G: One node = one process. The atomic unit of ManualCore. | H: Node ID on all documents | I: UUID v4
+Row 46 | A: nodes.session_id | B: UUID | C: FK→sessions | D: NO | E: S | F: IDX | G: Session this node belongs to. | H: — | I: Must exist
+Row 47 | A: nodes.tenant_id | B: UUID | C: FK→tenants | D: NO | E: S | F: IDX | G: Denormalised for fast filtering. | H: — | I: Must match session tenant
+Row 48 | A: nodes.node_code | B: VARCHAR(20) | C: 88 | E: E | F: UNQ | G: Human-readable node identifier. E.g. A-01, B-02. Unique per tenant. | H: Op ID field on SOP, WI, TWI, BOM, Flowchart | I: Unique per tenant
+Row 49 | A: nodes.name | B: VARCHAR(300) | C: 88 | E: B | F: 219 | H: Process name on all documents | I: Non-empty
+Row 50 | A: nodes.sequence | B: INTEGER | C: 88 | E: E | F: IDX | G: Position in overall process sequence. 1, 2, 3… | H: Sequence field: '3 of 6' | I: Positive integer
+Row 51 | A: nodes.total_nodes | B: INTEGER | C: 88 | E: E | F: 227 | H: Sequence field: '3 of 6' | I: ≥ sequence
+Row 52 | A: nodes.parent_node_id | B: UUID | C: FK→nodes | D: YES | E: E | F: IDX | G: For hierarchy: child node points to parent SOP node. Null for top-level. | H: Parent document reference | I: Self-referential FK, nullable
+Row 53 | A: nodes.hierarchy_level | B: ENUM | C: 88 | E: E | F: 234 | H: Document type header | I: Must match level enum
+Row 54 | A: nodes.next_node_id | B: UUID | C: FK→nodes | D: YES | E: E | F: IDX | G: The node this output connects to. Null if terminal. | H: Flowchart end node connector, VSM, Gantt | I: Nullable
+Row 55 | A: nodes.connection_type | B: ENUM | C: 116 | E: E | F: 241 | H: Gantt (finish-to-start vs independent), VSM arrow | I: Required if next_node_id set
+Row 56 | A: nodes.input_description | B: TEXT | C: 116 | E: B | F: 245 | H: Scope input field, Material Flowchart | I: Nullable — brain fills
+Row 57 | A: nodes.output_description | B: TEXT | C: 116 | E: B | F: 249 | H: Scope output field, Material Flowchart | I: Nullable — brain fills
+Row 58 | A: nodes.ref_sop_id | B: UUID | C: FK→documents | D: YES | E: E | F: 253 | H: Ref SOP field on WI, TWI headers | I: Nullable
+Row 59 | A: nodes.created_at | B: TIMESTAMPTZ | C: 88 | E: S | F: 256 | H: — | I: Auto
+
+
+===== SHEET: Matrix 1 — Master Data =====
+Row 1 | A: MATRIX 1 — MASTER DATA TABLES: operations · steps · materials · specs · photos · time_study
+Row 3 | A: TABLE.COLUMN | B: DATA TYPE | C: PK / FK | D: NULL? | E: SOURCE | F: INDEX | G: DESCRIPTION / RULES | H: TEMPLATE FIELDS POPULATED | I: VALIDATION
+Row 4 | A: operations
+Row 5 | A: TABLE.COLUMN | B: DATA TYPE | C: PK / FK | D: NULL? | E: SOURCE | F: INDEX | G: DESCRIPTION / RULES | H: TEMPLATE FIELDS POPULATED | I: VALIDATION
+Row 6 | A: operations.id | B: UUID | C: PK | D: NO | E: S | F: PK | G: One row per operation. | H: Operation rows in SOP, WI, Routing, OBC | I: UUID v4
+Row 7 | A: operations.node_id | B: UUID | C: FK→nodes | D: NO | E: S | F: IDX | G: Node this operation belongs to. | H: — | I: Must exist
+Row 8 | A: operations.op_code | B: VARCHAR(20) | C: 88 | E: E | F: IDX | G: e.g. A-01. Matches node_code for single-operation nodes. | H: Op ID column in all templates | I: Non-empty
+Row 9 | A: operations.sequence | B: INTEGER | C: 88 | E: B | F: IDX | G: Order within node. Brain assigns from input sequence. | H: Sequence / step order | I: Positive, unique per node
+Row 10 | A: operations.description | B: TEXT | C: 88 | E: B | F: 271 | H: SOP steps, WI operation description | I: Non-empty after confirm
+Row 11 | A: operations.takt_time_min | B: DECIMAL(8,3) | C: 116 | E: E | F: 275 | H: OBC takt line | I: Positive decimal or null
+Row 12 | A: operations.allowance_pct | B: DECIMAL(5,2) | C: 116 | E: E | F: 279 | H: Time Study allowance column | I: 0.0–1.0 or null
+Row 13 | A: operations.trained_req | B: BOOLEAN | C: 88 | E: B | F: 283 | H: Training Matrix — only flagged ops appear | I: Default false
+Row 14 | A: operations.safety_flag | B: BOOLEAN | C: 88 | E: B | F: 286 | H: Safety/PPE section on SOP, WI, TWI | I: Default false
+Row 15 | A: operations.cycle_time_limit | B: DECIMAL(8,3) | C: 116 | E: E | F: 289 | H: Time Study deviation column | I: Nullable
+Row 16 | A: operations.work_center | B: VARCHAR(200) | C: 116 | E: B | F: 292 | H: Routing work center column | I: Nullable
+Row 17 | A: operations.cost_center | B: VARCHAR(50) | C: 116 | E: E | F: 296 | H: Routing cost center column | I: Nullable
+Row 18 | A: operations.labor_grade | B: VARCHAR(50) | C: 116 | E: E | F: 299 | H: Routing labor grade column | I: Nullable
+Row 19 | A: operations.setup_time_min | B: DECIMAL(8,3) | C: 116 | E: E | F: 302 | H: Routing setup time column | I: Nullable
+Row 20 | A: operations.std_time_min | B: DECIMAL(8,3) | C: 116 | E: C | F: 306 | H: Routing std time, OBC bar height, Gantt duration | I: Computed — do not write directly
+Row 22 | A: steps
+Row 23 | A: TABLE.COLUMN | B: DATA TYPE | C: PK / FK | D: NULL? | E: SOURCE | F: INDEX | G: DESCRIPTION / RULES | H: TEMPLATE FIELDS POPULATED | I: VALIDATION
+Row 24 | A: steps.id | B: UUID | C: PK | D: NO | E: S | F: PK | G: One row per step within an operation. | H: Step rows in WI process table | I: UUID v4
+Row 25 | A: steps.operation_id | B: UUID | C: FK→operations | D: NO | E: S | F: IDX | G: Parent operation. | H: — | I: Must exist
+Row 26 | A: steps.node_id | B: UUID | C: FK→nodes | D: NO | E: S | F: IDX | G: Denormalised for fast retrieval. | H: — | I: Must match operation node
+Row 27 | A: steps.step_number | B: INTEGER | C: 88 | E: B | F: IDX | G: Sequence within operation. Brain assigns. | H: Step number column in WI, Flowchart node label | I: Positive, unique per operation
+Row 28 | A: steps.description | B: TEXT | C: 88 | E: B | F: 323 | H: WI step description, SOP step | I: Non-empty after confirm
+Row 29 | A: steps.material_id | B: UUID | C: FK→materials | D: YES | E: B | F: IDX | G: Primary material used in this step. Null if no material. | H: Material column in WI, BOM step grouping | I: Nullable
+Row 30 | A: steps.critical_param | B: VARCHAR(300) | C: 116 | E: B | F: 330 | H: Critical param column in WI and SOP | I: Nullable
+Row 31 | A: steps.quality_gate | B: BOOLEAN | C: 88 | E: B | F: 333 | H: QC badge in WI, Checklist row, Control Plan row | I: Default false
+Row 32 | A: steps.safety_hazard | B: BOOLEAN | C: 88 | E: B | F: 336 | H: Safety flag on TWI sheet | I: Default false
+Row 33 | A: steps.ansi_symbol | B: ENUM | C: 116 | E: B | F: 339 | H: Flowchart symbol type column | I: Nullable — required for Flowchart gen
+Row 34 | A: steps.decision_yes_to | B: UUID | C: FK→steps | D: YES | E: B | F: 344 | H: Flowchart YES branch | I: Nullable
+Row 35 | A: steps.decision_no_to | B: UUID | C: FK→steps | D: YES | E: B | F: 347 | H: Flowchart NO branch | I: Nullable
+Row 36 | A: steps.nc_action | B: TEXT | C: 116 | E: B | F: 350 | H: Flowchart NC box, Checklist NC action strip | I: Required if decision_no_to set
+Row 37 | A: steps.dept_responsible | B: VARCHAR(200) | C: 116 | E: E | F: 354 | H: Swimlane lane assignment in multi-dept flowchart | I: Nullable
+Row 38 | A: steps.photo_id | B: UUID | C: FK→photos | D: YES | E: E | F: IDX | G: Primary instruction photo for this step. | H: WI photo column, TWI photo placeholder | I: Nullable — blocks TWI if null
+Row 40 | A: materials
+Row 41 | A: TABLE.COLUMN | B: DATA TYPE | C: PK / FK | D: NULL? | E: SOURCE | F: INDEX | G: DESCRIPTION / RULES | H: TEMPLATE FIELDS POPULATED | I: VALIDATION
+Row 42 | A: materials.id | B: UUID | C: PK | D: NO | E: S | F: PK | G: One row per distinct material used in the node. | H: BOM material rows, Material Flowchart | I: UUID v4
+Row 43 | A: materials.node_id | B: UUID | C: FK→nodes | D: NO | E: S | F: IDX | G: Node this material is used in. | H: BOM operation segment | I: Must exist
+Row 44 | A: materials.name | B: VARCHAR(300) | C: 88 | E: B | F: 368 | H: Material name in BOM, WI, SOP, Checklist | I: Non-empty after confirm
+Row 45 | A: materials.sku | B: VARCHAR(100) | C: 116 | E: E | F: IDX | G: SKU or part number. Brain proposes, engineer confirms. Null if unknown. | H: SKU column in BOM, WI, Material Flowchart | I: Nullable until confirmed
+Row 46 | A: materials.qty_per_op | B: DECIMAL(10,3) | C: 88 | E: B | F: 377 | H: QTY/OP column in BOM | I: Positive decimal
+Row 47 | A: materials.unit | B: VARCHAR(20) | C: 88 | E: B | F: 381 | H: Unit column in BOM | I: Non-empty
+Row 48 | A: materials.repetitions | B: INTEGER | C: 88 | E: E | F: 384 | H: Repetitions column in BOM | I: Positive integer, default 1
+Row 49 | A: materials.total_qty | B: DECIMAL(10,3) | C: 88 | E: C | F: 388 | H: Total QTY column in BOM | I: Computed
+Row 50 | A: materials.is_consumed | B: BOOLEAN | C: 88 | E: B | F: 392 | H: BOM notes 'not consumed', cost rollup exclusion | I: Default true
+Row 51 | A: materials.flow_type | B: ENUM | C: 116 | E: B | F: 395 | H: Material Flowchart flow type column | I: Nullable
+Row 52 | A: materials.storage_loc | B: VARCHAR(200) | C: 116 | E: B | F: 398 | H: Material Flowchart storage column, WH triangle | I: Nullable
+Row 53 | A: materials.incoming_spec | B: VARCHAR(300) | C: 116 | E: E | F: 401 | H: 5M Material field in SOP and WI | I: Nullable
+Row 54 | A: materials.coc_required | B: BOOLEAN | C: 88 | E: E | F: 404 | H: 5M Material field | I: Default false
+Row 56 | A: product_specs
+Row 57 | A: TABLE.COLUMN | B: DATA TYPE | C: PK / FK | D: NULL? | E: SOURCE | F: INDEX | G: DESCRIPTION / RULES | H: TEMPLATE FIELDS POPULATED | I: VALIDATION
+Row 58 | A: product_specs.id | B: UUID | C: PK | D: NO | E: S | F: PK | G: One spec characteristic per row. | H: Quality inspection table in SOP, WI, Checklist | I: UUID v4
+Row 59 | A: product_specs.node_id | B: UUID | C: FK→nodes | D: NO | E: S | F: IDX | G: Node this spec applies to. | H: — | I: Must exist
+Row 60 | A: product_specs.step_id | B: UUID | C: FK→steps | D: YES | E: B | F: IDX | G: Step where this spec is verified. Null if operation-level. | H: Linked to quality gate step | I: Nullable
+Row 61 | A: product_specs.characteristic | B: VARCHAR(300) | C: 88 | E: B | F: 415 | H: Characteristic column in SOP, WI, Checklist, CP | I: Non-empty
+Row 62 | A: product_specs.nominal | B: DECIMAL(12,4) | C: 116 | E: B | F: 419 | H: Nominal column | I: Nullable if attribute spec
+Row 63 | A: product_specs.usl | B: DECIMAL(12,4) | C: 116 | E: B | F: 423 | H: USL column — shown in red | I: Nullable
+Row 64 | A: product_specs.lsl | B: DECIMAL(12,4) | C: 116 | E: B | F: 426 | H: LSL column — shown in red | I: Nullable
+Row 65 | A: product_specs.unit | B: VARCHAR(30) | C: 116 | E: B | F: 430 | H: Unit column | I: Nullable
+Row 66 | A: product_specs.ref_doc | B: VARCHAR(200) | C: 116 | E: E | F: 433 | H: Linked drawing / spec reference | I: Nullable
+Row 67 | A: product_specs.measurement_method | B: TEXT | C: 116 | E: B | F: 436 | H: Gauge/method column in SOP, WI, Checklist | I: Nullable
+Row 68 | A: product_specs.gauge_id | B: UUID | C: FK→specs_5m | D: YES | E: E | F: 440 | H: Gauge ID in Control Plan and Data Form | I: Nullable
+Row 69 | A: product_specs.special_char | B: ENUM | C: 116 | E: E | F: 443 | H: Control Plan special char column | I: Nullable
+Row 70 | A: product_specs.frequency | B: VARCHAR(100) | C: 116 | E: E | F: 446 | H: Checklist frequency column, Control Plan frequency | I: Nullable
+Row 71 | A: product_specs.sample_size | B: INTEGER | C: 116 | E: E | F: 449 | H: Control Plan sample size column | I: Nullable
+Row 72 | A: product_specs.reaction_plan | B: TEXT | C: 116 | E: E | F: 452 | H: Control Plan reaction plan, Checklist NC action | I: Required if in Control Plan
+Row 74 | A: specs_5m
+Row 75 | A: TABLE.COLUMN | B: DATA TYPE | C: PK / FK | D: NULL? | E: SOURCE | F: INDEX | G: DESCRIPTION / RULES | H: TEMPLATE FIELDS POPULATED | I: VALIDATION
+Row 76 | A: specs_5m.id | B: UUID | C: PK | D: NO | E: S | F: PK | G: One 5M record per operation. | H: 5M section in SOP and WI | I: UUID v4
+Row 77 | A: specs_5m.operation_id | B: UUID | C: FK→operations | D: NO | E: S | F: IDX | G: Operation these 5M requirements apply to. | H: — | I: Must exist, unique per operation
+Row 78 | A: specs_5m.man | B: TEXT | C: 116 | E: B | F: 462 | H: Man row in 5M table | I: Nullable
+Row 79 | A: specs_5m.machine | B: TEXT | C: 116 | E: B | F: 465 | H: Machine row in 5M table | I: Nullable
+Row 80 | A: specs_5m.machine_id | B: VARCHAR(100) | C: 116 | E: E | F: IDX | G: Equipment identifier. Links to equipment register. | H: Equipment ID in WI scope section | I: Nullable
+Row 81 | A: specs_5m.calibration_due | B: DATE | C: 116 | E: E | F: 472 | H: Calibration due field in WI scope | I: Nullable
+Row 82 | A: specs_5m.material | B: TEXT | C: 116 | E: B | F: 475 | H: Material row in 5M table | I: Nullable
+Row 83 | A: specs_5m.method | B: TEXT | C: 116 | E: B | F: 478 | H: Method row in 5M table | I: Nullable
+Row 84 | A: specs_5m.measurement | B: TEXT | C: 116 | E: B | F: 481 | H: Measurement row in 5M table | I: Nullable
+Row 85 | A: specs_5m.gauge_ids | B: JSONB | C: 116 | E: E | F: 484 | H: Data Form gauge column, Control Plan gauge | I: Nullable
+Row 86 | A: specs_5m.ppe | B: TEXT | C: 116 | E: B | F: 487 | H: PPE field in SOP, WI, TWI | I: Nullable
+Row 87 | A: specs_5m.hazard | B: TEXT | C: 116 | E: B | F: 490 | H: Hazard field in SOP, WI, TWI | I: Nullable
+Row 89 | A: photos
+Row 90 | A: TABLE.COLUMN | B: DATA TYPE | C: PK / FK | D: NULL? | E: SOURCE | F: INDEX | G: DESCRIPTION / RULES | H: TEMPLATE FIELDS POPULATED | I: VALIDATION
+Row 91 | A: photos.id | B: UUID | C: PK | D: NO | E: S | F: PK | G: One row per uploaded photo or drawing. | H: Photo placeholders in WI and TWI | I: UUID v4
+Row 92 | A: photos.session_id | B: UUID | C: FK→sessions | D: NO | E: S | F: IDX | G: Session this photo was uploaded in. | H: — | I: Must exist
+Row 93 | A: photos.step_id | B: UUID | C: FK→steps | D: YES | E: E | F: IDX | G: Step this photo illustrates. Null until engineer assigns. | H: WI step photo column, TWI photo column | I: Nullable — required for TWI generation
+Row 94 | A: photos.classification | B: ENUM | C: 88 | E: E | F: 502 | H: Photo type drives template placement | I: Non-empty
+Row 95 | A: photos.caption | B: VARCHAR(500) | C: 116 | E: B | F: 506 | H: Photo caption in WI and TWI | I: Nullable
+Row 96 | A: photos.annotations | B: JSONB | C: 116 | E: E | F: 509 | H: Callout arrows in TWI photo columns | I: Nullable
+Row 97 | A: photos.correct_condition | B: TEXT | C: 116 | E: E | F: 512 | H: TWI correct line per step | I: Required for TWI generation
+Row 98 | A: photos.if_wrong | B: TEXT | C: 116 | E: E | F: 516 | H: TWI if-wrong line per step | I: Required for TWI generation
+Row 99 | A: photos.file_url | B: TEXT | C: 88 | E: S | F: 519 | H: — | I: Non-empty
+Row 100 | A: photos.uploaded_at | B: TIMESTAMPTZ | C: 88 | E: S | F: 521 | H: — | I: Auto
+Row 102 | A: time_study_observations
+Row 103 | A: TABLE.COLUMN | B: DATA TYPE | C: PK / FK | D: NULL? | E: SOURCE | F: INDEX | G: DESCRIPTION / RULES | H: TEMPLATE FIELDS POPULATED | I: VALIDATION
+Row 104 | A: tso.id | B: UUID | C: PK | D: NO | E: S | F: PK | G: One row per observation. | H: Time Study observation cell | I: UUID v4
+Row 105 | A: tso.step_id | B: UUID | C: FK→steps | D: NO | E: S | F: IDX | G: Step being timed. | H: Time Study step row | I: Must exist
+Row 106 | A: tso.session_id | B: UUID | C: FK→sessions | D: NO | E: S | F: IDX | G: Session context. | H: — | I: Must exist
+Row 107 | A: tso.analyst_id | B: UUID | C: FK→users | D: NO | E: E | F: IDX | G: User who collected this observation. | H: Time Study analyst field | I: Must exist
+Row 108 | A: tso.obs_number | B: INTEGER | C: 88 | E: S | F: 534 | H: Obs 1 through Obs 10 columns | I: 1–10
+Row 109 | A: tso.observed_min | B: DECIMAL(8,3) | C: 88 | E: E | F: 538 | H: Observation cell value | I: Positive decimal
+Row 110 | A: tso.rating_factor | B: DECIMAL(4,2) | C: 88 | E: E | F: 542 | H: Rating column in Time Study | I: 0.5–1.5 typical
+Row 111 | A: tso.observed_at | B: TIMESTAMPTZ | C: 88 | E: S | F: 546 | H: — | I: Auto
+
+
+===== SHEET: Matrices 2-3-4 + Brain =====
+Row 1 | A: MATRICES 2·3·4 — documents · ownership · revisions + BRAIN TABLES: conflicts · chat · audit
+Row 3 | A: TABLE.COLUMN | B: DATA TYPE | C: PK / FK | D: NULL? | E: SOURCE | F: INDEX | G: DESCRIPTION / RULES | H: TEMPLATE FIELDS POPULATED | I: VALIDATION
+Row 4 | A: documents
+Row 5 | A: TABLE.COLUMN | B: DATA TYPE | C: PK / FK | D: NULL? | E: SOURCE | F: INDEX | G: DESCRIPTION / RULES | H: TEMPLATE FIELDS POPULATED | I: VALIDATION
+Row 6 | A: documents.id | B: UUID | C: PK | D: NO | E: S | F: PK | G: One row per document. Created when generation is requested. | H: Every document header | I: UUID v4
+Row 7 | A: documents.tenant_id | B: UUID | C: FK→tenants | D: NO | E: S | F: IDX | G: Denormalised tenant reference. | H: — | I: Must exist
+Row 8 | A: documents.node_id | B: UUID | C: FK→nodes | D: NO | E: S | F: IDX | G: Node this document covers. | H: — | I: Must exist
+Row 9 | A: documents.session_id | B: UUID | C: FK→sessions | D: NO | E: S | F: IDX | G: Session that generated this document. | H: — | I: Must exist
+Row 10 | A: documents.doc_type | B: ENUM | C: 88 | E: S | F: IDX | G: sop|wi|twi|bom|checklist|data_form|time_study|routing|obc|pfmea|control_plan|flowchart|material_flowchart|gantt|vsm|ownership_matrix|training_matrix | H: Document type label | I: Must match enum
+Row 11 | A: documents.doc_number | B: VARCHAR(50) | C: 88 | E: S | F: UNQ | G: System-generated. Format: TYPE-NODE-SEQ. e.g. SOP-A01-001. | H: DOC NO. on all document headers | I: Unique per tenant
+Row 12 | A: documents.title | B: VARCHAR(400) | C: 88 | E: B | F: 566 | H: Document title on header | I: Non-empty
+Row 13 | A: documents.revision | B: VARCHAR(10) | C: 88 | E: S | F: 570 | H: REVISION on all headers | I: System-managed
+Row 14 | A: documents.revision_number | B: INTEGER | C: 88 | E: S | F: 574 | H: — | I: Non-negative integer
+Row 15 | A: documents.status | B: ENUM | C: 88 | E: S | F: IDX | G: draft|under_review|approved|released|obsolete | H: Status in Ownership Matrix | I: State machine
+Row 16 | A: documents.effective_date | B: DATE | C: 116 | E: E | F: 581 | H: EFF DATE on all headers | I: Nullable until approved
+Row 17 | A: documents.review_due | B: DATE | C: 88 | E: E | F: 585 | H: REVIEW DUE on all headers | I: Required — blocks approval if missing
+Row 18 | A: documents.output_format | B: ENUM | C: 88 | E: S | F: 589 | H: — | I: Must match doc_type format mapping
+Row 19 | A: documents.file_url | B: TEXT | C: 116 | E: S | F: 592 | H: — | I: Nullable until generated
+Row 20 | A: documents.created_at | B: TIMESTAMPTZ | C: 88 | E: S | F: 595 | H: — | I: Auto
+Row 21 | A: documents.approved_at | B: TIMESTAMPTZ | C: 116 | E: S | F: 597 | H: — | I: Nullable until approved
+Row 23 | A: document_relationships
+Row 24 | A: TABLE.COLUMN | B: DATA TYPE | C: PK / FK | D: NULL? | E: SOURCE | F: INDEX | G: DESCRIPTION / RULES | H: TEMPLATE FIELDS POPULATED | I: VALIDATION
+Row 25 | A: doc_rel.id | B: UUID | C: PK | D: NO | E: S | F: PK | G: One row per directional relationship between two documents. | H: Connection Map in Instruction Manual | I: UUID v4
+Row 26 | A: doc_rel.source_id | B: UUID | C: FK→documents | D: NO | E: S | F: IDX | G: The document that has the field being changed. | H: Source template in Connection Map | I: Must exist
+Row 27 | A: doc_rel.related_id | B: UUID | C: FK→documents | D: NO | E: S | F: IDX | G: The document affected by changes to source. | H: Related template | I: Must exist
+Row 28 | A: doc_rel.rel_type | B: ENUM | C: 88 | E: S | F: 608 | H: Connection type column | I: Must match enum
+Row 29 | A: doc_rel.shared_fields | B: JSONB | C: 116 | E: S | F: 611 | H: Impact analysis — which fields to check | I: Nullable
+Row 30 | A: doc_rel.criticality | B: ENUM | C: 88 | E: E | F: 614 | H: Criticality in impact report | I: Non-empty
+Row 31 | A: doc_rel.last_check | B: DATE | C: 116 | E: S | F: 617 | H: Last impact check date | I: Nullable
+Row 32 | A: doc_rel.check_result | B: ENUM | C: 116 | E: S | F: 620 | H: Impact report action column | I: Nullable until checked
+Row 34 | A: ownership
+Row 35 | A: TABLE.COLUMN | B: DATA TYPE | C: PK / FK | D: NULL? | E: SOURCE | F: INDEX | G: DESCRIPTION / RULES | H: TEMPLATE FIELDS POPULATED | I: VALIDATION
+Row 36 | A: ownership.id | B: UUID | C: PK | D: NO | E: S | F: PK | G: One ownership record per document per revision. | H: Delivery Ownership Matrix row | I: UUID v4
+Row 37 | A: ownership.document_id | B: UUID | C: FK→documents | D: NO | E: S | F: IDX | G: Document this record applies to. | H: — | I: Must exist
+Row 38 | A: ownership.owner_id | B: UUID | C: FK→users | D: NO | E: E | F: IDX | G: Process owner. Must sign before approval. | H: Process owner column in Ownership Matrix | I: Must exist, cannot equal approver
+Row 39 | A: ownership.approver_id | B: UUID | C: FK→users | D: NO | E: E | F: IDX | G: Approver. Cannot be same as owner. | H: Approver column in Ownership Matrix | I: Must exist, cannot equal owner_id
+Row 40 | A: ownership.qa_id | B: UUID | C: FK→users | D: YES | E: E | F: IDX | G: QA sign-off user. Null if no QA role in account. | H: QA column — hidden if null | I: Nullable
+Row 41 | A: ownership.owner_signed | B: TIMESTAMPTZ | C: 116 | E: S | F: 640 | H: Owner signature date in Ownership Matrix | I: Nullable until signed
+Row 42 | A: ownership.approver_signed | B: TIMESTAMPTZ | C: 116 | E: S | F: 644 | H: Approver signature date | I: Nullable until signed
+Row 43 | A: ownership.qa_signed | B: TIMESTAMPTZ | C: 116 | E: S | F: 647 | H: QA signature date | I: Nullable
+Row 44 | A: ownership.trainable_pos | B: JSONB | C: 116 | E: E | F: 650 | H: Trainable positions column, Training Matrix seed | I: Nullable
+Row 45 | A: ownership.training_due | B: DATE | C: 116 | E: E | F: 653 | H: Training due date column | I: Nullable — required if trainable_pos set
+Row 47 | A: revisions
+Row 48 | A: TABLE.COLUMN | B: DATA TYPE | C: PK / FK | D: NULL? | E: SOURCE | F: INDEX | G: DESCRIPTION / RULES | H: TEMPLATE FIELDS POPULATED | I: VALIDATION
+Row 49 | A: revisions.id | B: UUID | C: PK | D: NO | E: S | F: PK | G: One revision event per approval cycle. | H: Revision + Audit Matrix | I: UUID v4
+Row 50 | A: revisions.document_id | B: UUID | C: FK→documents | D: NO | E: S | F: IDX | G: Document being revised. | H: — | I: Must exist
+Row 51 | A: revisions.rev_number | B: INTEGER | C: 88 | E: S | F: 662 | H: Revision number in document control system | I: Auto-increment per document
+Row 52 | A: revisions.reason | B: TEXT | C: 88 | E: E | F: 666 | H: Revision reason in system (not on document face) | I: Non-empty
+Row 53 | A: revisions.what_changed | B: TEXT | C: 88 | E: B | F: 669 | H: What changed — for impact analysis notification | I: Non-empty — brain writes
+Row 54 | A: revisions.created_by | B: UUID | C: FK→users | D: NO | E: S | F: IDX | G: User who initiated this revision. | H: Created by in audit | I: Must exist
+Row 55 | A: revisions.approved_by | B: UUID | C: FK→users | D: YES | E: S | F: IDX | G: User who approved this revision. | H: Approved by in audit | I: Nullable until approved
+Row 56 | A: revisions.effective_date | B: DATE | C: 116 | E: E | F: 679 | H: — | I: Nullable until set
+Row 57 | A: revisions.obsolete_date | B: DATE | C: 116 | E: S | F: 682 | H: — | I: Auto-set when next revision approved
+Row 58 | A: revisions.created_at | B: TIMESTAMPTZ | C: 88 | E: S | F: 685 | H: — | I: Auto
+Row 59 | A: revisions.retained | B: BOOLEAN | C: 88 | E: S | F: 687 | H: — | I: Default true, set false after 5 revisions
+Row 61 | A: conflicts
+Row 62 | A: TABLE.COLUMN | B: DATA TYPE | C: PK / FK | D: NULL? | E: SOURCE | F: INDEX | G: DESCRIPTION / RULES | H: TEMPLATE FIELDS POPULATED | I: VALIDATION
+Row 63 | A: conflicts.id | B: UUID | C: PK | D: NO | E: S | F: PK | G: One conflict per field discrepancy between two inputs. | H: Chat interface — conflict bubble | I: UUID v4
+Row 64 | A: conflicts.session_id | B: UUID | C: FK→sessions | D: NO | E: S | F: IDX | G: Session in which this conflict was found. | H: — | I: Must exist
+Row 65 | A: conflicts.field_path | B: VARCHAR(200) | C: 88 | E: B | F: 695 | H: Conflict bubble field label | I: Non-empty
+Row 66 | A: conflicts.value_a | B: TEXT | C: 88 | E: B | F: 698 | H: Left side of conflict display | I: Non-empty
+Row 67 | A: conflicts.source_a | B: VARCHAR(200) | C: 88 | E: B | F: 701 | H: Source label in conflict bubble | I: Non-empty
+Row 68 | A: conflicts.value_b | B: TEXT | C: 88 | E: B | F: 704 | H: Right side of conflict display | I: Non-empty
+Row 69 | A: conflicts.source_b | B: VARCHAR(200) | C: 88 | E: B | F: 707 | H: Source label in conflict bubble | I: Non-empty
+Row 70 | A: conflicts.status | B: ENUM | C: 88 | E: S | F: IDX | G: open|resolved|held. Open = blocks generation. Held = engineer needs to verify. | H: Chat bubble border color | I: Default open
+Row 71 | A: conflicts.resolution | B: TEXT | C: 116 | E: E | F: 713 | H: Conflict resolution in audit log | I: Required when resolved
+Row 72 | A: conflicts.resolved_by | B: UUID | C: FK→users | D: YES | E: S | F: IDX | G: User who resolved this conflict. | H: — | I: Nullable until resolved
+Row 73 | A: conflicts.resolved_at | B: TIMESTAMPTZ | C: 116 | E: S | F: 720 | H: — | I: Auto on resolution
+Row 74 | A: conflicts.created_at | B: TIMESTAMPTZ | C: 88 | E: S | F: 723 | H: — | I: Auto
+Row 76 | A: chat_messages
+Row 77 | A: TABLE.COLUMN | B: DATA TYPE | C: PK / FK | D: NULL? | E: SOURCE | F: INDEX | G: DESCRIPTION / RULES | H: TEMPLATE FIELDS POPULATED | I: VALIDATION
+Row 78 | A: chat.id | B: UUID | C: PK | D: NO | E: S | F: PK | G: One row per message in the brain-engineer conversation. | H: Chat interface message bubble | I: UUID v4
+Row 79 | A: chat.session_id | B: UUID | C: FK→sessions | D: NO | E: S | F: IDX | G: Session this chat belongs to. | H: — | I: Must exist
+Row 80 | A: chat.role | B: ENUM | C: 88 | E: S | F: 730 | H: Avatar and bubble style in chat interface | I: Must match enum
+Row 81 | A: chat.content | B: TEXT | C: 88 | E: S | F: 733 | H: Chat bubble content | I: Non-empty
+Row 82 | A: chat.msg_type | B: ENUM | C: 88 | E: S | F: 736 | H: Chat bubble visual style (color, border) | I: Must match enum
+Row 83 | A: chat.linked_conflict | B: UUID | C: FK→conflicts | D: YES | E: S | F: IDX | G: Conflict this message relates to. Null for general messages. | H: Conflict bubble in chat | I: Nullable
+Row 84 | A: chat.linked_field | B: VARCHAR(200) | C: 116 | E: S | F: 743 | H: Question context in chat | I: Nullable
+Row 85 | A: chat.options | B: JSONB | C: 116 | E: S | F: 746 | H: Action buttons in chat bubble | I: Nullable
+Row 86 | A: chat.selected_option | B: TEXT | C: 116 | E: S | F: 749 | H: Button highlight state | I: Nullable
+Row 87 | A: chat.created_at | B: TIMESTAMPTZ | C: 88 | E: S | F: 752 | H: Chat timestamp display | I: Auto
+Row 89 | A: audit_log
+Row 90 | A: TABLE.COLUMN | B: DATA TYPE | C: PK / FK | D: NULL? | E: SOURCE | F: INDEX | G: DESCRIPTION / RULES | H: TEMPLATE FIELDS POPULATED | I: VALIDATION
+Row 91 | A: audit.id | B: BIGSERIAL | C: PK | D: NO | E: S | F: PK | G: Append-only. Never updated or deleted. | H: — | I: Auto-increment
+Row 92 | A: audit.tenant_id | B: UUID | C: FK→tenants | D: NO | E: S | F: IDX | G: Tenant scope. | H: — | I: Must exist
+Row 93 | A: audit.session_id | B: UUID | C: FK→sessions | D: YES | E: S | F: IDX | G: Session scope. Null for account-level events. | H: — | I: Nullable
+Row 94 | A: audit.actor_id | B: UUID | C: FK→users | D: YES | E: S | F: IDX | G: User who triggered the event. Null if system-initiated. | H: — | I: Nullable
+Row 95 | A: audit.actor_type | B: ENUM | C: 88 | E: S | F: 765 | H: — | I: Must match enum
+Row 96 | A: audit.event_type | B: VARCHAR(100) | C: 88 | E: S | F: IDX | G: field_write|conflict_detected|conflict_resolved|status_change|document_generated|print|approval|access_grant|revision | H: Audit log entry type | I: Non-empty
+Row 97 | A: audit.table_name | B: VARCHAR(100) | C: 116 | E: S | F: 770 | H: — | I: Nullable
+Row 98 | A: audit.record_id | B: UUID | C: 116 | E: S | F: 772 | H: — | I: Nullable
+Row 99 | A: audit.old_value | B: JSONB | C: 116 | E: S | F: 774 | H: — | I: Nullable
+Row 100 | A: audit.new_value | B: JSONB | C: 116 | E: S | F: 776 | H: — | I: Nullable
+Row 101 | A: audit.created_at | B: TIMESTAMPTZ | C: 88 | E: S | F: 778 | H: — | I: Auto — cannot be updated
+
+
+===== SHEET: Validation + Connection Rules =====
+Row 1 | A: VALIDATION RULES + CONNECTION VALIDATION LOGIC
+Row 3 | A: RULE | B: SCOPE | C: SEVERITY | D: DETAIL — WHAT IS CHECKED AND WHAT HAPPENS ON FAILURE
+Row 5 | A: GROUP: GENERATION BLOCKERS
+Row 6 | A: Review date required | B: All documents | C: BLOCKS GENERATION | D: documents.review_due must be set before any document can move to approved status. Brain prompts engineer if missing. No exceptions.
+Row 7 | A: Conflict must be resolved | B: All fields | C: BLOCKS GENERATION | D: Any conflict with status=open prevents generation of any document that uses the conflicted field. Brain routes to chat interface with the conflict bubble.
+Row 8 | A: Missing required 5M fields | B: SOP, WI | C: BLOCKS GENERATION | D: specs_5m.man, machine, material, method, measurement must all be non-null before SOP or WI can generate. Brain asks one field at a time.
+Row 9 | A: TWI requires photos | B: TWI only | C: BLOCKS GENERATION | D: Every step linked to a TWI sheet must have photos.step_id set and photos.correct_condition and photos.if_wrong non-null. Generation blocked until all photos uploaded and annotated.
+Row 10 | A: Node link type required | B: Flowchart, Gantt, VSM | C: BLOCKS GENERATION | D: nodes.connection_type must be set if nodes.next_node_id is set. Brain asks at session end: sequential or material?
+Row 11 | A: Owner ≠ Approver | B: All documents | C: BLOCKS APPROVAL | D: ownership.owner_id cannot equal ownership.approver_id. System rejects approval if same user signs both roles.
+Row 12 | A: SKU must be confirmed | B: BOM, WI, Checklist | C: BLOCKS GENERATION | D: materials.sku must be confirmed (not null) before BOM, WI material section, or Checklist material verification row can generate.
+Row 14 | A: GROUP: CONFLICT DETECTION LOGIC
+Row 15 | A: Spec value conflict | B: Any spec field | C: CONFLICT | D: If two input sources provide different numeric values for the same field (e.g. force=400N in voice, force=450N in drawing), brain creates a conflict record with both values and sources. Routed to chat immediately.
+Row 16 | A: SKU ambiguity | B: Materials | C: CONFLICT | D: If voice input matches two or more SKUs in the product catalog, brain creates a conflict with both options. Engineer selects correct SKU before matrix write.
+Row 17 | A: Step count mismatch | B: Steps | C: WARNING | D: If two input files describe a different number of steps for the same operation, brain flags a warning and asks engineer to confirm the correct sequence.
+Row 18 | A: 5M contradiction | B: specs_5m | C: CONFLICT | D: If machine ID in voice does not match machine ID on engineering drawing, conflict is raised. Both values shown in chat with sources.
+Row 19 | A: Unit mismatch | B: product_specs | C: CONFLICT | D: If nominal value uses different units across two sources (e.g. mm vs inches), brain flags unit mismatch conflict. Engineer confirms correct unit.
+Row 21 | A: GROUP: CONNECTION VALIDATION (Layer 3)
+Row 22 | A: Sequential link — both nodes must exist | B: Gantt, VSM, Flowchart | C: BLOCKS DIAGRAM GEN | D: If nodes.connection_type = sequential, both the source node and nodes.next_node_id must exist and be confirmed in the same session or linked cross-session. Brain cannot generate Gantt or VSM if next node is undefined.
+Row 23 | A: Material link — WH buffer implied | B: Material Flowchart, VSM | C: WARNING | D: If nodes.connection_type = material, brain automatically creates a WH buffer element in the Material Flowchart and VSM diagram between the two nodes. No explicit engineer action needed but a warning is shown.
+Row 24 | A: End node annotation required | B: Flowchart | C: BLOCKS DIAGRAM GEN | D: The final step in every flowchart must have ansi_symbol=oval and a node end annotation: 'END A-01 = START of B-01' or 'END — terminal'. Brain inserts this automatically but engineer must confirm.
+Row 25 | A: Swimlane assignment | B: Multi-dept Flowchart | C: WARNING | D: steps.dept_responsible must be set for every step before swimlane flowchart can generate. Brain attempts to infer from role mentions in input. Unassigned steps are flagged amber in the review queue.
+Row 26 | A: Doc relationship impact check | B: All documents | C: WARNING | D: When any document is revised, brain runs impact analysis against all records in document_relationships where source_id = revised doc. Affected owners receive targeted action items. doc_rel.check_result is set to pending until engineer acts.
+Row 28 | A: GROUP: DOCUMENT CONTROL RULES
+Row 29 | A: Print only when approved | B: All documents | C: BLOCKS PRINT | D: documents.status must be approved or released before print is permitted. Draft documents cannot be printed regardless of user role.
+Row 30 | A: Copy number on every print | B: All documents | C: ENFORCED | D: print_events.copy_number and total_copies are set on every print action. The traceability footer is injected by the generation engine and cannot be removed by templates.
+Row 31 | A: Revision history limit | B: All documents | C: ENFORCED | D: Maximum 5 revisions retained in revisions table per document (revisions.retained=true). On revision 6, the oldest is marked retained=false and archived. Archive is permanent.
+Row 32 | A: Review date mandatory on all documents | B: All documents | C: BLOCKS APPROVAL | D: documents.review_due cannot be null when status transitions from draft to under_review. System rejects the transition.
+Row 33 | A: QA block hidden if no QA role | B: SOP, WI approval | C: DISPLAY RULE | D: If no user with role=qa exists in the tenant, the QA sign-off block is hidden from the generated document. Empty QA block looks worse in audit than no block.
+
+
+===== SHEET: Field-to-Template Map =====
+Row 1 | A: FIELD-TO-TEMPLATE MAP — which matrix field populates which template column
+Row 3 | A: MATRIX FIELD (table.column) | B: TEMPLATE(S) POPULATED | C: EXACT LOCATION IN TEMPLATE
+Row 4 | A: tenants.name | B: ALL 17 templates | C: Company name in document header, top-left bar
+Row 5 | A: tenants.logo_url | B: ALL 17 templates | C: Logo slot in header, right of company name
+Row 6 | A: nodes.node_code | B: ALL 17 templates | C: Op ID field in header identity row
+Row 7 | A: nodes.name | B: SOP, WI, TWI, BOM, Flowchart, Material FC, Gantt, VSM | C: Process/job title in header
+Row 8 | A: nodes.sequence + total | B: SOP, WI, TWI | C: Sequence field: '3 of 6'
+Row 9 | A: nodes.next_node_id + type | B: Flowchart (end node), Gantt (dependency), VSM (push arrow), Material FC (output annotation) | C: END node label, Gantt finish-to-start, VSM link arrow
+Row 10 | A: nodes.connection_type | B: Gantt, VSM, Material FC | C: sequential → finish-to-start in Gantt, push arrow in VSM; material → WH triangle in VSM, independent bar in Gantt
+Row 11 | A: nodes.input_description | B: WI scope section, Material FC lane header, TWI header row 2 | C: INPUT cell
+Row 12 | A: nodes.output_description | B: WI scope section, Material FC output lane, TWI header row 2 | C: OUTPUT cell
+Row 13 | A: operations.op_code | B: SOP, WI, TWI, BOM, Checklist, Routing, OBC, Flowchart | C: Op ID column / tag
+Row 14 | A: operations.description | B: SOP steps table, WI operation header, Routing operation description | C: Step description column
+Row 15 | A: operations.std_time_min | B: Routing STD TIME column, OBC bar height, Gantt duration | C: Std time column — computed from time study
+Row 16 | A: operations.work_center | B: Routing WORK CENTER column, VSM process box label | C: Work center column
+Row 17 | A: operations.trained_req | B: Training Matrix (ops without flag excluded), TWI footer | C: Column appears only if true
+Row 18 | A: operations.safety_flag | B: SOP safety section, WI safety section, TWI PPE strip | C: Safety and PPE rows
+Row 19 | A: operations.allowance_pct | B: Time Study allowance column | C: Allowance % cell — pre-filled for each step row
+Row 20 | A: steps.step_number | B: WI process steps, Flowchart node step badge, TWI step number badge | C: Step number column / badge
+Row 21 | A: steps.description | B: WI process steps description column, Flowchart node label, TWI important step field | C: Description column
+Row 22 | A: steps.critical_param | B: WI critical param column (red), SOP critical param column | C: Critical param column — red text
+Row 23 | A: steps.quality_gate | B: WI QC badge on step row, Checklist row (one row per true gate), Control Plan characteristic row | C: QC badge / Checklist item
+Row 24 | A: steps.ansi_symbol | B: Process Flowchart symbol type | C: Oval, rect, diamond, parallelogram shape choice
+Row 25 | A: steps.dept_responsible | B: Swimlane Flowchart lane assignment | C: Which horizontal lane the step appears in
+Row 26 | A: steps.nc_action | B: Flowchart NO branch box, Checklist nonconformance strip | C: NC action text in rejection box
+Row 27 | A: materials.name | B: BOM material name, WI material column, Material FC material ellipse, Checklist material verify row | C: Material name column
+Row 28 | A: materials.sku | B: BOM SKU column, WI material column, Material FC SKU label | C: SKU column
+Row 29 | A: materials.qty_per_op | B: BOM QTY/OP column | C: Qty per operation — user-editable in BOM
+Row 30 | A: materials.total_qty | B: BOM TOTAL QTY column | C: Computed: =QTY/OP × REPETITIONS (live Excel formula)
+Row 31 | A: materials.is_consumed | B: BOM notes column, cost rollup exclusion flag | C: Notes: 'Tool — not consumed'
+Row 32 | A: materials.flow_type | B: Material FC flow arrow type | C: Push = solid arrow, Pull = reverse arrow, Tool = dashed
+Row 33 | A: materials.storage_loc | B: Material FC storage column, VSM WH triangle label | C: Storage location annotation
+Row 34 | A: product_specs.characteristic | B: SOP quality table, WI quality table, Checklist characteristic column, Control Plan characteristic column, Data Form characteristic column | C: Characteristic column
+Row 35 | A: product_specs.nominal | B: SOP nominal, WI nominal, Checklist nominal, Control Plan spec, Data Form nominal (pre-filled) | C: Nominal column
+Row 36 | A: product_specs.usl | B: SOP USL, WI USL, Checklist USL (red), Control Plan spec/tolerance, Data Form USL (pre-filled) | C: USL column — shown in red
+Row 37 | A: product_specs.lsl | B: SOP LSL, WI LSL, Checklist LSL (red), Control Plan, Data Form | C: LSL column — shown in red
+Row 38 | A: product_specs.measurement_method | B: SOP measurement method, WI gauge/method, Checklist measurement method, Control Plan measurement method | C: Method column
+Row 39 | A: product_specs.special_char | B: Control Plan special char column | C: ★ safety-critical, △ key characteristic, blank = standard
+Row 40 | A: product_specs.frequency | B: Control Plan frequency, Checklist frequency | C: Frequency column
+Row 41 | A: product_specs.reaction_plan | B: Control Plan reaction plan, Checklist NC action strip | C: Reaction plan column
+Row 42 | A: specs_5m.man | B: SOP 5M Man row, WI 5M Man row | C: Man cell in 5M table
+Row 43 | A: specs_5m.machine | B: SOP 5M Machine row, WI 5M Machine row | C: Machine cell
+Row 44 | A: specs_5m.machine_id | B: WI equipment/station scope field, WI calibration due | C: Equipment ID in scope section
+Row 45 | A: specs_5m.calibration_due | B: WI calibration due date (red if approaching) | C: Calibration due cell
+Row 46 | A: specs_5m.material | B: SOP 5M Material row, WI 5M Material row | C: Material cell in 5M table
+Row 47 | A: specs_5m.method | B: SOP 5M Method row, WI 5M Method row | C: Method cell
+Row 48 | A: specs_5m.measurement | B: SOP 5M Measurement row, WI 5M Measurement row | C: Measurement cell
+Row 49 | A: specs_5m.ppe | B: SOP safety section, WI safety section, TWI PPE strip, Checklist PPE header | C: PPE field
+Row 50 | A: specs_5m.hazard | B: SOP safety section, WI safety section, TWI hazard strip | C: Hazard field
+Row 51 | A: photos.file_url + caption | B: WI step photo column, TWI photo placeholder | C: Photo area — engineer uploads actual image
+Row 52 | A: photos.correct_condition | B: TWI green ✓ line under each step photo | C: Correct condition text
+Row 53 | A: photos.if_wrong | B: TWI red ✗ line under each step photo | C: If-wrong condition text
+Row 54 | A: documents.doc_number | B: ALL 17 templates | C: DOC NO. field in header identity row
+Row 55 | A: documents.revision | B: ALL 17 templates | C: REVISION field in header identity row
+Row 56 | A: documents.effective_date | B: ALL 17 templates footer | C: Eff. date in footer and header
+Row 57 | A: documents.review_due | B: ALL 17 templates header | C: REVIEW DUE — shown in red
+Row 58 | A: documents.status | B: Ownership Matrix status column, all document footers (draft watermark) | C: Status column + DRAFT banner
+Row 59 | A: ownership.owner_id → name | B: SOP, WI approval block, Ownership Matrix | C: Process owner name + position
+Row 60 | A: ownership.approver_id → name | B: SOP, WI approval block, Ownership Matrix | C: Approver name + position
+Row 61 | A: ownership.trainable_pos | B: Ownership Matrix trainable positions column, Training Matrix column seeding | C: Trainable positions column
+Row 62 | A: training_records.* | B: Training Matrix C/T/X/— cells | C: One cell per operator × operation intersection
+Row 63 | A: time_study_observations.* | B: Time Study observation columns, derived std_time → Routing, OBC, Gantt | C: Obs 1–10 columns then computed outputs
+Row 64 | A: gantt_tasks.* | B: Gantt Chart bars and metadata | C: Task rows and colored bars in Gantt HTML diagram
+Row 65 | A: vsm_data_blocks.* | B: VSM process box data | C: Data block under each process box in VSM HTML diagram
+Row 66 | A: diagram_nodes + edges.* | B: Process Flowchart HTML, Material FC HTML, Swimlane HTML | C: SVG shape positions and arrow routing
+Row 67 | A: conflicts.* | B: Chat interface conflict bubble | C: Red bubble with both values, both sources, action buttons
+Row 68 | A: chat_messages.* | B: Chat interface message thread | C: Brain/engineer message bubbles and action buttons

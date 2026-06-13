@@ -1,0 +1,176 @@
+﻿{
+    "hallazgos":  [
+                      {
+                          "hallazgo":  "El \u0027texto libre → SOP con IA\u0027 ya está comoditizado como FEATURE, pero nadie lo combina con documento industrial formal ISO + control documental. Existen decenas de generadores de SOP con IA (Waybook, Scribe, Supademo, MyMap, Taskade, Easy-Peasy en español) que convierten una descripción en pasos estructurados, pero producen documentos genéricos en web/markdown, sin numeración controlada, estados de revisión, ni trazabilidad de impresión. Un análisis de 11 herramientas ISO 9001 (junio 2026) confirma explícitamente que ninguna genera documentos ISO formales desde input conversacional en lenguaje natural.",
+                          "evidencia":  "Waybook: \u0027describe el proceso y la IA produce un SOP estructurado en segundos\u0027; Unite.AI lista los \u00275 mejores generadores de SOP con IA 2026\u0027; el comparativo de ComplyJet de 11 herramientas QMS/compliance reporta solo \u0027AI-assisted policy drafting\u0027 como máximo, sin generación de documentos formales desde texto libre conversacional.",
+                          "fuente":  "https://www.waybook.com/tools/free-ai-sop-creator | https://www.unite.ai/best-ai-sop-standard-operating-procedures-generators/ | https://www.complyjet.com/blog/best-iso-9001-software"
+                      },
+                      {
+                          "hallazgo":  "El mercado se divide en dos mundos que no se tocan: (a) herramientas de documentación con IA (Scribe, Tango, Trainual, Whale, Process Street) que generan contenido pero NO tienen control documental ISO (estados Draft→Released, numeración [DEPT]-[SECC][####]-REV, owner≠approver, audit log inmutable); y (b) software QMS (Qualio, QT9, isoTracker, Effivity, ISOlocity) que tiene control documental pero NO genera el contenido — asume que tú ya escribiste el procedimiento. ManualCore une exactamente esos dos mundos.",
+                          "evidencia":  "Scribe/Tango son captura de pantalla → guías paso a paso (inútil para procesos de piso de manufactura que viven en la cabeza de la gente); isoTracker se describe como \u0027document control, audit management\u0027 sin ninguna IA generativa; Qualio reserva su IA (revisión de documentos, no autoría) para tiers Growth/Scale de ~$25k+/año.",
+                          "fuente":  "https://scribe.com/library/scribe-vs-tango | https://www.isotracker.com/ | https://www.qualio.com/pricing | https://qmswrapper.com/qmswrapper-vs-qualio/"
+                      },
+                      {
+                          "hallazgo":  "El espacio en español/LatAm está ocupado por QMS tradicionales ($50–$280+ USD/mes) y el más peligroso ya está añadiendo IA: KAWAK (Colombia) incorporó IA para \u0027apoyar la creación de documentos, análisis de causas y planes de acción\u0027. Isolución arranca en ~$280/mes, QualityWeb 360 (México) desde $50/mes, QmKey opera en República Dominicana, e ISOTools tiene página dedicada a RD. Pero ninguno ofrece extracción conversacional desde texto libre ni precio plano accesible para micro-PyMEs.",
+                          "evidencia":  "kawak.net promociona IA para crear documentos dentro de su QMS; QualityWeb 360 publica \u0027ISO 9001 Software from $50 USD/month\u0027; Capterra lista Isolución \u0027desde USD $280/mes\u0027; QmKey se comercializa como SaaS con presencia en todos los países hispanohablantes incl. RD; isotools.org mantiene página de cumplimiento para República Dominicana.",
+                          "fuente":  "https://kawak.net/es/ | https://www.qualityweb360.com/pricing/ | https://www.capterra.com/p/248364/ISOLUCIN-CALIDAD/ | https://www.qmkey.mx/software-gestion-calidad/ | https://isotools.org/republica-dominicana"
+                      },
+                      {
+                          "hallazgo":  "Hay espacio de precio real en $49/mes plano: las herramientas de documentación cobran $59–$250+/mes por equipo (Trainual ~$249/mes mínimo + $1,000 de implementación; Scribe Pro Teams $59/mes; SweetProcess $99/mes; Whale $99/mes), los QMS van de $50/mes (QualityWeb) a $280/mes (Isolución) a $12,000–$36,000/año (Qualio, QT9, MasterControl), y los generadores IA gratuitos no entregan valor de cumplimiento. Nadie vende el paquete completo (generación IA + control documental ISO) a precio de micro-PyME.",
+                          "evidencia":  "Trainual: Core ~$249/mes + fee único de implementación de $1,000; Qualio: ~$12k/año base + $3k/usuario (reportes de clientes ~€25k/año); QT9 ~$10k/año; SweetProcess $99/mes hasta 20 usuarios; Whale Team $99/mes hasta 10 usuarios.",
+                          "fuente":  "https://www.educate-me.co/blog/trainual-pricing | https://openregulatory.com/articles/qualio-price | https://www.complyjet.com/blog/best-iso-9001-software | https://www.glitter.io/blog/process-documentation/best-sweetprocess-alternatives"
+                      },
+                      {
+                          "hallazgo":  "La demanda dominicana es real y creciente: las zonas francas y multinacionales están exigiendo proveedores locales certificados ISO; INDOCAL adoptó la NORDOM/ISO 9001:2015; certificadoras (EQA Dominicana, AENOR RD, G-CERTI) están activas y G-CERTI describe a RD como \u0027hub de certificación ISO del Caribe\u0027. No existe ningún producto SaaS de documentación ISO nativo de IA, en español, orientado a este mercado — solo QMS regionales genéricos.",
+                          "evidencia":  "G-CERTI: \u0027las zonas francas y empresas multinacionales están pidiendo proveedores locales certificados ISO\u0027; INDOCAL publica la NORDOM ISO 9001:2015; EQA y AENOR operan certificación ISO 9001 en RD.",
+                          "fuente":  "https://gcerti.org/blog/republica-dominicana-hub-certificacion-iso-caribe | https://www.indocalnormas.gob.do/catalogo/ver/nordom-iso-9001-2015-sistemas-de-gesti-n-de-la-calidad-requisitos | https://eqadominicana.com/iso-9001/"
+                      },
+                      {
+                          "hallazgo":  "El competidor silencioso más grande es ChatGPT/GPTs personalizados + consultores: ya existen GPTs específicos (\u0027ISO 9001 Document and Template GPT\u0027) y los consultores de calidad en LatAm ya usan LLMs para redactar borradores de procedimientos. Esto valida la demanda del job-to-be-done, pero también significa que la generación de texto por sí sola NO es defendible — lo defendible de ManualCore es el workflow: estados, numeración automática, footer de trazabilidad de impresión, audit log inmutable, owner≠approver.",
+                          "evidencia":  "YesChat ofrece un GPT generador de documentación ISO 9001; artículos en español (nueva-iso-9001-2015.com, marzo 2026) documentan \u0027casos de éxito\u0027 de consultores usando IA para redactar borradores de procedimientos que luego adaptan al cliente.",
+                          "fuente":  "https://www.yeschat.ai/gpts-2OTocDitm7-ISO-9001-Document-and-Template-GPT | https://www.nueva-iso-9001-2015.com/2026/03/auditorias-y-consultorias-de-calidad/"
+                      },
+                      {
+                          "hallazgo":  "El patrón de interacción \u0027la IA te pregunta los campos faltantes\u0027 (Question/Confirmation) casi no existe en el mercado. Lo más cercano son los \u0027document wizards\u0027 de Advisera/Conformio (formularios paso a paso, principalmente ISO 27001, no extracción desde texto libre) y la generación one-shot desde prompt de Whale/Trainual/Process Street (sin diálogo de completitud). La extracción conversacional iterativa sobre texto pegado es genuinamente diferenciada hoy.",
+                          "evidencia":  "Conformio: \u0027documentos rehechos como wizards que te guían paso a paso\u0027 (form-filling, no chat); Process Street: \u0027escribe el nombre del proceso y obtén un workflow en menos de 3 minutos\u0027 (one-shot, sin preguntas de campos faltantes); Whale Alice \u0027genera SOPs desde prompts de texto\u0027 (one-shot).",
+                          "fuente":  "https://advisera.com/conformio/ | https://www.g2.com/products/process-street/reviews | https://document360.com/blog/whale-alternatives/"
+                      }
+                  ],
+    "competidores":  [
+                         {
+                             "nombre":  "Scribe (scribehow.com)",
+                             "enfoque":  "Captura de pantalla → guías paso a paso con screenshots; documentación de workflows digitales/software",
+                             "precio":  "Free / Pro Personal $23/seat/mes / Pro Teams $12/seat/mes con mínimo 5 seats (~$59-85/mes)",
+                             "ia":  "Genera guías y SOPs automáticamente desde grabación de acciones en pantalla; redacción asistida de títulos y descripciones",
+                             "brecha":  "Solo sirve para procesos que ocurren EN una pantalla — inútil para procesos de manufactura/piso de planta. Sin control documental ISO (sin estados, numeración, revisiones controladas, trazabilidad de impresión). Inglés-first. Output web/PDF, no DOCX industrial formal."
+                         },
+                         {
+                             "nombre":  "Tango",
+                             "enfoque":  "Captura de clics → guías con screenshots + guidance in-app para adopción de software",
+                             "precio":  "Free tier usable; ~$100/mes por 5 seats",
+                             "ia":  "Captura automática de workflows y generación de guías; enfoque reciente en \u0027digital adoption\u0027",
+                             "brecha":  "Misma brecha que Scribe: atado a workflows digitales, cero ISO 9001, cero documento formal imprimible con control de copias. No español."
+                         },
+                         {
+                             "nombre":  "Trainual",
+                             "enfoque":  "Plataforma de conocimiento + training: organizar SOPs, manuales y onboarding con tracking de quién leyó/completó",
+                             "precio":  "~$249/mes mínimo (Core, ~10 seats) + $1,000 fee único de implementación; sin tier gratis",
+                             "ia":  "AI Compose: redacta SOPs desde prompts o outlines; asistente IA que responde preguntas del equipo sobre el contenido documentado",
+                             "brecha":  "Precio 5x el de ManualCore y fuera del alcance de PyMEs dominicanas. Orientado a training/HR, no a auditoría ISO: sin numeración de documentos, sin estados de revisión formales, sin footer de trazabilidad. Inglés."
+                         },
+                         {
+                             "nombre":  "SweetProcess",
+                             "enfoque":  "Documentación de procedimientos y procesos para SMBs (10-50 empleados), estructura jerárquica de SOPs",
+                             "precio":  "$99/mes flat hasta 20 usuarios; +$5/usuario adicional",
+                             "ia":  "SweetAI: genera borradores de procedimientos desde un título",
+                             "brecha":  "Generación one-shot superficial (desde título, no extracción de conocimiento existente). Sin templates industriales ISO distintos por tipo, sin flowcharts ANSI, sin control documental de auditoría. Inglés."
+                         },
+                         {
+                             "nombre":  "Process Street",
+                             "enfoque":  "Workflows ejecutables / compliance operations: convierte SOPs en checklists corribles con tracking, soporta marcos ISO 9001, SOC 2, HIPAA",
+                             "precio":  "Tier gratis limitado; pagos desde ~$100/mes",
+                             "ia":  "Genera un workflow completo desde el nombre del proceso en \u003c3 min; \u0027Cora\u0027, agente IA de compliance que monitorea ejecución y flaggea riesgos",
+                             "brecha":  "Su unidad es el workflow ejecutable digital, no el documento formal imprimible que pide un auditor ISO en una planta. Complejo para una PyME no técnica. Inglés-first, precio por usuario escala rápido."
+                         },
+                         {
+                             "nombre":  "Whale (usewhale.io)",
+                             "enfoque":  "SOPs + playbooks + training para SMBs (\u0027Document, Train, Run\u0027)",
+                             "precio":  "$6/usuario/mes Starter; $99/mes Team hasta 10 usuarios",
+                             "ia":  "Alice: asistente IA que genera SOPs desde prompts de texto; extensión de browser para capturar procesos web",
+                             "brecha":  "El competidor funcional más cercano en \u0027texto → SOP\u0027, pero genera documentos web informales: sin DOCX con template industrial, sin numeración/revisiones ISO, sin audit log inmutable. Inglés."
+                         },
+                         {
+                             "nombre":  "Way We Do",
+                             "enfoque":  "SOPs \u0027activos\u0027 con compliance: procedimientos documentados, adopción rastreada y training verificable para ISO 9001/27001",
+                             "precio":  "No publica precios claros (históricamente ~$25-99/mes por equipos pequeños)",
+                             "ia":  "Se rebrandeó como \u0027AI-Operational Governance\u0027; asistencia IA en redacción",
+                             "brecha":  "El más consciente de ISO entre las herramientas de SOPs, pero sin generación conversacional desde texto libre, sin templates DOCX industriales ni flowcharts ANSI, sin español."
+                         },
+                         {
+                             "nombre":  "Document360",
+                             "enfoque":  "Knowledge base empresarial; SOPs como artículos con versionado",
+                             "precio":  "$199-$249 (Professional) a $799+ (Enterprise) por proyecto/mes; IA como add-on pagado aparte",
+                             "ia":  "Eddy AI (búsqueda conversacional), AI Suggest, redacción asistida — todos add-ons",
+                             "brecha":  "Caro, orientado a documentación de producto/soporte. Cero control documental ISO de manufactura. La IA cuesta extra."
+                         },
+                         {
+                             "nombre":  "Qualio",
+                             "enfoque":  "eQMS para life sciences (farma, dispositivos médicos): control documental, training, CAPA, proveedores",
+                             "precio":  "~$12,000/año base + ~$3,000/usuario/año; clientes reportan ~€25k/año para startups pequeñas",
+                             "ia":  "Revisión de documentos asistida por IA, análisis predictivo de riesgo, búsqueda IA — solo en tiers Growth/Scale",
+                             "brecha":  "20-60x el precio de ManualCore, vertical life-sciences, su IA revisa pero no AUTORA documentos desde conocimiento informal. Confirma que el control documental formal se vende como enterprise — ManualCore lo democratiza."
+                         },
+                         {
+                             "nombre":  "isoTracker",
+                             "enfoque":  "QMS modular en la nube para pequeñas empresas: control de documentos, quejas, auditorías, no conformidades (ISO 9001, 13485, 14001)",
+                             "precio":  "Desde $10/usuario/mes; ~$984/año por 5 usuarios con un módulo",
+                             "ia":  "Ninguna IA generativa",
+                             "brecha":  "Es el archivo, no el autor: gestiona documentos que ya escribiste. La PyME sigue enfrentando la página en blanco. UI anticuada, inglés. ManualCore ataca exactamente el paso que isoTracker asume resuelto."
+                         },
+                         {
+                             "nombre":  "Effivity",
+                             "enfoque":  "QMS/HSE multi-norma (ISO 9001, 14001, 45001, 22000) para PyMEs, basado en formularios y módulos",
+                             "precio":  "Desde ~$30/usuario/mes (marketing: \u0027$1/usuario/día\u0027); clientes reportan ~$75/mes",
+                             "ia":  "Sin generación IA de documentos relevante",
+                             "brecha":  "Forms-based: te da la estructura pero tú redactas todo. Sin chat conversacional, sin extracción desde texto libre. Soporte en español limitado."
+                         },
+                         {
+                             "nombre":  "ISOlocity",
+                             "enfoque":  "QMS para manufactura (ISO 9001, 21 CFR 11): control de documentos, inspecciones, CAPA; incluye templates de SOPs",
+                             "precio":  "$199-$220/admin/mes + $29-$39/usuario de producción/mes",
+                             "ia":  "Sin IA generativa de autoría",
+                             "brecha":  "Precio de admin solo ya es 4x ManualCore completo. Templates estáticos que llenas a mano. Inglés."
+                         },
+                         {
+                             "nombre":  "KAWAK (Colombia) — amenaza regional #1",
+                             "enfoque":  "SaaS de sistemas de gestión integrados (ISO 9001/14001/27001/45001) para empresas LatAm, en español, con fuerte presencia regional",
+                             "precio":  "Modular, mensual, no público (segmento medio: estimado \u003e$100/mes)",
+                             "ia":  "YA incorporó IA para apoyar creación de documentos, análisis de causas y planes de acción — el único LatAm con IA generativa anunciada dentro de un QMS",
+                             "brecha":  "Su IA es asistencia dentro de un QMS pesado tradicional, no extracción conversacional desde texto libre con Question/Confirmation. Apunta a empresas medianas con SGC ya en marcha, no a la PyME pre-certificación que parte de cero. Sin foco Caribe/RD."
+                         },
+                         {
+                             "nombre":  "Isolución (Colombia)",
+                             "enfoque":  "Suite completa de gestión ISO en español: documentos, indicadores, auditorías, mejora continua, proveedores",
+                             "precio":  "Desde ~$280 USD/mes",
+                             "ia":  "Sin generación conversacional de documentos; marketing de IA incipiente",
+                             "brecha":  "5-6x el precio de ManualCore, diseñado para empresas medianas/grandes con equipo de calidad dedicado. Implementación pesada vs. self-serve."
+                         },
+                         {
+                             "nombre":  "QualityWeb 360 (México)",
+                             "enfoque":  "QMS ISO 9001 en español para PyMEs: gestión documental con ciclo de vida, control de versiones, trazabilidad",
+                             "precio":  "Desde $50 USD/mes",
+                             "ia":  "Publica contenido sobre \u0027automatizar el QMS con IA\u0027 pero el producto es gestión documental tradicional, sin autoría generativa",
+                             "brecha":  "El competidor de precio más cercano en español, pero sin generación IA: el cliente sigue escribiendo sus procedimientos desde cero. Sin chat, sin flowcharts ANSI autogenerados. Es a quien ManualCore debe ganarle el deal en LatAm."
+                         },
+                         {
+                             "nombre":  "QmKey (México/España, presencia en RD)",
+                             "enfoque":  "QMS SaaS multi-norma en español, 30+ años, clientes en todos los países hispanohablantes incluida República Dominicana",
+                             "precio":  "No público (SaaS por suscripción)",
+                             "ia":  "Sin IA generativa anunciada",
+                             "brecha":  "Presencia local en RD pero producto legacy sin IA. Valida que hay mercado dominicano dispuesto a pagar por software de calidad; vulnerable a un producto IA-nativo moderno."
+                         },
+                         {
+                             "nombre":  "Advisera (toolkits + Conformio)",
+                             "enfoque":  "Toolkits de documentación ISO descargables + Conformio con \u0027document wizards\u0027 paso a paso (foco ISO 27001)",
+                             "precio":  "Toolkits €397-€897 pago único; Conformio por suscripción (no público)",
+                             "ia":  "Asistente IA para responder dudas sobre normas y refinar redacción; wizards de formularios, no chat de extracción",
+                             "brecha":  "Lo más cercano en filosofía \u0027te guío para construir el documento\u0027, pero es form-filling sobre templates, no extracción IA desde texto libre, y su Conformio prioriza 27001 sobre 9001. Sin control documental post-emisión con trazabilidad de impresión."
+                         },
+                         {
+                             "nombre":  "ChatGPT / GPTs personalizados (competidor silencioso)",
+                             "enfoque":  "GPTs como \u0027ISO 9001 Document and Template GPT\u0027; consultores LatAm ya usan LLMs para borradores de procedimientos",
+                             "precio":  "$0-20/mes",
+                             "ia":  "Generación de texto pura: borradores de manuales, procedimientos, matrices",
+                             "brecha":  "Genera texto, no un sistema: sin templates DOCX consistentes, sin numeración automática, sin estados/aprobaciones, sin audit log, sin multi-tenant, sin trazabilidad de copias impresas. Es el benchmark contra el que ManualCore debe demostrar que vende workflow auditable, no palabras."
+                         }
+                     ],
+    "implicaciones":  [
+                          "El posicionamiento exacto de ManualCore (extracción IA conversacional desde texto libre + documento industrial formal DOCX/SVG + control documental ISO con trazabilidad + español + precio micro-PyME LatAm) está LIBRE: ningún competidor encontrado ocupa la intersección completa. Pero cada ingrediente por separado SÍ está ocupado — la defensa no es \u0027tenemos IA\u0027 sino la combinación + cercanía al mercado dominicano.",
+                          "La generación de SOPs con IA ya es un feature comoditizado (Whale, Trainual, Process Street, decenas de generadores gratuitos, ChatGPT). NO construir el pitch sobre \u0027la IA escribe tu SOP\u0027. El pitch defendible es: \u0027documento que pasa la auditoría\u0027 — numeración [DEPT]-[SECC][####]-REV, estados Draft→Released, owner≠approver, audit log inmutable, footer de trazabilidad de impresión. Eso es lo que el auditor de INDOCAL/EQA revisa y lo que ningún generador IA ni ChatGPT entrega. La decisión de V0 de priorizar document control sobre más templates es correcta según este panorama.",
+                          "La amenaza más probable a 12-24 meses son los QMS LatAm añadiendo IA generativa: KAWAK ya lo anunció, y QualityWeb 360 ($50/mes, español, PyMEs) está a un feature de distancia. La ventana de ManualCore es moverse rápido en RD con los 3 pilotos, atar testimonios y relaciones locales (zonas francas, consultores, certificadoras EQA/AENOR/INDOCAL como canal) antes de que un colombiano o mexicano localice IA conversacional.",
+                          "Las herramientas anglo de documentación IA (Scribe, Tango) son falsos competidores: su paradigma de captura de pantalla solo documenta procesos digitales, y el mercado de ManualCore (manufactura en zonas francas, procesos físicos y administrativos que viven en la cabeza de la gente) es estructuralmente inaccesible para ellas. El paradigma \u0027pega texto y conversa\u0027 es la elección correcta para este segmento.",
+                          "El precio de $49/mes flat tiene espacio real: queda debajo de SweetProcess/Whale ($99), QualityWeb 360 ($50 entry), Isolución ($280), Trainual ($249+$1,000), y a 1-2 órdenes de magnitud de los eQMS ($12k-36k/año). Anclar el mensaje contra el costo de un consultor de documentación ISO (miles de USD por engagement en RD) y contra Isolución/KAWAK, nunca contra los generadores gratuitos.",
+                          "El patrón conversacional Question/Confirmation (la IA detecta campos faltantes y pregunta) es genuinamente diferenciado hoy: los competidores hacen generación one-shot desde prompt o wizards de formularios (Advisera). Vale la pena demostrarlo en cada demo porque es visiblemente distinto, y el dashboard admin de V0 lo amplifica para la venta.",
+                          "Riesgo a vigilar: ChatGPT es el competidor silencioso del job \u0027redáctame el procedimiento\u0027 — consultores dominicanos ya lo usan. Estrategia: convertir consultores en canal (ellos generan más documentos por hora con ManualCore y entregan trazabilidad que Word+ChatGPT no da) en vez de competir contra ellos."
+                      ]
+}

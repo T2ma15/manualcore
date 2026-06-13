@@ -1,0 +1,97 @@
+﻿{
+    "hallazgos":  [
+                      {
+                          "hallazgo":  "La base de empresas ISO 9001 certificadas en RD es muy pequeña: ~41 certificados ISO válidos acreditados (2023, +28% vs 32 en 2022) según IAF CertSearch, y ~150 entidades certificadas detectadas por encuesta del MICM (el viceministro Fantino Polanco habla de \u0027cientos\u0027 incluyendo no acreditadas). Es un mercado de decenas-a-cientos de empresas, no de miles.",
+                          "evidencia":  "Pacific Certifications reporta 32→41 certificados ISO válidos 2022→2023; Diario Libre (mayo 2024) cita al viceministro del MICM con ~150 entidades certificadas detectadas en levantamiento del nuevo Directorio de Servicios Gubernamentales de Calidad.",
+                          "fuente":  "https://blog.pacificcert.com/iso-certifications-in-dominican-republic-popular-standards-requirements-and-benefits-clvytuvje002yezi0wt1wxgi8/ y https://www.diariolibre.com/economia/negocios/2024/05/13/certificacion-de-calidad-normas-iso-9001-y-empresas-certificadas/2720372"
+                      },
+                      {
+                          "hallazgo":  "INDOCAL es a la vez normalizador y organismo certificador (ISO 9001, 37001, 37301), pero sus certificaciones recientes visibles son mayormente instituciones públicas (EGEHID, ITLA, Senado), no PyMEs privadas. El sector público dominicano es un comprador activo de certificación ISO 9001 — segmento secundario interesante para SOP Administrativo.",
+                          "evidencia":  "Notas de prensa INDOCAL 2024-2025: entrega de ISO 9001:2015 a EGEHID, recertificación de ITLA, certificación del Senado en Gestión Humana; página de servicios de certificación de sistemas de INDOCAL.",
+                          "fuente":  "https://indocal.gob.do/certificacion-de-sistemas-de-gestion-basados-en-las-normas-iso-9001-iso-14001-iso-22000-etc/ y https://indocal.gob.do/noticias/"
+                      },
+                      {
+                          "hallazgo":  "Zonas francas: 843 empresas activas en 94 parques (2024), 198,552 empleos directos y US$8,425.9MM exportados (61% de las exportaciones de bienes del país). En 2025 se aprobaron 82 empresas nuevas y 10 parques más. Es el segmento manufacturero concentrado y accesible más grande para el template SOP Manufactura.",
+                          "evidencia":  "Informe Estadístico CNZFE 2024 (843 compañías, 94 parques, 198,552 empleos, US$8,425.9MM, +5.9%); Presidencia/MICM diciembre 2025 (82 empresas y 10 parques aprobados en 2025, US$221.9MM inversión proyectada).",
+                          "fuente":  "https://cnzfe.gob.do/wp-content/uploads/2025/08/Informe-Estadistico-2024.pdf y https://presidencia.gob.do/noticias/zonas-francas-consolidan-su-dinamismo-en-2025-con-82-empresas-y-10-nuevos-parques"
+                      },
+                      {
+                          "hallazgo":  "Los compradores internacionales SÍ exigen certificaciones: dispositivos médicos es el principal subsector exportador de zonas francas (~31 empresas, 22,666 empleos) y requiere ISO 13485/FDA/CE. Crítico: la FDA reemplaza el 21 CFR 820 por ISO 13485:2016 (QMSR) con vigencia a inicios de 2026 — ahora mismo hay presión regulatoria fresca de documentación de procesos en ese subsector. ADOZONA (presidencia de Claudia Pellerano desde enero 2025) prioriza nearshoring en dispositivos médicos, electrónica y semiconductores; BASC es otra certificación común de cadena de suministro.",
+                          "evidencia":  "CNZFE: dispositivos médicos encabezan exportaciones de zonas francas; FDA QMSR final rule armoniza con ISO 13485:2016 con transición a inicios de 2026; ADOZONA foco estratégico 2025-2026 en dispositivos médicos/electrónica.",
+                          "fuente":  "https://cnzfe.gob.do/categoria/noticias/dispositivos-medicos-encabezan-exportaciones-de-las-zonas-francas-dominicanas , https://www.fda.gov/media/135790/download y https://adozona.org/"
+                      },
+                      {
+                          "hallazgo":  "El ecosistema de consultores/certificadoras en RD está identificado y es pequeño: CompetISO (programa de la asociación industrial ANEIH, activo desde 2007) afirma que el 62% de las PyMEs certificadas ISO 9001 en RD lo lograron a través de su servicio, con proyectos de ~7 meses. Otros: Qualitypoint Management School (15+ años), Ecco Qualitá, Soluciones QES, EQA Dominicana (certificadora), AENOR Dominicana (primera entidad acreditada por ODAC para certificar ISO 9001 en el país), INDOCAL como certificador estatal. ODAC es el organismo acreditador único (Ley 166-12).",
+                          "evidencia":  "Página CompetISO de ANEIH con la cifra del 62% y duración de 7 meses; revista AENOR sobre acreditación ODAC; sitios de Qualitypoint, Ecco Qualitá y EQA Dominicana.",
+                          "fuente":  "https://aneih.org.do/competiso/ , https://revista.aenor.com/381/odac-acredita-a-aenor-en-republica-dominicana.html , https://qualitypoint.com.do/ , https://eqa.com.do/"
+                      },
+                      {
+                          "hallazgo":  "Existe financiamiento público-internacional activo para certificación de PyMEs: el programa MICM + Unión Europea \u0027Fortalecimiento de la Calidad para el Desarrollo de las MIPYMES\u0027 tiene presupuesto de €11 millones y meta de certificar ~250 mipymes en calidad, inocuidad alimentaria, ambiente y equidad de género, con acompañamiento GRATUITO de consultores acreditados. Además el MICM mantiene la Normativa de Calidad para Mipymes (norma local puente hacia ISO 9001) y convocatorias periódicas de postulación.",
+                          "evidencia":  "elDinero: \u0027MICM y Unión Europea impulsan la certificación de 250 mipymes en normas de calidad\u0027 (€11MM); página MICM de Normativa de Calidad para Mipymes; convocatoria MICM para certificar procesos con consultores acreditados; CODOCA participa en el programa.",
+                          "fuente":  "https://eldinero.com.do/136393/micm-y-union-europea-impulsan-la-certificacion-de-250-mipymes-en-normas-de-calidad/ y https://micm.gob.do/viceministerios/fomento-a-las-pymes/normativa-de-calidad-para-micro-pequena-y-mediana-empresas-mipymes/"
+                      },
+                      {
+                          "hallazgo":  "Capacidad de pago: US$49/mes ≈ RD$2,890 (tasa ~58.4-59.0 en junio 2026). Es ~16% de un salario mínimo de pequeña empresa (RD$18,421/mes desde febrero 2026) y marginal frente al costo total de certificarse: solo la auditoría de certificación cuesta US$1,200-3,500 (sin incluir consultoría de implementación, que se cobra aparte y suele ser varias veces eso). En el contexto de un proyecto de certificación de 7 meses, US$49/mes (~US$350 durante el proyecto) es una fracción \u003c5% del gasto total — el precio no es la barrera; la barrera es llegar a la empresa en el momento del proyecto.",
+                          "evidencia":  "gcerti: costo de certificación ISO 9001 en RD US$1,200-3,500 + vigilancias anuales 40-60%, consultoría e implementación excluidas; Banco Central/CDN: dólar ~58.4-59.0 en junio 2026; EY/Alegra: salarios mínimos 2026 por tamaño de empresa (micro RD$16,993, pequeña RD$18,421, mediana RD$27,490).",
+                          "fuente":  "https://gcerti.org/blog/cuanto-cuesta-certificar-iso-9001-argentina-republica-dominicana/ , https://cdn.com.do/economicas/tasa-del-dolar-hoy-precio-en-rd/ y https://www.ey.com/es_ce/technical/tax/tax-alerts/republica-dominicana-salario-minimo-2026"
+                      },
+                      {
+                          "hallazgo":  "Universo total direccionable en RD: 125,715 empresas formales en 2025 (98.7% mipymes), pero de ~404,000 mipymes existentes el 85% son informales. El mercado real de ManualCore en RD no son \u0027las pymes\u0027 en general sino la intersección: empresa formal + exportadora o en cadena regulada + en proceso de certificación — un universo de cientos por año (250 del programa UE + ~40-80 certificaciones acreditadas activas + zonas francas), suficiente para pilotos y primeros 20-50 clientes, no para escalar.",
+                          "evidencia":  "elDinero: 125,715 empresas formales con 2.5MM empleos en 2025; Cámara de Comercio Santo Domingo: 404,034 mipymes, 85% informales; cruce con datos de certificación (41-150 certificadas) y meta de 250 mipymes del programa UE.",
+                          "fuente":  "https://eldinero.com.do/367260/rd-alcanza-125715-empresas-formales-con-mas-de-2-5-millones-de-empleos-en-2025/ y https://www.ccisad.org/dobyt/nota-en-republica-dominicana-hay-404-034-mipymes;-un-85--son-informales-63858"
+                      }
+                  ],
+    "competidores":  [
+                         {
+                             "nombre":  "Scribe / Tango (captura de procesos con IA)",
+                             "enfoque":  "Documentación de procesos por captura de pantalla (how-tos paso a paso), equipos de oficina",
+                             "precio":  "Gratis a US$12-17/usuario/mes",
+                             "ia":  "Sí — genera pasos automáticamente desde la captura; sin chat de extracción de conocimiento",
+                             "brecha":  "Solo procesos digitales en pantalla (inútil para piso de manufactura); en inglés; sin formato industrial DOCX, sin control documental ISO (estados, numeración, revisiones), sin flowcharts ANSI. Fuente: https://www.glitter.io/blog/process-documentation/ai-sop-generator-tools"
+                         },
+                         {
+                             "nombre":  "Trainual / SweetProcess",
+                             "enfoque":  "SOPs orientados a onboarding y entrenamiento de personal",
+                             "precio":  "US$99-299+/mes (mínimos por paquete de asientos; Trainual Small US$299/mes)",
+                             "ia":  "Sí — asistente de redacción de SOPs",
+                             "brecha":  "Precio 5-6x el de ManualCore para una PyME dominicana; inglés-céntrico; el output es contenido de entrenamiento web, no documentos controlados auditables para ISO 9001. Fuente: https://www.waybook.com/blog/best-sop-software-alternatives"
+                         },
+                         {
+                             "nombre":  "Process Street",
+                             "enfoque":  "Workflows y checklists recurrentes con seguimiento de ejecución",
+                             "precio":  "~US$100-150/mes (desde ~US$30/usuario/mes)",
+                             "ia":  "Sí — generación de workflows con IA",
+                             "brecha":  "Resuelve ejecución de procesos, no formalización documental; sin DOCX industrial, sin trazabilidad de impresión ni numeración de documentos exigida en auditorías. Fuente: https://www.glitter.io/blog/process-documentation/sop-software-for-small-business"
+                         },
+                         {
+                             "nombre":  "isoTracker / QT9 / Qualio (QMS anglosajones)",
+                             "enfoque":  "Control documental y gestión de calidad ISO para pymes (document control, CAPA, auditorías)",
+                             "precio":  "isoTracker ~US$13/usuario/mes por módulo; rango de mercado US$49/mes a US$50K+/año",
+                             "ia":  "No (o mínima) — gestionan documentos que el usuario ya escribió; no generan contenido",
+                             "brecha":  "Asumen que la documentación ya existe: no convierten conocimiento no estructurado en SOPs. Interfaz y soporte en inglés. Es el complemento, no el sustituto, de lo que hace ManualCore. Fuente: https://www.isotracker.com/pricing-and-payment/ y https://trainingtiger.co/insights/iso-9001-software-cost"
+                         },
+                         {
+                             "nombre":  "Isolución / KAWAK / ISOTools / Daruma (QMS LATAM en español)",
+                             "enfoque":  "Suites completas de gestión ISO en español, fuertes en Colombia/México, dirigidas a medianas y grandes organizaciones",
+                             "precio":  "Isolución desde US$280/mes en nube (o US$4,300 on-premise); KAWAK con planes modulares y subsidios pyme; ISOwin desde €49/mes",
+                             "ia":  "Limitada — son plataformas de gestión/flujo documental, no motores generativos de documentación",
+                             "brecha":  "Competidor más cercano por idioma, pero: precio 5x+, implementación pesada (meses), sin chat IA que extraiga conocimiento, y presencia comercial débil en RD. Ninguno hace \u0027texto libre → SOP formal\u0027. Fuente: https://kawak.net/es/precios y https://isolucion.com/blog/top-10-software-para-sistemas-de-gestion-iso/"
+                         },
+                         {
+                             "nombre":  "Consultores locales (CompetISO/ANEIH, Qualitypoint, Ecco Qualitá, Soluciones QES)",
+                             "enfoque":  "Implementación humana de ISO 9001 de punta a punta (incluida la redacción manual de la documentación) en ~7 meses",
+                             "precio":  "Miles de USD por proyecto (la consultoría queda fuera del costo de auditoría de US$1,200-3,500)",
+                             "ia":  "No — trabajo manual de consultores",
+                             "brecha":  "Lentos y caros en la fase de documentación, que es justo donde ManualCore acelera. NO son competencia a desplazar sino el CANAL: CompetISO concentra el 62% de las PyMEs certificadas en RD. Fuente: https://aneih.org.do/competiso/"
+                         }
+                     ],
+    "implicaciones":  [
+                          "El mercado RD solo SÍ alcanza para validar pero NO para escalar: el universo activo es de cientos de empresas por año (~41-150 certificadas acreditadas + 250 mipymes del programa UE en pipeline + 843 empresas de zonas francas), suficiente para 3 pilotos y los primeros 20-50 clientes de pago (~US$12-30K ARR), pero el plan post-validación debe asumir expansión Caribe/Centroamérica — la arquitectura multi-tenant de V0 ya lo permite.",
+                          "Canal de entrada más rápido a los 3 pilotos: los consultores ISO, empezando por CompetISO/ANEIH (concentra el 62% de las PyMEs certificadas y corre cohortes de ~7 meses) y Qualitypoint. Un solo consultor aliado puede aportar los 3 pilotos de su cartera activa en semanas. Propuesta: ManualCore les recorta la fase de documentación (su cuello de botella) y ellos ponen el cliente; considerar licencia de consultor o revenue share en lugar de venderle directo a la PyME fría.",
+                          "Segundo canal paralelo: el programa MICM-UE \u0027Fortalecimiento de la Calidad\u0027 (€11MM, 250 mipymes con consultores acreditados pagados por el programa) — posicionar ManualCore como herramienta de los consultores acreditados convierte un subsidio estatal en financiamiento de la adopción. Contacto identificado: Viceministerio de Fomento a las Pymes del MICM, (809) 567-7192 ext. 1041.",
+                          "El precio de US$49/mes (~RD$2,890) es razonable y hasta bajo para el segmento correcto: es \u003c5% del gasto total de un proyecto de certificación y 5x más barato que la alternativa LATAM más cercana (Isolución US$280/mes). El riesgo no es el precio sino el timing — la PyME solo compra durante su proyecto de certificación, lo que refuerza el canal vía consultores. Hay espacio para un tier superior (US$99-149) para zonas francas.",
+                          "La distinción SOP Manufactura vs SOP Administrativo del V0 mapea exactamente a los dos segmentos reales: zonas francas/manufactura (843 empresas, presión de compradores USA/EU) e instituciones de servicios y sector público (donde INDOCAL certifica activamente). Validar un piloto de cada tipo + uno de consultor cubriría ambos.",
+                          "Oportunidad post-V0 con urgencia regulatoria real: la transición FDA QMSR→ISO 13485:2016 entra en vigor a inicios de 2026, presionando ahora mismo a las ~31 empresas de dispositivos médicos de zonas francas (principal subsector exportador) a re-documentar procesos. Un template ISO 13485 sería la extensión natural de mayor valor por empresa, aunque ese subsector exigirá validación/compliance más seria que la PyME ISO 9001.",
+                          "Diferenciador defendible en RD: ninguna herramienta identificada (ni las anglosajonas con IA, ni las LATAM en español sin IA generativa) hace \u0027conocimiento no estructurado → documento industrial formal con control documental\u0027 en español; la combinación chat-IA + DOCX con numeración/revisiones/trazabilidad de impresión es exactamente lo que el auditor pide y lo que el consultor hoy hace a mano."
+                      ]
+}

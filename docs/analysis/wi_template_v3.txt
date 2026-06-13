@@ -1,0 +1,192 @@
+[COMPANY NAME]
+[Department / Division]
+[ COMPANY LOGO ]
+Replace with logo
+
+
+WORK INSTRUCTION
+Cover Sub-Assembly — Riveting Operation
+DOC NO.
+WI-A01-001
+REVISION
+Rev. 00
+EFF. DATE
+[DD-MMM-YYYY]
+REVIEW DUE
+[DD-MMM-YYYY]
+Op ID: A-01   |   Seq: 3 of 6   |   Ref SOP: SOP-A01-001   |   Ref TWI: TWI-A01-001
+PROCESS OWNER
+[Name / Position]
+APPROVER
+[Name / Position]
+QA SIGN-OFF
+[Name / N/A]
+
+1
+  SCOPE — INPUT, OUTPUT, EQUIPMENT AND REFERENCES
+
+INPUT
+Urea Cover Black (SKU-1234)
+Rivet #4 Gold x4 (SKU-5678)
+Work order confirmed
+OUTPUT
+Riveted cover sub-assembly
+Passed flush inspection
+In approved (green) tray
+EQUIPMENT / STATION
+Riveter Machine (EQ-003)
+Assembly fixture (EQ-003-F)
+Calibration due: [DD-MMM-YYYY]
+RELATED DOCUMENTS
+SOP: Cover Sub-Assembly — Standard Operating Procedure  SOP-A01-001 Rev. 00
+TWI: Cover Sub-Assembly — Job Breakdown Sheet  TWI-A01-001 Rev. 00
+Checklist: Cover Sub-Assembly — Quality Inspection Checklist  CHK-A01-001 Rev. 00
+Data Form: Cover Sub-Assembly — Production Recording Form  DAT-A01-001 Rev. 00
+Eng. Drawing: Cover Assembly Detail — Rivet Positions 1-2-3-4  DWG-A01-003 Rev. B
+Spec Sheet: Rivet Flush and Gap Specifications  SPEC-A01-001 Rev. 00
+
+
+2
+  OPERATIONAL REQUIREMENTS (5M)
+
+Man
+Qualified assembler — Level 2 certification required. Verify training record before operation.
+Machine
+Riveter Machine EQ-003. Calibration due: see header. Setup per this WI before each shift.
+Material
+Urea Cover Black SKU-1234 — inspect nubs before use. Rivet #4 Gold SKU-5678 — verify lot.
+Method
+This WI Rev. 00. No active deviations. Follow step sequence exactly — no substitutions.
+Measure
+Depth gauge (GAU-012) — calibration current. Feeler gauge set (GAU-008) — calibration current.
+PPE / Safety
+Safety glasses mandatory. Cut-resistant gloves during riveting. Steel-toe boots.
+
+3
+  SETUP REQUIREMENTS — VERIFY BEFORE STARTING
+
+PARAMETER
+REQUIRED VALUE
+TOLERANCE
+VERIFICATION METHOD
+Die installed
+Die #A01-D4 per station poster
+Match exactly
+Visual — check die label against setup sheet
+Machine force
+450 N
+±20 N
+Read force display before every cycle
+Fixture condition
+Locating pins intact, no debris
+Zero damage
+Visual inspection at shift start
+Rivet supply
+Rivet #4 Gold SKU-5678
+SKU match only
+Check bin label against work order
+
+4
+  PROCESS STEPS
+
+STEP
+DESCRIPTION
+CRITICAL PARAM
+QC GATE
+INSTRUCTION PHOTO
+1
+Retrieve Urea Cover Black (SKU-1234) from incoming area. Verify part number against work order before moving to station.
+Material: Urea Cover Black (SKU-1234)
+—
+✓
+
+[ PHOTO / DRAWING — Step 1 ]
+Upload instruction photo or engineering drawing
+
+2
+Inspect both alignment nubs — must be intact and equal height. Measure tip gap with feeler gauge.
+Gap: 0.3 mm (0.1–0.5)
+✓
+
+[ PHOTO / DRAWING — Step 2 ]
+Upload instruction photo or engineering drawing
+
+3
+Lower cover onto assembly fixture locating pins. Both nubs must click into seat. Press center — no rocking permitted.
+Material: Assembly fixture (EQ-003-F)
+Zero rocking
+—
+
+[ PHOTO / DRAWING — Step 3 ]
+Upload instruction photo or engineering drawing
+
+4
+Confirm die label matches WI-A01-001. Read force display — must show 450N ±20 before any cycle. Place hands on handles.
+Material: Riveter Machine (EQ-003)
+Force: 450N ±20
+✓
+
+[ PHOTO / DRAWING — Step 4 ]
+Upload instruction photo or engineering drawing
+
+5
+Apply 4 rivets in sequence: positions 1→2→3→4 per station diagram. After each rivet verify flush with depth gauge before proceeding to next position.
+Material: Rivet #4 Gold (SKU-5678) — Qty: 4
+Flush: 0.0 mm ±0.2
+✓
+
+[ PHOTO / DRAWING — Step 5 ]
+Upload instruction photo or engineering drawing
+
+6
+Remove assembly from fixture by lifting straight up — do not twist. Final visual inspection: all 4 rivets flush, cover centered, no fixture marks. Place in green approved tray. Sign quality log.
+—
+✓
+
+[ PHOTO / DRAWING — Step 6 ]
+Upload instruction photo or engineering drawing
+
+
+5
+  QUALITY INSPECTION CRITERIA
+
+CHARACTERISTIC
+NOMINAL
+USL
+LSL
+UNIT
+GAUGE / METHOD
+ACCEPT
+Rivet flush height
+0.0
++0.2
+-0.2
+mm
+Depth gauge GAU-012 — post rivet, all 4 positions
+Pass / Fail
+Cover tip gap
+0.3
+0.5
+0.1
+mm
+Feeler gauge GAU-008 — before fixture seating
+Pass / Fail
+Machine force
+450
+470
+430
+N
+Machine force display — before every cycle
+Pass / Fail
+Rivet count
+4
+4
+4
+ea
+Visual count — all 4 positions confirmed
+Pass / Fail
+
+Current revision only. Previous revisions retained in document control system. Valid only when carrying approved status in ManualCore.
+Process owner: [Name]   Approved by: [Name]   QA: [Name / N/A]   Date: [DD-MMM-YYYY]
+
+DRAFT — PENDING APPROVAL — NOT FOR PRODUCTION USE

@@ -1,0 +1,117 @@
+﻿{
+    "fortalezas":  [
+                       "El Field-to-Template Map es excelente: cada campo de cada template traza a exactamente una columna de una tabla (ej. product_specs.usl → columna USL en rojo en SOP/WI/Checklist). Esto materializa el principio de \u0027single source of truth\u0027 del Layer 4 y hace el motor de generación testeable.",
+                       "Los source codes por columna (B=Brain, E=Engineer, S=System, C=Calculated) son una decisión de diseño inteligente: operacionalizan directamente el flujo chat-first de V0 — el sistema sabe qué campos puede auto-escribir Claude, cuáles requieren confirmación en chat (Question/Confirmation) y cuáles son intocables.",
+                       "Las reglas de document control están bien pensadas para ISO 9001: ownership.owner_id ≠ ownership.approver_id con bloqueo en aprobación, documents.review_due obligatorio que bloquea la transición draft→under_review, \u0027print only when approved/released\u0027, y print_events con copy_number/total_copies para el footer de trazabilidad.",
+                       "audit_log tiene el diseño correcto: BIGSERIAL append-only (no UUID, decisión justificada), old_value/new_value en JSONB, actor_type para distinguir brain/usuario/sistema, y la regla explícita de que nunca se actualiza ni borra, ni siquiera por el platform owner.",
+                       "La hoja \u0027Validation + Connection Rules\u0027 separa severidades (BLOCKS GENERATION / BLOCKS APPROVAL / WARNING / ENFORCED), lo que la convierte en una suite de tests de aceptación casi lista.",
+                       "Separación correcta de entidades de control documental: documents (estado actual) vs revisions (eventos) vs print_events (impresiones) vs ownership (firmas) — no mezclan responsabilidades.",
+                       "Soft deletes (is_active en tenants y users) en lugar de borrado físico, coherente con auditabilidad.",
+                       "El soporte para el Flowchart V0 existe de punta a punta: steps.ansi_symbol, steps.decision_yes_to/decision_no_to, steps.nc_action (\u0027Required if decision_no_to set\u0027), más diagram_nodes/diagram_edges para el render SVG."
+                   ],
+    "problemas":  [
+                      {
+                          "titulo":  "tenant_id ausente en ~20 de las tablas pese a que la spec promete \u0027tenant_id on every table\u0027",
+                          "severidad":  "alta",
+                          "detalle":  "La spec v2 §6.1 dice \u0027Multi-tenant with tenant_id on every table. Row-level security enforced by tenant_id\u0027, pero en las hojas de columnas solo tenants, users, sessions, nodes, documents y audit_log lo tienen. operations, steps, materials, product_specs, specs_5m, photos, time_study_observations, document_relationships, ownership, revisions, conflicts, chat_messages (y todas las tablas no detalladas) NO tienen tenant_id. En Supabase, las políticas RLS de esas tablas requerirían subconsultas encadenadas (steps→operations→nodes→tenants), lo cual es lento, frágil y la fuente #1 de fugas de datos entre tenants en SaaS construidos por no-programadores.",
+                          "solucion":  "Añadir tenant_id UUID NOT NULL FK→tenants a TODAS las tablas (denormalizado, como ya se hizo en nodes.tenant_id \u0027Denormalised for fast filtering\u0027), con política RLS uniforme tenant_id = (select tenant_id from users where id = auth.uid()) y un trigger BEFORE INSERT que lo herede del padre para que nunca se escriba mal."
+                      },
+                      {
+                          "titulo":  "El schema no puede representar el V0 elegido: no existe doc_type \u0027sop_admin\u0027 y el modelo apuesta por industry_profile (label-switching) que ya fue descartado",
+                          "severidad":  "alta",
+                          "detalle":  "documents.doc_type enum lista 17 valores (sop|wi|twi|bom|...) pero V0 exige DOS templates SOP distintos (SOP Manufactura y SOP Administrativo, plantillas estructuralmente diferentes, no un cambio de etiquetas). Además tenants.industry_profile y sessions.industry_profile (\u0027Drives field labels\u0027, spec §7) implementan exactamente el enfoque de label-switching que se decidió NO usar. El schema no tiene forma de saber qué template DOCX usar para un documento dado.",
+                          "solucion":  "Añadir doc_type \u0027sop_admin\u0027 (o mejor: una tabla document_templates con id, code, version, doc_type y FK documents.template_id) y degradar industry_profile a metadato informativo del tenant, no a mecanismo de renderizado. Registrar template_version en documents para trazabilidad cuando los templates evolucionen."
+                      },
+                      {
+                          "titulo":  "Numeración de documentos no idempotente y con formato contradictorio",
+                          "severidad":  "alta",
+                          "detalle":  "documents.doc_number dice \u0027System-generated. Format: TYPE-NODE-SEQ. e.g. SOP-A01-001\u0027, pero el V0 definido es [DEPT]-[SECC][####]-REV[##]. No existe ninguna entidad departamento/sección en el schema (solo steps.dept_responsible, un VARCHAR libre para swimlanes), así que el formato V0 es literalmente inimplementable. Peor: no hay tabla de contadores ni estrategia de asignación atómica — si generation_jobs se reintenta (Claude API falla a mitad), dos llamadas concurrentes con MAX(seq)+1 producen duplicados o el índice UNQ revienta el job. Además doc_number marcado UNQ a secas contradice \u0027Unique per tenant\u0027: necesita unique compuesto (tenant_id, doc_number).",
+                          "solucion":  "Crear tabla departments (tenant_id, code, name) y doc_number_counters (tenant_id, dept_code, section_code, next_seq) incrementada con UPDATE ... RETURNING dentro de la misma transacción que inserta el documento; unique compuesto (tenant_id, doc_number); el REV[##] no va en doc_number sino derivado de revision_number. Añadir idempotency_key a generation_jobs para que un reintento no cree un segundo documento."
+                      },
+                      {
+                          "titulo":  "14 de las tablas listadas no tienen definición de columnas — incluidas 4 críticas para V0",
+                          "severidad":  "alta",
+                          "detalle":  "El Schema Overview lista 32 tablas (aunque dice \u0027Total tables: 29\u0027 — ni el conteo cuadra), pero las hojas de detalle solo definen 18. Sin columnas quedan: process_specs, related_documents_display, reviewers, training_records, print_events, access_grants, input_files, brain_extractions, generation_jobs, diagram_nodes, diagram_edges, gantt_tasks, vsm_data_blocks, output_files. De estas, CUATRO son núcleo del V0: print_events (footer de trazabilidad de impresión), access_grants (distribución controlada), brain_extractions e input_files (el corazón del flujo chat-first de extracción). La spec misma dice \u0027Developers cannot start building without a schema\u0027 — y el schema no está completo donde más importa.",
+                          "solucion":  "Definir columnas completas (tipo, FK, nullabilidad, tenant_id) al menos para print_events, access_grants, brain_extractions, input_files y generation_jobs antes de escribir código; eliminar del documento las 9 restantes que pertenecen a templates fuera de V0."
+                      },
+                      {
+                          "titulo":  "~12 tablas de sobre-ingeniería para un V0 de 10 días construido por una persona",
+                          "severidad":  "alta",
+                          "detalle":  "V0 = 3 templates, solo texto, sin conflict resolution. Sin embargo el schema arrastra: time_study_observations (Time Study, fuera), gantt_tasks (Gantt, fuera), vsm_data_blocks (VSM, fuera), training_records (Training Matrix, fuera), photos con correct_condition/if_wrong (TWI, fuera; además V0 no acepta fotos), conflicts + chat.linked_conflict (conflict resolution explícitamente fuera de V0), document_relationships + related_documents_display (impact analysis, fuera), product_specs con special_char/sample_size/reaction_plan (Control Plan/PFMEA, fuera), materials con flow_type/storage_loc (Material Flowchart, fuera), y campos de operations como cost_center/labor_grade/setup_time_min (Routing, fuera). Cada tabla extra es migración, RLS, seeds y bugs que la fundadora pagará sola.",
+                          "solucion":  "Congelar V0 en ~13 tablas: tenants, users, departments, sessions, nodes, operations, steps, specs_5m (recortada), documents, document_templates, revisions, ownership, print_events, access_grants, chat_messages, brain_extractions, audit_log, doc_number_counters. Mantener las demás como diseño documentado v1.1+, no como DDL desplegado."
+                      },
+                      {
+                          "titulo":  "El artefacto fuente está corrupto: columnas PK/FK, NULL? e INDEX llenas de basura numérica",
+                          "severidad":  "alta",
+                          "detalle":  "En decenas de filas la columna C (PK/FK) contiene \u002788\u0027 o \u0027116\u0027 y la columna F (INDEX) contiene números como 108, 117, 145, 562 (ej. tenants.name | C: 88 | F: IDX vs tenants.logo_url | C: 116 | F: 117). La columna D (NULL?) solo aparece en filas FK. La nullabilidad de la mayoría de campos solo puede ADIVINARSE del patrón 88=NOT NULL/116=nullable. Este Excel es \u0027la fuente autoritativa de build\u0027 según la spec — un desarrollador (o una IA generando el DDL) producirá constraints incorrectos.",
+                          "solucion":  "Regenerar el artefacto como DDL SQL real (CREATE TABLE con NOT NULL, FK, UNIQUE, CHECK explícitos) versionado en el repo como migraciones de Supabase, y retirar el Excel como fuente de verdad. El DDL es verificable; el Excel exportado demostró no serlo."
+                      },
+                      {
+                          "titulo":  "Sin mapeo a Supabase Auth y unicidad de email contradictoria",
+                          "severidad":  "alta",
+                          "detalle":  "users.email está marcado UNQ (índice único global) pero la regla dice \u0027unique per tenant\u0027 — son cosas distintas. Más grave: no existe users.auth_user_id que vincule con auth.users de Supabase. Sin ese vínculo, NINGUNA política RLS puede resolverse (auth.uid() no mapea a nada), que es exactamente el pilar \u0027RLS desde día 1\u0027 del V0.",
+                          "solucion":  "Añadir users.auth_user_id UUID UNIQUE FK→auth.users(id), decidir si email es global (recomendado con Supabase Auth, una persona = una cuenta) o compuesto (tenant_id, email), y escribir las políticas RLS contra auth.uid() → users.tenant_id."
+                      },
+                      {
+                          "titulo":  "materials mezcla catálogo con consumo y no soporta el BOM \u0027segmentado por operación\u0027 que la propia spec promete",
+                          "severidad":  "media",
+                          "detalle":  "materials tiene node_id pero NO operation_id, y aun así guarda qty_per_op, repetitions y total_qty — datos de USO, no de catálogo. La spec dice \u0027BOM segmented by operation\u0027 pero no hay forma de saber en qué operación se consume cada material salvo el indirecto steps.material_id (que además es un solo material por step: un step con tornillo + arandela no se puede modelar). Si el mismo material se usa en dos operaciones con cantidades distintas, hay que duplicar la fila completa.",
+                          "solucion":  "Para V0 (BOM fuera de alcance) basta con steps + texto; cuando entre el BOM: separar materials (catálogo: tenant_id, name, sku, unit) de step_materials/operation_materials (uso: material_id, operation_id, qty, repetitions), con total_qty como columna GENERATED o vista, nunca escrita."
+                      },
+                      {
+                          "titulo":  "ownership dice \u0027one record per document per revision\u0027 pero no tiene revision_id",
+                          "severidad":  "media",
+                          "detalle":  "La descripción de ownership.id es \u0027One ownership record per document per revision\u0027, pero la tabla solo tiene document_id FK→documents. Es imposible tener firmas por revisión (requisito ISO: cada revisión se aprueba) sin un FK a revisions; tal como está, una re-aprobación de REV02 sobreescribiría las firmas de REV01, destruyendo evidencia de auditoría.",
+                          "solucion":  "Añadir ownership.revision_id UUID NOT NULL FK→revisions con unique (document_id, revision_id), o mover owner_signed/approver_signed/qa_signed a la tabla revisions directamente."
+                      },
+                      {
+                          "titulo":  "FK circular sessions.node_id ↔ nodes.session_id y FK semánticamente errónea product_specs.gauge_id→specs_5m",
+                          "severidad":  "media",
+                          "detalle":  "sessions.node_id FK→nodes y nodes.session_id FK→sessions crean una referencia circular: orden de inserción problemático, riesgo de inconsistencia (session apunta a un node de otra session) y es derivable por consulta. Por otro lado, product_specs.gauge_id FK→specs_5m apunta una referencia de GAUGE (instrumento de medición) a un registro 5M de operación — modelado erróneo; y specs_5m.gauge_ids JSONB es una lista de referencias sin integridad referencial alguna.",
+                          "solucion":  "Eliminar sessions.node_id (derivable de nodes where session_id=X) o degradarlo a sin-FK. Para gauges: en V0 dejar measurement_method como texto; post-V0, tabla equipment/gauges propia (alimenta también specs_5m.machine_id y calibration_due) y FK directa."
+                      },
+                      {
+                          "titulo":  "Purga de historial a 5 revisiones — riesgo directo en auditoría ISO 9001",
+                          "severidad":  "media",
+                          "detalle":  "La regla \u0027Revision history limit: Maximum 5 revisions retained... On revision 6, the oldest is marked retained=false and archived\u0027 (y revisions.retained \u0027set false after 5 revisions\u0027) trata la retención como límite duro del producto. ISO 9001 §7.5.3.2 exige retención de información documentada como evidencia conforme a los requisitos del cliente/regulatorios — un auditor puede pedir la historia completa, y empresas de zona franca suelen tener requisitos de retención de sus clientes (automotriz/médico) muy superiores a 5 ciclos.",
+                          "solucion":  "Eliminar la purga del modelo de datos: las filas de revisions se conservan siempre (son livianas); \u0027retained\u0027 puede quedar como flag de visualización. La política de retención debe ser configurable por tenant, nunca una constante del schema."
+                      },
+                      {
+                          "titulo":  "No existe \u0027pdf\u0027 en los formatos pese a que V0 exige impresión PDF con footer de trazabilidad",
+                          "severidad":  "media",
+                          "detalle":  "documents.output_format y output_files se definen como \u0027(docx/xlsx/html)\u0027. El V0 exige \u0027print PDF con footer de trazabilidad (quién imprimió, copia #, fecha)\u0027 y la spec §9.3 describe el footer inyectado at print time. Si el PDF impreso no se almacena como artefacto, no hay evidencia reproducible de QUÉ recibió exactamente el holder de la Copia #2 — debilita la trazabilidad que es el argumento de venta.",
+                          "solucion":  "Añadir \u0027pdf\u0027 al enum de formatos y un campo print_events.pdf_snapshot_url (o FK a output_files) que guarde el PDF exacto generado en cada impresión, con su footer ya inyectado."
+                      },
+                      {
+                          "titulo":  "Inmutabilidad del audit_log declarada solo por convención, y redundancia documents.revision/revision_number",
+                          "severidad":  "media",
+                          "detalle":  "La regla \u0027audit_log records are never updated or deleted under any circumstances\u0027 no tiene mecanismo: en Postgres/Supabase nada lo impide por defecto (el service_role bypasea RLS). Aparte, documents.revision VARCHAR(10) y documents.revision_number INTEGER almacenan el mismo hecho dos veces — deriva garantizada con el tiempo.",
+                          "solucion":  "REVOKE UPDATE, DELETE ON audit_log para todos los roles + trigger BEFORE UPDATE OR DELETE que haga RAISE EXCEPTION + RLS solo-INSERT/SELECT. Eliminar documents.revision y derivar el display \u0027REV02\u0027 de revision_number con formato en la capa de generación."
+                      },
+                      {
+                          "titulo":  "Sin updated_at/updated_by en tablas mutables y ENUMs nativos en campos que van a evolucionar",
+                          "severidad":  "baja",
+                          "detalle":  "Ninguna tabla mutable (operations, steps, materials, documents, specs_5m...) tiene updated_at ni updated_by — el audit_log lo suple parcialmente, pero reconstruir \u0027estado actual + última modificación\u0027 desde un log JSONB es caro. Y los ENUM nativos de Postgres en tenants.subscription, industry_profile, documents.doc_type son dolorosos de migrar (ALTER TYPE con locks) para un producto que VA a añadir 15 templates más.",
+                          "solucion":  "Añadir updated_at TIMESTAMPTZ con trigger genérico y updated_by UUID. Para los enums volátiles (doc_type, subscription) usar TEXT + CHECK constraint o tabla lookup; reservar ENUM nativo para estados verdaderamente estables (documents.status)."
+                      },
+                      {
+                          "titulo":  "El workflow de estados no modela el rechazo",
+                          "severidad":  "baja",
+                          "detalle":  "documents.status = draft|under_review|approved|released|obsolete no tiene estado \u0027rejected\u0027 ni se define la transición de vuelta (under_review→draft), ni dónde queda registrado el motivo del rechazo del aprobador. En los pilotos reales el primer SOP será rechazado varias veces — es el camino feliz del mundo real.",
+                          "solucion":  "Permitir transición under_review→draft registrada en audit_log con event_type=\u0027approval_rejected\u0027 y campo de comentario obligatorio (puede vivir en reviewers.comment_summary cuando esa tabla se defina), sin necesidad de nuevo estado."
+                      }
+                  ],
+    "faltantes":  [
+                      "Distribución controlada de copias (ISO 9001 §7.5.3): print_events registra la impresión pero NO existe tabla de copias controladas vivas — quién TIENE físicamente la Copia #2 de SOP-A01, en qué ubicación, y el flujo de recogida/destrucción de copias obsoletas cuando sale una nueva revisión. Falta una tabla controlled_copies (print_event_id, holder_user_id/location, status: active|recalled|destroyed, recalled_at). Sin esto, el \u0027document control\u0027 es de papel: el auditor encontrará la REV01 obsoleta pegada en la pared de producción.",
+                      "Tabla departments/sections: la numeración V0 [DEPT]-[SECC][####]-REV[##] requiere un catálogo de departamentos y secciones por tenant que no existe en ninguna parte del schema.",
+                      "Tabla de contadores de numeración (doc_number_counters) con incremento transaccional — sin ella la numeración \u0027S: System generates\u0027 es un deseo, no un mecanismo.",
+                      "users.auth_user_id → auth.users de Supabase: sin este vínculo no se puede escribir ni una sola política RLS, que es el requisito \u0027multi-tenant con RLS desde día 1\u0027.",
+                      "Tabla document_templates (código, versión, doc_type): necesaria para distinguir SOP Manufactura de SOP Administrativo (templates DISTINTOS por decisión de producto) y para trazar qué versión de template generó cada documento aprobado.",
+                      "Definición de columnas de brain_extractions, input_files y generation_jobs — el corazón del flujo chat-first de V0 (texto pegado → extracción → Question/Confirmation) no tiene ni una columna definida; tampoco hay idempotency_key en generation_jobs para reintentos seguros de la Claude API, ni registro de modelo/tokens/costo por llamada (el costo de API es el principal costo variable de una solopreneur a $49/mes).",
+                      "Resumen de control de cambios visible en el documento: revisions.reason dice explícitamente \u0027not on document face\u0027, pero los auditores ISO esperan una tabla de historial de revisiones (rev, fecha, descripción del cambio, aprobó) EN el documento o en la lista maestra. El dato existe (revisions.what_changed) — falta mapearlo al template en el Field-to-Template Map.",
+                      "Campo de idioma/locale: el mercado son PyMEs dominicanas — los documentos saldrán en español, la spec asume todo en inglés y no hay tenants.locale ni documents.language para controlar el idioma de labels del template generado.",
+                      "Snapshot de datos por revisión aprobada: cuando se revisa un documento, operations/steps se editan in-place; la única evidencia de la REV01 aprobada es el archivo generado en output_files. Falta un revisions.data_snapshot JSONB (o estrategia equivalente) que congele los datos de la matriz que produjeron cada revisión aprobada — sin él, la auditoría de \u0027¿qué decía exactamente el paso 3 en la REV01?\u0027 depende de parsear un DOCX.",
+                      "Soporte para el dashboard admin de plataforma (requerido en V0 para vender/demostrar): no hay nada para métricas cross-tenant (sesiones por tenant, documentos generados, costo de API) — puede resolverse con vistas sobre las tablas existentes, pero hay que diseñarlas y el rol platform_owner necesita políticas RLS especiales que no están especificadas."
+                  ],
+    "veredicto":  "El diseño conceptual es notablemente bueno para una fundadora no técnica — la trazabilidad campo-a-template, los source codes B/E/S/C y las reglas de document control (owner≠approver, review_due bloqueante, print solo aprobados) son exactamente la columna vertebral correcta para un producto ISO 9001. Pero como artefacto de construcción, el schema NO está listo: promete tenant_id en todas las tablas y lo implementa en 6; deja sin definir 14 tablas incluyendo cuatro críticas para V0 (print_events, access_grants, brain_extractions, input_files); no puede representar el V0 elegido (sin sop_admin, numeración TYPE-NODE-SEQ contradice [DEPT]-[SECC][####]-REV[##], sin PDF, y apuesta por el label-switching ya descartado); la numeración no es idempotente; y arrastra ~12 tablas de templates fuera de alcance que una persona sola no debería migrar ni mantener en 10 días. Recomendación: congelar este Excel como documento de visión, y derivar de él un DDL SQL de ~13-16 tablas para V0 (con tenant_id universal, auth_user_id, departments, doc_number_counters, document_templates y controlled_copies), versionado como migraciones de Supabase. Es una semana de trabajo de corrección que evita meses de deuda — y evita el peor escenario posible para este producto: que el software que vende control documental falle su propia auditoría.\""
+}

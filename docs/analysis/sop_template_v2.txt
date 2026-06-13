@@ -1,0 +1,207 @@
+[COMPANY NAME]
+[Department / Division]
+[ COMPANY LOGO ]
+Replace with your logo
+
+
+STANDARD OPERATING PROCEDURE
+[Process / Operation Title]
+DOC NO.
+SOP-[X]-[00]
+REVISION
+Rev. 00
+EFF. DATE
+[DD-MMM-YYYY]
+REVIEW DATE
+[DD-MMM-YYYY]
+Node ID:  [NODE-ID]     Industry Profile:  Manufacturing
+PROCESS OWNER
+[Name / Position]
+APPROVER
+[Name / Position]
+QA SIGN-OFF
+(if applicable)
+[Name]
+
+1
+  PURPOSE
+
+This Standard Operating Procedure defines the required steps, materials, specifications, and quality controls for the process identified above. It is the authoritative instruction for all personnel performing this operation. Any deviation from these instructions requires written authorization from the Process Owner prior to implementation.
+
+2
+  SCOPE AND APPLICABILITY
+
+Process start
+[Define starting condition — e.g. part arrives at station, order received, patient enters care pathway]
+Process end
+[Define ending condition — e.g. part transferred to next node, order fulfilled, discharge completed]
+Exclusions
+[What this SOP does not cover]
+Applies to
+[Departments, positions, lines, shifts, locations]
+Industry profile
+Manufacturing
+
+3
+  OPERATIONAL REQUIREMENTS (5M)
+
+M
+REQUIREMENT
+VERIFICATION METHOD
+Man
+Qualification level, certification required, training document reference
+Verify training record and certification expiry date
+Machine
+Equipment ID, calibration due date, setup parameters, maintenance schedule
+Check calibration sticker, confirm setup sheet is current revision
+Material
+Incoming spec, CoC required, storage conditions, shelf life
+Incoming inspection record on file, CoC attached to lot
+Method
+Approved method revision level, active deviations or concessions
+Confirm this SOP revision matches work order and router
+Measurement
+Gauge ID, gauge type, calibration status, GRR status, measurement method
+Check gauge calibration tag, verify GRR is current
+
+4
+  SAFETY AND PPE REQUIREMENTS
+
+PPE REQUIRED
+SAFETY HAZARDS
+[Safety glasses, gloves, steel-toe boots — specify per operation and industry]
+[Pinch points, burns, slip hazard, allergens, biological risk — specify per process]
+
+5
+  PROCESS STEPS
+
+Legend:  Critical Parameter  = value must be verified and recorded before proceeding.    Quality Gate  ✓  = inspection required, result must be recorded.
+OP
+STEP
+DESCRIPTION
+Material / Tool  (Name — SKU)
+Critical Parameter
+Quality Gate
+A-01
+1
+Retrieve part from incoming area and verify part number against work order.
+Urea Cover Black (SKU-1234)
+—
+✓
+A-01
+2
+Inspect cover for surface defects, warping, or dimensional non-conformance.
+Inspection gauge (SKU-7890)
+Gap ≤ 0.5 mm
+✓
+A-01
+3
+Align cover tips to fixture reference points. Both tips fully seated before riveting.
+Assembly fixture (SKU-4567)
+—
+—
+A-01
+4
+Insert assembly into riveter. Confirm correct die installed per setup sheet WI-A01-001.
+Riveter Machine (EQ-003)
+Force: 450N ±20
+✓
+A-01
+5
+Apply 4 rivets in sequence per diagram. Verify each rivet is fully closed before next.
+Rivet #4 Golden (SKU-5678) — Qty: 4
+Flush ±0.2 mm
+✓
+A-01
+6
+Remove assembly. Confirm all 4 rivets flush and cover alignment within tolerance.
+—
+—
+✓
+
+
+[ Add rows as needed — one row per process step ]
+
+
+
+
+6
+  PRODUCT / SERVICE SPECIFICATIONS
+
+All characteristics listed below must be verified at the quality gate identified in Section 5. Results recorded on the corresponding checklist or data form.
+CHARACTERISTIC
+NOMINAL
+UPPER
+LOWER
+UNIT
+MEASUREMENT METHOD
+Rivet flush height
+0.0
++0.2
+-0.2
+mm
+Depth gauge — post rivet, all 4 positions
+Cover gap at tip
+0.3
+0.5
+0.0
+mm
+Feeler gauge at both tips before riveting
+[Characteristic]
+[nom]
+[USL]
+[LSL]
+[u]
+[Instrument and technique]
+
+7
+  RELATED DOCUMENTS
+
+TYPE
+TITLE
+DOC NUMBER
+REVISION
+Work Instruction
+Cover Sub-Assembly — Riveting Operation
+WI-A01-001
+Rev. 00
+TWI Sheet
+Cover Sub-Assembly — Operator Job Breakdown
+TWI-A01-001
+Rev. 00
+Checklist
+Cover Sub-Assembly — Quality Inspection Checklist
+CHK-A01-001
+Rev. 00
+Eng. Drawing
+[Drawing title]
+[DWG-XXXX]
+[Rev.]
+Industry Std.
+[Applicable standard — ISO, HACCP, IATF, etc.]
+[Std. No.]
+[Year]
+
+8
+  APPROVAL — CURRENT REVISION ONLY
+
+Revision:  Rev. 00    Effective date:  [DD-MMM-YYYY]    Next review due:  [DD-MMM-YYYY]
+Previous revisions are retained in the document control system. Only the current approved revision is valid for production or service delivery use.
+PREPARED BY
+APPROVED BY
+QA SIGN-OFF  (if applicable)
+[Name]
+[Position]
+Date: ________________
+Signature: ____________
+[Name]
+[Position]
+Date: ________________
+Signature: ____________
+[Name — or N/A if no QA dept]
+[Position]
+Date: ________________
+Signature: ____________
+
+DOCUMENT STATUS: DRAFT — PENDING APPROVAL
+Not approved for release. Do not use for production or distribute until all sign-offs are complete and status is updated to APPROVED.

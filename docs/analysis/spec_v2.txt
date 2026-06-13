@@ -1,0 +1,501 @@
+MANUALCORE
+Process Knowledge Formalization Engine
+─────────────────────────────────────────
+DESIGN SPECIFICATION — VERSION 2.0
+
+Version
+2.0 — Updated
+Status
+Active — Build Reference
+Industry Profile
+Manufacturing (MVP)
+Platform Owner
+Franklin
+What changed in v2.0
+Diagram outputs → HTML/SVG. Chat interface added. Connection validation as explicit layer. Full database schema (29 tables).
+
+1. What is ManualCore
+ManualCore is a process knowledge formalization engine. It accepts any input — voice recordings, text notes, photographs, engineering drawings, specification sheets, WhatsApp messages, video — in any language and in any format, and produces a complete set of industry-standard process documentation from that input.
+The core problem it solves: operational knowledge lives in the heads of experienced operators and engineers. When those people leave, the knowledge leaves with them. ManualCore extracts that knowledge through natural conversation and structured input, resolves conflicts between sources, and converts the result into a living documentation system that keeps itself current.
+
+Tagline
+Every process. Fully documented.
+Primary market
+Manufacturing (MVP). Food and beverage, field service, logistics, healthcare follow.
+Core differentiator
+Accepts unstructured input in any format. Resolves conflicts automatically. Generates 17 document types from a single data matrix. Documents stay linked — changing one propagates impact to all related documents.
+What it is not
+A document editor. A template filler. A compliance tool. ManualCore is a knowledge extraction and formalization engine that produces documentation as output.
+Platform model
+Multi-tenant SaaS. One platform owner (Franklin). Tenants are companies. Users are company staff.
+
+
+2. System Architecture
+ManualCore has six layers. Data flows top to bottom. The engineer interacts at Layer 2 through the chat interface. Nothing writes to the matrix without passing through validation.
+
+Layer 1 — Input
+Accepts every format the engineer has available. Transcription, OCR, vision analysis, and language normalisation happen inside Layer 2.
+Voice: Multilingual. Handles slang, spoken SKUs, informal descriptions. Transcribed in Layer 2.
+Text: Formal documents, WhatsApp messages, handwritten notes, emails. Any language.
+Photos: Instruction photos, engineering drawings, GD&T drawings, handwritten specs.
+Video: Assembly recordings. Brain extracts steps from frame analysis and audio track.
+Specifications: Product specs, process specs, standards documents, customer requirements.
+
+Layer 2 — Brain (Claude API)
+The brain is the Claude API. It runs four sequential processes on every input, then routes each extracted field to one of four outcomes.
+Perception: Transcription, OCR, vision analysis on images and drawings. Language identification and normalisation.
+Extraction: Entity extraction: process steps, materials with quantities, specifications, equipment IDs, safety information.
+Normalisation: Generic language replaced with formal terms. SKU matching against product catalogue. Units standardised.
+Conflict detection: Every extracted value is compared against all other extracted values for the same field. Conflicts are flagged immediately.
+
+Four routing outcomes for every extracted field:
+High confidence: Brain writes directly to the matrix. Logged in audit trail. Engineer sees confirmation in chat.
+Inferred or ambiguous: Brain proposes a value and asks the engineer to confirm through the chat interface before writing.
+Conflict: Two sources give different values for the same field. Brain surfaces both values in the chat conflict bubble. Engineer decides. Nothing writes until resolved.
+Missing required: A required field has no value from any input. Brain asks for it specifically. Generation of affected documents is blocked until the field is provided.
+
+CHAT INTERFACE — NEW IN v2.0
+The chat interface is the mechanism through which the engineer interacts with the brain. Every question, conflict, and confirmation goes through a conversational message thread. The engineer types freely, selects action buttons, or uses quick shortcuts. The brain never writes to the matrix silently — every write is either confirmed by the engineer or logged as a high-confidence auto-write with full audit trail.
+
+Layer 3 — Connection Validation (new in v2.0)
+Connection validation is an explicit layer between the brain and the matrix. It runs before any document generation. It does not run field-by-field — it runs holistically across all four matrices once the engineer signals that a session is ready to generate.
+Five failure modes. Any one of them blocks generation of the affected documents:
+Node link type not confirmed: If a node has a next_node_id set but connection_type is null, generation of Flowchart, Gantt, and VSM is blocked. Brain asks at session end: sequential or material?
+Spec value conflict open: Any conflict record with status=open blocks generation of every document that uses the conflicted field. The conflict must be resolved first.
+Required field missing: review_due, owner, approver, and all 5M fields are required. Missing any one of them blocks approval transition.
+TWI photos missing: Every step linked to a TWI sheet must have an uploaded photo with correct_condition and if_wrong text. Generation blocked until complete.
+Document relationship impact pending: When a document is revised, all related documents in Matrix 2 are flagged. Generation of a new revision is blocked until the engineer acts on each impact flag.
+
+Layer 4 — Matrix (single source of truth)
+The matrix is a PostgreSQL relational database with 29 tables across four logical matrices. Every field in every template traces to exactly one column in exactly one table. No field exists in two places. Templates read from the matrix — they never have their own data.
+Matrix 1 — Master data: Operations, steps, materials, product specs, process specs, 5M requirements, photos, time study observations.
+Matrix 2 — Document relationships: Every directional link between two documents. Shared fields. Criticality. Impact check results.
+Matrix 3 — Ownership and approval: Process owner, approver, QA per document. Trainable positions. Training due dates. Reviewer records.
+Matrix 4 — Revision and audit: Every revision event. Print events. Access grants. Immutable audit log.
+
+Layer 5 — Output (17 templates)
+Templates are generated from matrix data. Three output format families:
+DOCX: SOP, WI, TWI. Generated using docx-js. Portrait for SOP and WI. A3 landscape for TWI. Table headers repeat on every page.
+XLSX: BOM, Checklist, Data Form, Time Study, Routing Sheet, OBC + Capacity Table, PFMEA, Control Plan, Delivery Ownership Matrix, Training Matrix. All formulas live — no hardcoded calculated values.
+HTML/SVG — UPDATED FROM XLSX: Process Flowchart, Material Flowchart, Gantt Chart, VSM, Multi-department Swimlane Flowchart. All five are visual diagrams rendered as HTML files with embedded SVG. Not tables. Not Excel. Actual shapes connected by arrows, matching ANSI and VSM symbol standards.
+
+Layer 6 — Document control
+Five document states: Draft, Under Review, Approved, Released, Obsolete. Print only when Approved or Released. Every print logs copy number, total copies, user, timestamp, and document revision at time of print. Revision history retained for 5 cycles then archived. Review date mandatory on every document — missing review date blocks approval.
+
+
+3. Output Formats — All 17 Templates
+This table is the authoritative format reference. Any previous version showing diagrams as XLSX is superseded by this table.
+
+#
+TEMPLATE NAME
+FORMAT
+PAGE
+CLASSIFICATION + NOTES
+1
+SOP — Standard Operating Procedure
+DOCX
+Portrait
+Fully derived. Parent of WI, TWI, Checklist. 5 levels of document hierarchy.
+2
+WI — Work Instruction
+DOCX
+Portrait
+Fully derived. Child of SOP. Related documents field accepts unlimited linked docs.
+3
+TWI — Job Breakdown Sheet
+DOCX
+A3 Landscape
+Fully derived. One operation per sheet. 3-4 photos. Correct / if-wrong per step. Photos mandatory — blocks generation if missing.
+4
+BOM — Bill of Materials (segmented)
+XLSX
+Portrait
+Fully derived. Segmented by operation. Total qty = live formula. Subtotals per segment. Grand total.
+5
+Checklist — Quality Inspection
+XLSX
+Portrait
+Fully derived. One row per quality gate flag. Spec values pre-filled. NC action strip non-removable.
+6
+Data Form — Production Recording
+XLSX
+Landscape
+Fully derived. 10 reading columns. Mean and PASS/FAIL auto-calculated against USL/LSL.
+7
+Time Study Sheet
+XLSX
+Portrait
+Requires floor data. 10 observation columns. Normal time and standard time calculated automatically.
+8
+Routing Sheet
+XLSX
+Portrait
+Derived from Time Study. Standard time, work center, cost center, setup time per operation.
+9
+OBC + Capacity Table
+XLSX
+Landscape
+Derived from Routing. Bar chart of std time vs takt. Bottleneck identification. Capacity per shift.
+10
+PFMEA — AIAG-VDA 2019
+XLSX
+Landscape
+Partially derived. Brain fills process column. Engineer fills S/O/D and action priority. Default standard AIAG-VDA 2019.
+11
+Control Plan — AIAG-VDA aligned
+XLSX
+Landscape
+Partially derived. Brain fills process and characteristic columns. Engineer fills sample size, frequency, control method.
+12
+Process Flowchart
+HTML/SVG
+Landscape
+Fully derived. ANSI symbols. Decision diamonds with YES/NO branches. NC paths in red. End node names next node explicitly.
+13
+Material Flowchart
+HTML/SVG
+Landscape
+Fully derived. Left-to-right material flow. Push/pull arrows. WH inventory triangles. Tool boxes in dashed orange.
+14
+Gantt Chart
+HTML/SVG
+Landscape
+Partially derived. Horizontal bars per task. Sequential links = finish-to-start arrows. Node end feeds next node start.
+15
+VSM — Value Stream Map
+HTML/SVG
+Landscape
+Partially derived. Three sections: information flow (top), material flow (middle), timeline (bottom). Kaizen burst on improvement opportunities.
+16
+Multi-dept Swimlane Flowchart
+HTML/SVG
+Landscape
+Fully derived. Horizontal lanes per department. Cross-lane arrows for handoffs. NC path drops into QA lane.
+17
+Delivery Ownership Matrix
+XLSX
+Landscape
+Fully derived. One row per document. Status color-coded. Trainable positions feed Training Matrix.
+18
+Training Matrix
+XLSX
+Landscape
+Fully derived. C/T/X/— cells per operator × operation. Only operations with trained_req=true appear as columns.
+
+
+4. Diagram Output Rules (new in v2.0)
+All five diagram outputs are HTML files with embedded SVG. These rules are non-negotiable and override any previous specification.
+
+4.1 What a diagram must be
+Visual shapes: Actual shapes connected by actual arrows. Ovals for start and end. Rectangles for operations. Diamonds for decisions. Parallelograms for documents. Connector circles for off-page references.
+ANSI compliant: Process flowcharts use ANSI standard symbols. VSM uses standard VSM symbols: process boxes, inventory triangles, push arrows, pull arrows, kaizen bursts.
+Not a table: No diagram template uses a table with row/column data as its primary output. The Excel flowchart data table built in the previous version is replaced entirely by the HTML/SVG diagram.
+Rendered in browser: Opening the HTML file in any browser renders the diagram at full quality. No plugin, no special software.
+
+4.2 End node connection rule
+Every flowchart must show what happens at the END node. The end node is never just 'END'. It always states:
+Sequential link: END — [Node code]: where it connects to, e.g. 'END A-01 = START of Node B-01 Frame Assembly'
+Material link: END — [Node code]: output to warehouse buffer, Node B-01 starts independently
+Terminal node: END — [Node code]: terminal. No downstream node.
+This rule applies to the Process Flowchart, Material Flowchart, and the Swimlane Flowchart. The Gantt and VSM show the same information through task dependencies and push arrows respectively.
+
+4.3 Gantt — node sequencing
+The Gantt chart explicitly shows the relationship between nodes. A sequential link between Node A and Node B is shown as a finish-to-start dependency: a red dashed arrow from the A-01 completion milestone to the B-01 setup task. A material link is shown as independent parallel bars with a warehouse buffer annotation between them. The day the next node starts is labeled on the timeline.
+
+4.4 VSM — push vs pull vs material
+The VSM material flow section uses three arrow types determined by nodes.connection_type in the matrix: sequential connection draws a solid push arrow with no WH triangle between nodes; material connection draws a WH inventory triangle between nodes with a push arrow from production to WH and a pull arrow from WH to the next node; terminal connection draws the arrow pointing to the finished goods warehouse.
+
+
+5. Chat Interface (new in v2.0)
+The chat interface is the primary interaction surface between the engineer and the brain. It is a conversational message thread embedded in the ManualCore session view.
+
+5.1 What the chat handles
+Questions: Brain asks for missing required fields, ambiguous values, or confirmation of inferred data. One question at a time. Never a list of 10 questions at once.
+Conflicts: A conflict bubble shows both conflicting values with their sources side by side. Engineer selects which is correct or types a free-text answer. Nothing writes to the matrix until the conflict is resolved.
+Confirmations: When a field is written to the matrix, the brain sends a green confirmation message showing what was written. Engineer can correct immediately if wrong.
+Free text: Engineer can type anything at any time. Add a step that was forgotten. Correct a previous answer. Ask what is still missing. Ask which documents are ready to generate.
+Action buttons: Quick-select options appear as buttons in brain messages for bounded choices (sequential or material, SKU A or SKU B). Engineer can always type instead.
+
+5.2 Chat message types
+Question (amber border)
+Brain needs information before it can write a field. Blocks writing until answered.
+Conflict (red border)
+Two sources disagree. Shows both values and sources. Blocks generation of affected documents.
+Confirmation (green border)
+Field written successfully. Shows what was written and which templates it populates.
+System (no border)
+Session status updates. Document generation progress. Validation results.
+Free text (no border)
+Engineer's typed messages and brain's conversational responses.
+
+5.3 What the brain never does
+Writes to the matrix without the engineer's knowledge. Every write is either a confirmed engineer action or a logged high-confidence auto-write.
+Asks more than one question in a single message. One message, one question.
+Resolves a conflict without engineer input. Conflicts always require explicit human decision.
+Generates a document with an open conflict. All conflicts must be resolved first.
+Lets a session proceed past the connection validation check without all required fields.
+
+
+6. Database Schema
+Full schema is in ManualCore_Database_Schema.xlsx. This section records the high-level decisions and the rules that govern the schema.
+
+6.1 Schema summary
+Database
+PostgreSQL. Multi-tenant with tenant_id on every table. Row-level security enforced by tenant_id.
+Total tables
+29 tables across 7 logical groups.
+Primary keys
+UUID v4 on all domain tables. BIGSERIAL on audit_log (append-only, never updated).
+Soft deletes
+is_active boolean on tenants and users. Never hard delete a user or tenant.
+Audit log
+Immutable. Append-only. Every field write, conflict resolution, status change, print event, and brain action is logged. No updates or deletes on audit_log ever.
+Computed fields
+std_time_min on operations is computed from time study data. total_qty on materials is computed from qty_per_op × repetitions. Neither field is ever written directly.
+
+6.2 Source codes
+Every column in the schema carries a source code. These codes drive the generation engine and the chat interface.
+B — Brain writes
+Brain extracts this value from input and writes it at high confidence. Engineer sees a confirmation in chat. Can always correct.
+E — Engineer confirms
+Brain may propose a value but waits for explicit engineer confirmation before writing. Used for SKUs, node links, ownership, specs.
+S — System generates
+IDs, timestamps, revision numbers, document numbers. Never provided by engineer or brain.
+C — Calculated
+Derived from other fields. std_time_min, total_qty. Writing directly is blocked by application logic.
+N — Nullable
+Optional field. No warning if null. Certain templates hide sections when these fields are null.
+
+6.3 Non-negotiable schema rules
+owner_id cannot equal approver_id on the same ownership record. Application enforces this on save.
+review_due cannot be null when a document transitions from draft to under_review. Transition is rejected if missing.
+revisions.what_changed is always brain-generated. Engineer cannot write this field directly.
+audit_log records are never updated or deleted under any circumstances, including by platform owner.
+documents.revision is always system-managed. Auto-increments on each approval. Engineer cannot set it manually.
+connection_type is required if next_node_id is set. Both must be set together or neither.
+
+
+7. Industry Profiles
+Industry profiles switch field labels across all templates without changing the underlying data model. The matrix stores values in canonical form. Templates render labels from the active profile.
+
+CANONICAL FIELD
+Manufacturing
+Food / Service
+Logistics
+Healthcare
+Machine / Equipment
+Machine / Equipment
+Equipment / Station
+Equipment / Zone
+Device / Equipment
+Critical Parameter
+Critical Parameter
+CCP / Service Standard
+Handling Requirement
+Critical Control
+Quality Gate
+Quality Gate
+Verification Point
+Check Point
+Inspection Point
+BOM label
+Bill of Materials
+Recipe / Parts List
+Handling Spec
+Procedure Supply List
+Operator
+Operator
+Staff / Server
+Handler / Driver
+Clinician / Technician
+Work center
+Work Center / Machine
+Station / Kitchen
+Zone / Bay
+Treatment Area
+Routing label
+Routing Sheet
+Production Sheet
+Handling Sheet
+Procedure Sheet
+
+
+8. Subscription Model
+
+FEATURE
+PYME
+Professional
+Enterprise
+Industry profiles
+1
+Up to 3
+All
+Users
+Up to 5
+Up to 25
+Unlimited
+Sessions / month
+10
+Unlimited
+Unlimited
+Template modification
+Tier 1 only
+Tier 1 + 2
+Tier 1 + 2 + 3
+Print config
+Config C (admin)
+Config B (email)
+Config A (QA auth)
+Diagram outputs
+HTML/SVG all 5
+HTML/SVG all 5
+HTML/SVG all 5
+Support SLA
+Email 72hr
+Chat 24hr
+Dedicated 4hr
+QR code
+Optional add-on
+Optional add-on
+Included
+API access
+No
+Read only
+Full
+
+Template modification tiers
+Tier 1 — Content: Always permitted in draft. Add rows, fill fields, upload photos, adjust instruction text.
+Tier 2 — Layout config: Professional and above. Activate or hide optional columns, save variant templates per industry or product family.
+Tier 3 — Structural: Enterprise only, requires platform owner approval, billed separately. Rename mandatory fields, adjust column widths, structural changes.
+
+Non-removable fields (all tiers)
+These fields cannot be hidden or removed by any tenant at any subscription tier: revision number, effective date, review date, approval block, document number, print traceability footer.
+
+
+9. Document Control
+9.1 Document states
+Draft
+Editable. Watermarked. Not printable. Engineer and reviewers can edit.
+Under Review
+Submitted for approval. Reviewers can comment. Owner and approver cannot be the same person.
+Approved
+Locked. Printable. Revision assigned. review_due must be set.
+Released
+Approved and distributed. Print config executed. Recipients notified.
+Obsolete
+Superseded by a newer revision. Retained in system for 5 revision cycles then archived. Not printable.
+
+9.2 Print configurations
+Config A — Enterprise
+QA role authorises every print. Every copy is logged and numbered. Operator receives a numbered physical copy tied to their ID.
+Config B — Professional
+Process owner approves. System emails locked PDF to distribution list. Each recipient receives their numbered copy.
+Config C — PYME
+Admin approves. Locked PDF downloadable by admin only. Admin distributes physically.
+
+9.3 Traceability footer
+Every printed document carries an injected footer that cannot be removed by any template modification: 'Printed by [Name / ID] | Copy [#] of [#] | [Date Time]'. This footer is injected by the generation engine at print time, not stored in the document template itself.
+
+9.4 Revision impact analysis
+When any document is revised, the brain checks Matrix 2 (document_relationships) and identifies all related documents. It compares the changed fields against each related document's matrix fields and generates a targeted impact report. Only the owners of actually-affected documents receive action items with specific suggested changes. Owners of unaffected documents are not notified.
+
+9.5 QR code access levels
+Public link
+Scanning opens the approved document without login. For non-sensitive processes.
+Authenticated
+Scanning requires login. Only users with access_grants on this document can view.
+Verification only
+Scanning shows revision status, effective date, and review date only. No document content. Prevents competitive intelligence exposure for sensitive processes.
+
+
+10. Node Architecture
+A node is the atomic unit of ManualCore. One node equals one process or one operation. Every document set belongs to one node. Nodes connect to each other through two relationship types determined at session end.
+
+10.1 Node hierarchy
+Level 1 — Company SOP
+Policies and procedures applying to the entire organization. All departments.
+Level 2 — Area SOP
+Procedures specific to one department or area.
+Level 3 — Process SOP
+The what and why for a specific process. References Area SOP.
+Level 4 — WI + Checklist
+Exactly how to execute one operation. References Process SOP.
+Level 5 — TWI
+How to teach the operation. Trainer document. References WI.
+
+10.2 Node connection types
+At the end of every session the engineer answers two questions: does this node connect to another node, and if yes, what type of connection?
+Sequential: Node A output directly triggers Node B. B cannot start without A complete. Finish-to-start in Gantt. Push arrow with no WH buffer in VSM. Direct END→START connector in Flowchart.
+Material: Node A output goes to a warehouse buffer. Node B starts independently when it pulls from the buffer. Independent bars in Gantt. WH inventory triangle in VSM. END node shows buffer destination in Flowchart.
+Terminal: This node has no downstream connection. Shows in Gantt as terminal task. VSM shows output to finished goods warehouse.
+
+
+11. Management Dashboard
+Delivered to the designated management authority on a configurable schedule. Three alert levels:
+
+Red — Immediate action
+Expired documents past review date. Operators missing required certification for active operations. Overdue approvals blocking production document release.
+Amber — Action required soon
+Documents within 30 days of review date. Operators in training (T status) whose learning curve has plateaued for 14 or more days without reaching standard. Processes with 3 or more revisions in the past 6 months (instability flag).
+Predictive — Plan ahead
+Certification expiry forecasts 60 days out. Review date batching suggestions (group similar reviews). Bottleneck operations identified from OBC data.
+
+
+12. Branding and Document Identity
+12.1 ManualCore on documents
+ManualCore does not appear on the face of any generated document. The customer company name and logo appear on all documents. ManualCore is present only in document metadata, file properties, and system footers. This prevents regulatory validation liability — the documents belong to the customer's quality system, not to a software vendor.
+12.2 Platform brand
+Product name
+ManualCore
+Tagline
+Every process. Fully documented.
+Primary color
+#0D1F3C — Navy
+Secondary color
+#1B4F72 — Steel
+Accent color
+#1ABC9C — Teal
+Font
+Arial — universally supported, renders consistently across OS and printer drivers
+12.3 Template families
+Manufacturing
+Full template set. All 17 documents. AIAG-VDA standard for PFMEA and Control Plan.
+Food / Service
+Adapted field labels. HACCP-aligned Checklist. Recipe-format BOM. CCP terminology.
+Logistics
+Adapted field labels. Handling specification format. Zone-based routing.
+
+
+13. Change Log — v1.0 to v2.0
+
+VERSION
+DATE
+WHAT CHANGED
+DECISION RATIONALE
+v2.0
+Current
+Diagram outputs changed from XLSX data tables to HTML/SVG visual diagrams for all 5 diagram types.
+Tables with rows and columns do not communicate process flow. Visual diagrams with shapes and arrows are the correct format for flowcharts, VSMs, and Gantt charts. Confirmed when engineer reviewed prototypes.
+v2.0
+Current
+Chat interface added as a component of Layer 2 (Brain). Defined message types, conflict bubble format, and brain behavior rules.
+The review and confirmation loop between brain and engineer was undefined in v1.0. The chat interface is the mechanism. Every ambiguous field, conflict, and confirmation goes through it.
+v2.0
+Current
+Connection validation added as an explicit Layer 3 between brain and matrix. Five failure modes defined.
+In v1.0 validation was implied but not structured. Making it an explicit layer forces every developer building this system to address it. Failure modes are now specific and testable.
+v2.0
+Current
+Full database schema defined: 29 tables, all columns with type, PK/FK, nullable, source code, index, and field-to-template mapping.
+Developers cannot start building without a schema. The matrix design was complete but not translated to relational tables. Schema is the next required artifact before any code can be written.
+v2.0
+Current
+TWI format corrected: one A3 landscape page per operation, 3-4 photo columns, correct/if-wrong per photo, not one page per step.
+The previous multi-page per-step format was methodologically incorrect. TWI is one teaching sheet per operation. Trainer carries the sheet for the full operation, not one sheet per individual step.
+v2.0
+Current
+Training Matrix template added to complete the 17-document set. Previously listed but not built.
+Ownership matrix references trainable positions. Training Matrix is the downstream document that tracks certification status. Both are required for a complete quality system.
+
+This document is the authoritative build reference for ManualCore v2.0.
+Any previous specification, design note, or session transcript that conflicts with this document is superseded by this version.

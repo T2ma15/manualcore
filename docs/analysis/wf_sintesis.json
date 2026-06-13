@@ -1,0 +1,186 @@
+﻿{
+    "veredicto_mvp":  "SÍ, CON AJUSTES. La apuesta central es correcta y la evidencia de los 6 análisis converge: la intersección \"extracción conversacional con IA + documento industrial formal + control documental ISO + español + precio micro-PyME\" está LIBRE — ninguno de los ~20 competidores analizados la ocupa, aunque cada ingrediente por separado ya está comoditizado. El foso es el control documental (estados, numeración, owner≠approver, audit log, trazabilidad de impresión), NO la generación con IA — eso es lo que ChatGPT, Scribe, Whale y los QMS baratos no entregan juntos, y es exactamente lo que el auditor revisa (cláusula 7.5). Mantener: 2 SOPs distintos, control documental, audit log inmutable, RLS desde día 1, y el patrón Question/Confirmation (genuinamente diferenciado hoy). PERO el V0 tal como está tiene 4 fallas que corregir antes de construir: (1) IDIOMA — si los DOCX salen en inglés el producto es inutilizable: las PyMEs dominicanas se certifican contra NORDOM ISO 9001:2015 en español y un SOP en inglés en planta es NC de facto (7.5.2.b); es el ajuste no negociable. (2) POSICIONAMIENTO — el V0 cubre 0 de los 4 documentos obligatorios y 0 de los 18 registros (~25-30% de lo que examina una auditoría): venderse como \"formaliza y controla tu documentación de procesos\", NUNCA como \"te deja listo para ISO 9001\", o los pilotos se decepcionan en semana 2 y queman los testimonios. (3) SOBRECARGA — el layout automático del flowchart ANSI (sumidero de ingeniería #1 con menor aporte de validación), el ciclo de 5 estados, el registro de copias numeradas con UI y el dashboard de plataforma consumen días que se robarán silenciosamente de la calidad de extracción, que ES el core; recortar a 4 estados (Draft→Under Review→Approved→Obsolete), flowchart lineal/Mermaid con time-box de 1 día, footer simple, Supabase Studio en vez de dashboard de plataforma. (4) FALTANTES BARATOS de alto valor: Lista Maestra exportable (~1 día, lo PRIMERO que pide el auditor) y 3 templates estáticos de documentos obligatorios (política, objetivos, alcance — el flujo de chat ya existe, solo son prompts + DOCX cortos). Advertencia dura: el schema actual NO está listo para crearse en Supabase esta noche — promete tenant_id en todas las tablas y lo tiene en 6, no puede representar los 2 SOPs del V0, la numeración es inimplementable y 4 tablas núcleo no tienen columnas. Aplicar la lista \"ahora\" primero; construir sobre el Excel tal cual garantiza fugas multi-tenant y re-trabajo de semanas.",
+    "cambios_matrices":  [
+                             {
+                                 "cambio":  "Añadir tenant_id UUID NOT NULL FK→tenants a TODAS las tablas (denormalizado), con política RLS uniforme contra auth.uid()→users.tenant_id y trigger BEFORE INSERT que lo herede del padre",
+                                 "prioridad":  "ahora",
+                                 "razon":  "La spec promete \u0027tenant_id on every table\u0027 pero solo 6 de 32 tablas lo tienen. RLS vía subconsultas encadenadas (steps→operations→nodes→tenants) es lento, frágil y la fuente #1 de fugas de datos entre tenants en SaaS construidos sin equipo técnico."
+                             },
+                             {
+                                 "cambio":  "Añadir users.auth_user_id UUID UNIQUE FK→auth.users(id) y decidir unicidad de email (recomendado: global con Supabase Auth)",
+                                 "prioridad":  "ahora",
+                                 "razon":  "Sin este vínculo no se puede escribir NI UNA política RLS — el pilar \u0027multi-tenant con RLS desde día 1\u0027 es literalmente inimplementable. El UNQ global actual contradice la regla \u0027unique per tenant\u0027."
+                             },
+                             {
+                                 "cambio":  "Congelar V0 a ~14-16 tablas y sacar del DDL las ~12 tablas de templates fuera de alcance (time_study_observations, gantt_tasks, vsm_data_blocks, training_records, photos, conflicts, document_relationships, related_documents_display, etc.); conservarlas como diseño documentado v1.1",
+                                 "prioridad":  "ahora",
+                                 "razon":  "Cada tabla extra es migración + RLS + seeds + bugs que la fundadora pagará sola en 10 días. V0 = 3 templates, solo texto, sin conflict resolution."
+                             },
+                             {
+                                 "cambio":  "Definir columnas completas de brain_extractions, input_files, generation_jobs (con idempotency_key + modelo/tokens/costo por llamada), print_events y access_grants",
+                                 "prioridad":  "ahora",
+                                 "razon":  "Cuatro de estas son el núcleo del V0 (extracción chat-first y trazabilidad de impresión) y hoy no tienen ni una columna definida. Sin idempotency_key, un reintento de la Claude API crea documentos duplicados; sin registro de tokens/costo no se puede vigilar el principal costo variable a $49/mes."
+                             },
+                             {
+                                 "cambio":  "Crear tabla departments (tenant_id, code, name) y doc_number_counters con incremento atómico (UPDATE...RETURNING en la misma transacción); unique compuesto (tenant_id, doc_number); REV derivado de revision_number, no parte del doc_number; eliminar documents.revision (VARCHAR duplicado)",
+                                 "prioridad":  "ahora",
+                                 "razon":  "El formato V0 [DEPT]-[SECC][####]-REV[##] es inimplementable sin catálogo de departamentos, y MAX(seq)+1 concurrente produce duplicados o jobs reventados. El doc_number actual del schema (TYPE-NODE-SEQ) contradice el V0 definido."
+                             },
+                             {
+                                 "cambio":  "Crear tabla document_templates (id, code, version, doc_type) con sop_mfg y sop_admin como templates DISTINTOS; FK documents.template_id + template_version; degradar tenants/sessions.industry_profile a metadato informativo",
+                                 "prioridad":  "ahora",
+                                 "razon":  "El schema no puede representar el V0 elegido: no existe sop_admin y apuesta por el label-switching que ya fue descartado por decisión de producto. Sin template_version no hay trazabilidad cuando los templates evolucionen."
+                             },
+                             {
+                                 "cambio":  "Añadir tenants.locale y documents.language con default \u0027es\u0027",
+                                 "prioridad":  "ahora",
+                                 "razon":  "Tres análisis convergen: INDOCAL, NORDOM y los auditores dominicanos trabajan en español; documentos en inglés = producto inutilizable y NC de facto (7.5.2.b). Retrofitear localización tarde rompe el cronograma."
+                             },
+                             {
+                                 "cambio":  "Eliminar la purga de historial a 5 revisiones (retained queda como flag de visualización; retención configurable por tenant, nunca constante del schema)",
+                                 "prioridad":  "ahora",
+                                 "razon":  "ISO 9001 §7.5.3.2 exige retención de información documentada; clientes de zonas francas (automotriz/médico) exigen retenciones muy superiores a 5 ciclos. Las filas de revisions son livianas — no hay razón técnica para purgar."
+                             },
+                             {
+                                 "cambio":  "Añadir ownership.revision_id NOT NULL FK→revisions con unique (document_id, revision_id), o mover las firmas a revisions",
+                                 "prioridad":  "ahora",
+                                 "razon":  "Tal como está, re-aprobar REV02 sobreescribe las firmas de REV01 — destrucción de evidencia de auditoría en el producto que vende auditabilidad."
+                             },
+                             {
+                                 "cambio":  "Añadir \u0027pdf\u0027 al enum de formatos y print_events.pdf_snapshot_url que guarde el PDF exacto impreso con su footer inyectado",
+                                 "prioridad":  "ahora",
+                                 "razon":  "V0 exige impresión PDF con footer de trazabilidad, pero los formatos definidos son solo docx/xlsx/html. Sin snapshot no hay evidencia reproducible de qué recibió el holder de la Copia #2."
+                             },
+                             {
+                                 "cambio":  "Hacer la inmutabilidad del audit_log un mecanismo: REVOKE UPDATE/DELETE para todos los roles + trigger BEFORE UPDATE OR DELETE con RAISE EXCEPTION + RLS solo INSERT/SELECT",
+                                 "prioridad":  "ahora",
+                                 "razon":  "Hoy es solo una convención escrita; en Postgres/Supabase nada lo impide y el service_role bypasea RLS. La inmutabilidad es argumento de venta — debe ser verificable."
+                             },
+                             {
+                                 "cambio":  "Colapsar el ciclo de vida a 4 estados (draft→under_review→approved→obsolete, eliminando \u0027released\u0027) y modelar el rechazo: transición under_review→draft con event_type=\u0027approval_rejected\u0027 y comentario obligatorio en audit_log",
+                                 "prioridad":  "ahora",
+                                 "razon":  "ISO exige revisión y aprobación, no 5 estados; con 3 pilotos nadie distingue Approved de Released. El rechazo es el camino feliz del mundo real — el primer SOP del piloto será rechazado varias veces."
+                             },
+                             {
+                                 "cambio":  "Limpiar deuda inmediata: eliminar FK circular sessions.node_id↔nodes.session_id, quitar product_specs.gauge_id→specs_5m (modelado erróneo), añadir updated_at/updated_by con trigger genérico, y usar TEXT+CHECK en vez de ENUM nativo para doc_type/subscription",
+                                 "prioridad":  "ahora",
+                                 "razon":  "La FK circular crea inconsistencias y problemas de orden de inserción; los ENUM nativos serán dolorosos (ALTER TYPE con locks) cuando entren los 15 templates restantes; sin updated_at, reconstruir \u0027última modificación\u0027 desde el log JSONB es caro."
+                             },
+                             {
+                                 "cambio":  "Emitir todo como migraciones SQL reales de Supabase versionadas en el repo (CREATE TABLE con NOT NULL/FK/UNIQUE/CHECK explícitos) y retirar el Excel como fuente de verdad",
+                                 "prioridad":  "ahora",
+                                 "razon":  "El artefacto fuente está corrupto (basura numérica en columnas PK/FK, NULL? e INDEX — la nullabilidad solo se puede adivinar). Un DDL es verificable y testeable; el Excel demostró no serlo. Esta noche se crea el schema desde el DDL corregido, no desde el Excel."
+                             },
+                             {
+                                 "cambio":  "Añadir tabla external_documents (título, origen, revisión/fecha, dónde se usa, responsable de vigilar) — CRUD simple, sin procesar el archivo con IA",
+                                 "prioridad":  "antes_de_beta",
+                                 "razon":  "7.5.3.2 exige controlar documentos de origen externo (especificaciones de clientes extranjeros, normas NORDOM). Si el piloto usa ManualCore como SU sistema de control documental, la ausencia es NC directa. Es una tabla más con CRUD."
+                             },
+                             {
+                                 "cambio":  "Añadir revisions.data_snapshot JSONB que congele los datos de operations/steps que produjeron cada revisión aprobada",
+                                 "prioridad":  "antes_de_beta",
+                                 "razon":  "Las matrices se editan in-place; sin snapshot, responder \u0027¿qué decía el paso 3 en REV01?\u0027 ante un auditor depende de parsear un DOCX."
+                             },
+                             {
+                                 "cambio":  "Crear vistas para Lista Maestra exportable (código, título, tipo, revisión vigente, estado, elaboró, aprobó, próxima revisión) y para el dashboard de tenant (documentos vencidos/por vencer sobre review_due)",
+                                 "prioridad":  "antes_de_beta",
+                                 "razon":  "Es lo primero que pide el auditor en la reunión de apertura y deriva 100% de datos que ya existen; review_due ya está en el schema, solo falta exponerlo."
+                             },
+                             {
+                                 "cambio":  "Mapear revisions.what_changed al template DOCX (tabla de historial de revisiones en la cara del documento) y añadir retention_period por tipo de documento",
+                                 "prioridad":  "antes_de_beta",
+                                 "razon":  "Los auditores esperan el historial de revisiones EN el documento (hoy la regla dice explícitamente \u0027not on document face\u0027) y 7.5.3.2.d exige abordar retención — en V0 basta el campo y el reporte."
+                             },
+                             {
+                                 "cambio":  "Tabla controlled_copies (print_event_id, holder, ubicación, status: active|recalled|destroyed) + workflow de recall automático al liberar nueva revisión",
+                                 "prioridad":  "v1",
+                                 "razon":  "Cierra la causa #1 de NC (documento obsoleto en uso en planta), pero es workflow completo, no schema crítico; en V0 el footer simple + print_events cubre la trazabilidad con 10% del esfuerzo."
+                             },
+                             {
+                                 "cambio":  "Separar materials (catálogo: tenant_id, name, sku, unit) de step_materials/operation_materials (uso: qty, repetitions, total_qty GENERATED), y crear tabla equipment/gauges propia que reemplace specs_5m.gauge_ids JSONB",
+                                 "prioridad":  "v1",
+                                 "razon":  "El BOM está fuera de V0 y el modelo actual no soporta el \u0027BOM segmentado por operación\u0027 que la spec promete (un step con tornillo + arandela no se puede modelar). gauge_ids JSONB no tiene integridad referencial."
+                             },
+                             {
+                                 "cambio":  "Tablas para Caracterización de Proceso (entradas/salidas/owner/indicadores/riesgos) y para registros: NC/acciones correctivas (10.2), auditoría interna (9.2), revisión por la dirección (9.3), matriz de competencias (7.2)",
+                                 "prioridad":  "v1",
+                                 "razon":  "Las NC más frecuentes en auditorías son registros, no SOPs (AFNOR, 20,000 informes: 7.2 con 12.6%, 9.2, 9.3, 10.2). La caracterización es la expectativa LatAm universal (4.4.1), encaja perfecto con Question/Confirmation, y NO está ni en los 18 templates del roadmap — punto ciego. Priorizar sobre BOM/VSM/Gantt/PFMEA."
+                             }
+                         ],
+    "resumen_mercado":  "El mercado dominicano es minúsculo pero real: ~41-150 empresas certificadas ISO 9001, 843 empresas en zonas francas y un pipeline de ~250 mipymes financiadas por el programa MICM-UE (€11MM) — alcanza para validar y los primeros 20-50 clientes (~US$12-30K ARR), no para escalar; el plan base post-validación es LatAm hispana. El posicionamiento exacto de ManualCore (IA conversacional + documento formal + control documental ISO + español + precio micro-PyME) está libre: nadie lo ocupa completo, aunque cada pieza por separado ya está comoditizada. El precio de $49/mes tiene espacio real — es \u003c5% del costo de un proyecto de certificación (US$1,200-3,500 solo la auditoría + consultoría aparte) y 5x más barato que Isolución; el riesgo no es el precio sino el timing: la PyME solo compra durante su proyecto. El canal natural son los consultores ISO (CompetISO/ANEIH concentra el 62% de las PyMEs certificadas), no la venta fría — son aliados a reclutar, no competencia a desplazar. La amenaza a 12-24 meses son los QMS LatAm añadiendo IA generativa (KAWAK ya lo anunció; QualityWeb 360 a $50/mes está a un feature de distancia): la ventana es moverse rápido en RD con pilotos y relaciones locales antes de que un colombiano o mexicano localice la IA conversacional.",
+    "recomendaciones":  [
+                            {
+                                "recomendacion":  "ESTA NOCHE: no crear el schema en Supabase desde el Excel. Aplicar primero los 14 cambios \u0027ahora\u0027 y emitir migraciones SQL reales de ~14-16 tablas (tenant_id universal, auth_user_id, departments, doc_number_counters, document_templates, locale). El Excel queda como documento de visión, no como fuente de build.",
+                                "prioridad":  "crítica",
+                                "esfuerzo":  "1-2 días"
+                            },
+                            {
+                                "recomendacion":  "Español por defecto de punta a punta: templates DOCX, prompts de extracción, chat y PDF de impresión con tenants.locale=\u0027es\u0027. Requisito no negociable del V0, documentado en la spec.",
+                                "prioridad":  "crítica",
+                                "esfuerzo":  "1 día si se hace desde el inicio; semanas si se retrofitea"
+                            },
+                            {
+                                "recomendacion":  "Reposicionar el mensaje: \u0027formaliza y controla tu documentación de procesos\u0027 (nunca \u0027te deja listo para ISO 9001\u0027) y \u0027documenta lo que realmente haces\u0027. Añadir al pitch: \u0027ninguna palabra llega a Approved sin aprobación humana\u0027 — neutraliza el caso de terror de las políticas alucinadas por IA ($45K en re-trabajo documentado).",
+                                "prioridad":  "crítica",
+                                "esfuerzo":  "horas"
+                            },
+                            {
+                                "recomendacion":  "Recortar ceremonia: 4 estados (sin \u0027released\u0027), footer de impresión simple sin UI de registro de copias numeradas, sin dashboard de plataforma (usar Supabase Studio), flowchart degradado a lineal/Mermaid con time-box de 1 día — si no cabe, se difiere. Lo que se ahorra se invierte en calidad de extracción del brain, que es el core.",
+                                "prioridad":  "crítica",
+                                "esfuerzo":  "ahorra 3-5 días netos"
+                            },
+                            {
+                                "recomendacion":  "Lista Maestra de Documentos exportable (XLSX/PDF) desde el dashboard del tenant: es lo primero que pide el auditor y es un query + un template sobre datos que ya existen.",
+                                "prioridad":  "alta",
+                                "esfuerzo":  "~1 día"
+                            },
+                            {
+                                "recomendacion":  "Reclutar 1-2 consultores ISO dominicanos como design partners ANTES de codificar los templates (empezar por CompetISO/ANEIH —62% del mercado— y Qualitypoint) y explorar el programa MICM-UE como canal subsidiado. Un solo consultor aliado puede aportar los 3 pilotos de su cartera activa.",
+                                "prioridad":  "alta",
+                                "esfuerzo":  "1 semana de gestiones, en paralelo, no bloquea código"
+                            },
+                            {
+                                "recomendacion":  "Condición de piloto: carta de conversión firmada a $49/mes al cierre (o LOI con precio). Piloto gratis valida uso, no disposición a pagar. Considerar tier $99-149 para zonas francas — el valor sustituido son miles de USD de consultoría.",
+                                "prioridad":  "alta",
+                                "esfuerzo":  "horas"
+                            },
+                            {
+                                "recomendacion":  "Añadir 3 templates estáticos de documentos obligatorios (política de calidad 5.2, objetivos 6.2, alcance 4.3) + un \u0027Procedimiento de Control de Documentos\u0027 pre-elaborado en PDF que describe cómo ManualCore implementa la cláusula 7.5. Convierte el pitch de \u0027documenta procesos\u0027 a \u0027arranca tu SGC\u0027.",
+                                "prioridad":  "alta",
+                                "esfuerzo":  "1-2 días (el flujo de chat ya existe; son prompts + DOCX cortos)"
+                            },
+                            {
+                                "recomendacion":  "Definir la métrica de validación del piloto: \u0027un consultor ISO externo acepta N documentos generados sin retrabajo mayor\u0027. Esa es la señal de que vale dinero — no la cantidad de features ni el uso.",
+                                "prioridad":  "alta",
+                                "esfuerzo":  "horas"
+                            },
+                            {
+                                "recomendacion":  "Mitigar la fatiga del chat: agrupar preguntas o gap-report editable en batch (responder 8 huecos en una pasada en vez de 8 turnos), aunque contradiga la regla \u0027una pregunta a la vez\u0027 del spec. Un proceso de 12 pasos a 30-45 minutos de ping-pong hace abandonar al piloto.",
+                                "prioridad":  "media",
+                                "esfuerzo":  "1-2 días"
+                            },
+                            {
+                                "recomendacion":  "Contenido semilla: 2-3 SOPs de ejemplo precargados (uno Mfg, uno Admin) en cada tenant piloto, y ocultar en los templates las filas de \u0027Related Documents\u0027 de tipos que V0 no genera (un SOP que referencia WI/TWI/CHK inexistentes parece roto).",
+                                "prioridad":  "media",
+                                "esfuerzo":  "~1 día"
+                            },
+                            {
+                                "recomendacion":  "Registro de documentos externos (CRUD sobre la tabla external_documents) y visibilidad de procedencia en el draft (qué vino del texto del usuario vs qué completó la IA) antes de la beta.",
+                                "prioridad":  "media",
+                                "esfuerzo":  "2-3 días en total"
+                            },
+                            {
+                                "recomendacion":  "Gestionar expectativas en el onboarding del piloto: ManualCore V0 no genera registros (NC, auditoría interna, revisión por dirección) — el cliente seguirá usando Excel para eso. Decirlo explícitamente evita el \u0027esto no me sirve completo\u0027 en la semana 2.",
+                                "prioridad":  "media",
+                                "esfuerzo":  "horas"
+                            }
+                        ],
+    "pivotes_a_considerar":  [
+                                 "Concierge / Wizard-of-Oz los primeros 30 días: correr sesiones con los pilotos por Zoom/WhatsApp usando Claude + templates internamente, entregando documentos numerados y lista maestra a mano, COBRANDO desde la semana 1 a precio de servicio. La evidencia lo apoya porque el riesgo dominante es de mercado, no técnico: valida disposición a pagar de inmediato y las sesiones reales son el training set del loop Question/Confirmation antes de codificarlo. No es abandonar el producto — es construirlo en paralelo sobre transcripts reales.",
+                                 "Consultor como comprador (B2B2B) en vez de PyME directa: vender ManualCore como herramienta de productividad del consultor ISO (hace 3 clientes en el tiempo de 1, con trazabilidad que Word+ChatGPT no da), con licencia de consultor multi-cliente o revenue share. La evidencia es fuerte: CompetISO concentra el 62% de las PyMEs certificadas, los consultores ya usan ChatGPT con resultados desiguales, Advisera anticipa \u0027generación de procedimientos desde input verbal\u0027 como el futuro del oficio, y el documento sale avalado por un humano experto — lo que neutraliza el déficit de confianza en IA. Mínimo: añadir rol \u0027consultor\u0027 multi-cliente al roadmap.",
+                                 "Wizard híbrido en vez de chat puro: pegar texto → extracción a formulario estructurado con huecos resaltados → completar en batch → generar. Reduce ~40% del código de UI más frágil y elimina la fatiga de \u0027una pregunta a la vez\u0027. Considerarlo solo si el calendario revienta: el chat es el factor wow de demo y el diferenciador visible; la versión intermedia (chat que agrupa preguntas) captura casi todo el beneficio sin perder la demo.",
+                                 "Expansión LatAm hispana como plan base (no contingencia): el TAM dominicano (~41-150 certificadas, 35 auditores en todo el país) alcanza para validar pero no para un negocio. Nada en el producto — copy, templates, numeración, moneda — debe asumir solo RD; los pilotos dominicanos son el trampolín a Colombia/Perú/Centroamérica, donde la adopción PyME lidera la región.",
+                                 "Vertical post-validación con urgencia regulatoria real: template ISO 13485 para las ~31 empresas de dispositivos médicos de zonas francas (principal subsector exportador), presionadas AHORA por la transición FDA QMSR→ISO 13485:2016 vigente desde inicios de 2026. Mayor valor por cliente, pero exige compliance más serio — solo después de validar con ISO 9001."
+                             ],
+    "riesgo_principal":  "Sobrecarga de alcance en 10 días que sacrificará silenciosamente la calidad de extracción del brain (el core del producto), dentro de un mercado minúsculo donde la reputación no perdona. Los dos sumideros identificados — fidelidad del DOCX y layout del flowchart SVG — más el schema no construible tal como está (tenant_id en 6 de 32 tablas, 4 tablas núcleo sin columnas, numeración inimplementable) garantizan que algo cederá, y lo que cede sin recorte explícito es siempre el core. El amplificador es el contexto: República Dominicana tiene ~41-150 empresas certificadas y 35 auditores líderes — todos se conocen. Si los 3 pilotos reciben documentos en inglés, un pitch de \u0027listo para ISO\u0027 que cubre el 25-30% de la auditoría, o un schema con fugas entre tenants, no se pierden 3 testimonios: se quema el único canal de distribución (los consultores tipo CompetISO) en un país sin segunda primera impresión — y el peor escenario posible es que el software que vende control documental falle su propia auditoría. Mitigación concreta: aplicar los recortes esta semana (4 estados, flowchart lineal, sin dashboard de plataforma), español desde el día 1, reposicionar el mensaje, corregir el schema antes de crearlo esta noche, y atar carta de conversión a $49/mes como condición del piloto — porque un piloto gratis valida uso, no negocio."
+}

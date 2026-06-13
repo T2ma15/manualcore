@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>ManualCore — Gantt de Gestión del Proyecto</title>
+<style>
+  :root { --navy:#0D1F3C; --steel:#1B4F72; --teal:#1ABC9C; --paper:#fff; --muted:#f4f6f8; --border:#e2e8f0; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:Arial,Helvetica,sans-serif; background:var(--muted); color:var(--navy); padding:24px; }
+  .doc { max-width:1280px; margin:0 auto; background:var(--paper); border:1px solid var(--border); }
+  header { background:var(--navy); color:#fff; padding:20px 28px; display:flex; justify-content:space-between; align-items:center; }
+  header .logo { display:flex; gap:10px; align-items:center; font-size:20px; font-weight:bold; }
+  header .logo .m { background:var(--teal); color:var(--navy); width:34px; height:34px; border-radius:6px; display:flex; align-items:center; justify-content:center; }
+  header .meta { text-align:right; font-size:11px; color:#cdd6e0; line-height:1.6; }
+  h2 { background:var(--steel); color:#fff; font-size:13px; letter-spacing:1px; text-transform:uppercase; padding:8px 28px; }
+  .gantt { padding:18px 28px 26px; overflow-x:auto; }
+  table { border-collapse:collapse; width:100%; font-size:12px; }
+  th { background:var(--muted); border:1px solid var(--border); padding:6px 8px; font-size:10px; text-transform:uppercase; letter-spacing:.5px; color:var(--steel); }
+  td { border:1px solid var(--border); padding:0; height:34px; }
+  td.task { padding:6px 10px; white-space:nowrap; font-weight:bold; width:300px; }
+  td.task small { display:block; font-weight:normal; color:#5a6b7e; font-size:10px; }
+  .bar { height:20px; margin:7px 2px; border-radius:4px; }
+  .b-core   { background:var(--teal); }
+  .b-build  { background:var(--steel); }
+  .b-sell   { background:#e67e22; }
+  .b-pilot  { background:#8e44ad; }
+  .b-money  { background:#27ae60; }
+  .b-done   { background:var(--teal); opacity:.45; }
+  .hito { color:var(--teal); font-size:16px; text-align:center; font-weight:bold; }
+  .leyenda { display:flex; gap:18px; padding:0 28px 22px; font-size:11px; flex-wrap:wrap; }
+  .leyenda span { display:flex; align-items:center; gap:6px; }
+  .leyenda i { width:14px; height:14px; border-radius:3px; display:inline-block; }
+  footer { border-top:1px solid var(--border); padding:10px 28px; font-size:10px; color:#5a6b7e; display:flex; justify-content:space-between; }
+</style>
+</head>
+<body>
+<div class="doc">
+  <header>
+    <div class="logo"><span class="m">M</span> ManualCore <span style="font-weight:normal;font-size:12px;color:#cdd6e0">· Gestión del Proyecto</span></div>
+    <div class="meta">DOC: GES-PRY0001 · REV00<br>Vigencia: 11 jun 2026 · Próx. revisión: semanal</div>
+  </header>
+
+  <h2>Fase 1 — Sprint V0 · 11 → 21 junio 2026</h2>
+  <div class="gantt">
+    <table>
+      <tr>
+        <th style="text-align:left">Tarea</th>
+        <th>J 11</th><th>V 12</th><th>S 13</th><th>D 14</th><th>L 15</th>
+        <th>M 16</th><th>X 17</th><th>J 18</th><th>V 19</th><th>S 20</th><th>D 21</th>
+      </tr>
+      <tr><td class="task">Validación MVP + schema corregido<small>matrices, mercado, ISO 2026, skills</small></td>
+        <td><div class="bar b-done"></div></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td class="task">Schema en Supabase + tests reglas<small>migraciones 0001-0003 · 6pm</small></td>
+        <td><div class="bar b-core"></div></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td class="task">Auth + registro + card flow<small>login, tenant, industria→template→nuevo</small></td>
+        <td></td><td><div class="bar b-build"></div></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td class="task">Brain 1 — chat + extracción<small>Claude API, Confirmations</small></td>
+        <td></td><td></td><td><div class="bar b-core"></div></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td class="task">Brain 2 — preguntas + criticidades<small>Questions, related_docs ¿ya existe?</small></td>
+        <td></td><td></td><td></td><td><div class="bar b-core"></div></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td class="task">SOP Manufactura (DOCX español)<small>generador + preview</small></td>
+        <td></td><td></td><td></td><td></td><td><div class="bar b-build"></div></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td class="task">SOP Administrativo (DOCX distinto)<small>template propio</small></td>
+        <td></td><td></td><td></td><td></td><td></td><td><div class="bar b-build"></div></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td class="task">Flujograma + states + numeración<small>SVG simple (time-box 1 día)</small></td>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td><div class="bar b-build"></div></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td class="task">Análisis Riesgos + Lista Maestra<small>+ política/objetivos/alcance</small></td>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td><div class="bar b-build"></div></td><td></td><td></td><td></td></tr>
+      <tr><td class="task">Print PDF + dashboards + demo data<small>footer trazable, /app y /platform</small></td>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td><div class="bar b-build"></div></td><td></td><td></td></tr>
+      <tr><td class="task">QA E2E + inglés + video demo 🎬<small>checklist qa-manualcore completo</small></td>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td><div class="bar b-sell"></div></td><td><div class="bar b-sell"></div></td></tr>
+      <tr><td class="task">Comercial en paralelo (de día)<small>LinkedIn, consultores, CRM, pitch</small></td>
+        <td></td><td><div class="bar b-sell"></div></td><td><div class="bar b-sell"></div></td><td><div class="bar b-sell"></div></td><td><div class="bar b-sell"></div></td><td><div class="bar b-sell"></div></td><td><div class="bar b-sell"></div></td><td><div class="bar b-sell"></div></td><td><div class="bar b-sell"></div></td><td><div class="bar b-sell"></div></td><td class="hito">★</td></tr>
+    </table>
+    <p style="font-size:11px;color:#5a6b7e;margin-top:8px">★ 21 jun = V0 COMPLETO: producto funcional + demo grabada + materiales de venta listos</p>
+  </div>
+
+  <h2>Fase 2-5 — Nacimiento del negocio · julio 2026 → marzo 2027</h2>
+  <div class="gantt">
+    <table>
+      <tr>
+        <th style="text-align:left">Fase</th>
+        <th>Jul</th><th>Ago</th><th>Sep</th><th>Oct</th><th>Nov</th><th>Dic</th><th>Ene 27</th><th>Feb</th><th>Mar</th>
+      </tr>
+      <tr><td class="task">Reclutar consultores aliados + pilotos<small>CompetISO, ANEIH, programa MICM-UE</small></td>
+        <td><div class="bar b-sell"></div></td><td><div class="bar b-sell"></div></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td class="task">Pilotos 7 días → cartas $49<small>ciclos de 3 empresas, acompañadas</small></td>
+        <td><div class="bar b-pilot"></div></td><td><div class="bar b-pilot"></div></td><td><div class="bar b-pilot"></div></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td class="task">Legal RD: privacidad + T&C<small>abogado, antes de cobrar</small></td>
+        <td><div class="bar b-build"></div></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td class="task">ISO 9001:2026 publicada → templates 2026<small>norm_version; ola de transición = campaña</small></td>
+        <td></td><td></td><td><div class="bar b-core"></div></td><td><div class="bar b-core"></div></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td class="task">Stripe + cobro + primeros clientes<small>meta: 5 pagando dic 2026</small></td>
+        <td></td><td></td><td><div class="bar b-money"></div></td><td><div class="bar b-money"></div></td><td><div class="bar b-money"></div></td><td class="hito">$</td><td></td><td></td><td></td></tr>
+      <tr><td class="task">V1: voz/foto · conflicts · WI/checklist<small>+ módulo entrenamiento (video+examen+registro)</small></td>
+        <td></td><td></td><td></td><td><div class="bar b-build"></div></td><td><div class="bar b-build"></div></td><td><div class="bar b-build"></div></td><td><div class="bar b-build"></div></td><td></td><td></td></tr>
+      <tr><td class="task">Ads + contenido (post-pilotos)<small>Google Search ES, LinkedIn, YouTube</small></td>
+        <td></td><td></td><td></td><td><div class="bar b-sell"></div></td><td><div class="bar b-sell"></div></td><td><div class="bar b-sell"></div></td><td><div class="bar b-sell"></div></td><td><div class="bar b-sell"></div></td><td><div class="bar b-sell"></div></td></tr>
+      <tr><td class="task">Expansión LatAm hispana + modo consultor<small>CO/PE/MX/UY · multi-cliente</small></td>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td><div class="bar b-pilot"></div></td><td><div class="bar b-pilot"></div></td><td><div class="bar b-pilot"></div></td></tr>
+    </table>
+    <p style="font-size:11px;color:#5a6b7e;margin-top:8px">$ dic 2026 = meta 5 clientes pagando (~$245 MRR) · Fase 6 (abr+ 2027): 30 clientes, portugués, vertical médico/pharma</p>
+  </div>
+
+  <div class="leyenda">
+    <span><i style="background:#1ABC9C"></i> Core (brain/schema)</span>
+    <span><i style="background:#1B4F72"></i> Construcción</span>
+    <span><i style="background:#e67e22"></i> Comercial</span>
+    <span><i style="background:#8e44ad"></i> Pilotos/expansión</span>
+    <span><i style="background:#27ae60"></i> Ingresos</span>
+    <span><i style="background:#1ABC9C;opacity:.45"></i> Completado</span>
+  </div>
+
+  <footer>
+    <span>ManualCore · Gestión interna — no distribuir</span>
+    <span>Generado 11 jun 2026 · Actualizar cada viernes</span>
+  </footer>
+</div>
+</body>
+</html>

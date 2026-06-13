@@ -20,10 +20,10 @@ export default function Home() {
               By use case
             </a>
             <a
-              href="#signin"
+              href="/login"
               className="rounded-full bg-[color:var(--mc-teal)] text-[color:var(--mc-navy)] px-4 py-2 font-medium hover:opacity-90"
             >
-              Sign in
+              Iniciar sesión
             </a>
           </nav>
         </div>
@@ -44,13 +44,14 @@ export default function Home() {
               </span>
             </h1>
             <p className="mt-6 text-lg text-white/80 leading-relaxed max-w-lg">
-              Convierte conocimiento no estructurado — texto, voz, foto — en
-              documentación industrial formal. SOPs, flujogramas, BOMs, VSM y
-              más, listos para ISO 9001.
+              Formaliza y controla la documentación de tus procesos. Le cuentas
+              a un asistente cómo trabajas — en tus palabras — y él te entrega
+              SOPs, flujogramas y análisis de riesgos formales, con control de
+              revisiones y aprobaciones.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row gap-4">
               <a
-                href="#start"
+                href="/registro"
                 className="inline-flex items-center justify-center rounded-full bg-[color:var(--mc-teal)] text-[color:var(--mc-navy)] px-8 py-3 font-semibold hover:opacity-90"
               >
                 Empezar gratis
