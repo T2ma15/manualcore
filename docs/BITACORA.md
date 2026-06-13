@@ -39,7 +39,15 @@
 - 🧹 Limpieza pendiente: borrar el usuario de prueba t2ma15+dia2@gmail.com y su tenant "Empresa Demo Dia 2" (soft-delete) cuando se quiera.
 - ⏳ Pendiente: commit + push a GitHub (proteger el trabajo).
 
-**Mañana (Día 3) toca:** Chat UI + brain parte 1 (extracción con Claude API) — necesitará la llave de Anthropic en .env.local. Antes: decidir email confirmation y hacer commit/push.
+## 11-12 jun 2026 (madrugada) — DÍA 3: EL CEREBRO ✅ (probado en vivo)
+- ✅ Día 1-2 commiteado y pusheado a GitHub (commit 16c6beb)
+- ✅ Instalado `@anthropic-ai/sdk`
+- ✅ Brain construido: `src/lib/brain/` (client, prompts con principios Lean, schema de extracción estructurada), ruta `/api/brain/extract`, componente `Chat.tsx`, integrado en la página de sesión
+- ✅ Llave de Anthropic en `.env.local` (cuenta tiene $20 crédito). **Fable 5 suspendido en la cuenta de Tania → brain fijado a `claude-opus-4-8`** (BRAIN_MODEL env, correcto).
+- ✅ **PRUEBA EN VIVO EXITOSA** (`tools/brain-test.mjs`): con un proceso informal de planta, Opus 4.8 extrajo 11 campos, hizo 6 preguntas (5 críticas de seguridad/calidad que el operador no mencionó: EPP, bloqueos, presión, qué hacer fuera de rango, calibración), sugirió 3 docs relacionados, todo en español. Costo: $0.0366/documento (~4 centavos). Comportamiento Lean confirmado.
+- ⏳ Falta: prueba click-through en navegador del flujo completo (registro→nuevo→chat) — Chrome bloquea localhost, lo hace Tania. El brain core ya está probado; la ruta usa exactamente la misma llamada.
+
+**Mañana (Día 4) toca:** Brain parte 2 — persistir respuestas a preguntas, re-extracción incremental, detección de "campos completos" para habilitar generación. Antes: que Tania pruebe el chat en su navegador + commit Día 3. Día 5 = generador SOP Manufactura (DOCX).
 
 ### Recordatorios de día para Tania (comercial, ~30 min)
 - Emails de oro HOY: CompetISO (capacitacion@aneih.org.do) y LEAN CONSULTING RD (info@leanconsultingrd.com)

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import Chat from "./Chat";
 
 export default async function SesionPage({
   params,
@@ -22,6 +23,13 @@ export default async function SesionPage({
     (session.document_templates as { name_es?: string } | null)?.name_es ??
     "Documento";
 
+  const { data: chatRows } = await supabase
+    .from("chat_messages")
+    .select("id, role, msg_type, content")
+    .eq("session_id", id)
+    .order("created_at", { ascending: true });
+  const initialMessages = chatRows ?? [];
+
   return (
     <div className="max-w-6xl mx-auto px-6 py-8">
       <Link href="/app" className="text-sm text-[color:var(--mc-steel)] hover:underline">
@@ -29,24 +37,15 @@ export default async function SesionPage({
       </Link>
 
       <div className="mt-4 grid lg:grid-cols-2 gap-6">
-        {/* Panel chat (Día 3) */}
-        <section className="rounded-2xl border border-[color:var(--mc-border)] bg-white p-6 min-h-[400px] flex flex-col">
+        {/* Panel chat */}
+        <section className="rounded-2xl border border-[color:var(--mc-border)] bg-white p-6 flex flex-col">
           <h2 className="font-semibold text-[color:var(--mc-navy)]">
             {templateName}
           </h2>
-          <p className="text-xs uppercase tracking-wide text-[color:var(--mc-steel)] mt-1">
-            Sesión iniciada
+          <p className="text-xs uppercase tracking-wide text-[color:var(--mc-steel)] mt-1 mb-4">
+            Asistente de documentación
           </p>
-
-          <div className="flex-1 flex items-center justify-center text-center">
-            <div className="text-[color:var(--mc-steel)]">
-              <div className="text-4xl">💬</div>
-              <p className="mt-3 max-w-xs">
-                Aquí va el asistente que te hará preguntas y construirá tu
-                documento. (Se activa en el Día 3.)
-              </p>
-            </div>
-          </div>
+          <Chat sessionId={session.id} initialMessages={initialMessages} />
         </section>
 
         {/* Vista previa del documento */}
