@@ -46,3 +46,7 @@ docs/analysis/_tmp/
 next-env.d.ts
 
 .vercel
+
+# artefactos de prueba de generación
+tools/_out_*
+tools/proceso-foto.png
