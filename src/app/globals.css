@@ -3,15 +3,20 @@
 :root {
   /* ManualCore brand tokens (spec §12.2) */
   --mc-navy: #0D1F3C;
-  --mc-steel: #1B4F72;
-  --mc-teal: #1ABC9C;
-  --mc-ink: #0D1F3C;
+  --mc-steel: #51607a;        /* secundario más neutro y refinado */
+  --mc-teal: #15a888;         /* acento un poco más sobrio que el original */
+  --mc-teal-soft: #e7f5f0;    /* relleno suave del acento */
+  --mc-ink: #11213b;
   --mc-paper: #ffffff;
-  --mc-muted: #f4f6f8;
-  --mc-border: #e2e8f0;
+  --mc-muted: #f7f8fa;        /* superficie suave */
+  --mc-canvas: #f3f4f7;       /* fondo de página */
+  --mc-border: #e7eaef;       /* borde más suave, menos frío */
 
-  --background: var(--mc-paper);
+  --background: var(--mc-canvas);
   --foreground: var(--mc-ink);
+
+  /* Tipografía de la APP (Arial queda solo para documentos impresos) */
+  --font-ui: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 @theme inline {
@@ -20,13 +25,22 @@
   --color-mc-navy: var(--mc-navy);
   --color-mc-steel: var(--mc-steel);
   --color-mc-teal: var(--mc-teal);
+  --color-mc-teal-soft: var(--mc-teal-soft);
   --color-mc-muted: var(--mc-muted);
+  --color-mc-canvas: var(--mc-canvas);
   --color-mc-border: var(--mc-border);
-  --font-sans: Arial, Helvetica, sans-serif;
+  --font-sans: var(--font-ui);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.005em;
+}
+
+h1, h2, h3 {
+  letter-spacing: -0.02em;
 }
