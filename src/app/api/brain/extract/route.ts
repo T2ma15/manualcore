@@ -144,6 +144,7 @@ export async function POST(req: Request) {
         session_id: sessionId,
         field_path: x.field,
         extracted_value: x.value,
+        category: x.category,
         status: "auto_written",
       })),
     );

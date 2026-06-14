@@ -43,8 +43,41 @@ export default function Chat({
   const [error, setError] = useState<string | null>(null);
   const [ready, setReady] = useState(initialReady);
   const [recording, setRecording] = useState(false);
+  const [generating, setGenerating] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const recRef = useRef<SpeechRec | null>(null);
+
+  async function generateDoc() {
+    if (generating) return;
+    setGenerating(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/document/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId }),
+      });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        throw new Error(d.error ?? "No se pudo generar");
+      }
+      const blob = await res.blob();
+      const dispo = res.headers.get("Content-Disposition") ?? "";
+      const name = dispo.match(/filename="(.+?)"/)?.[1] ?? "documento";
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "No se pudo generar");
+    } finally {
+      setGenerating(false);
+    }
+  }
 
   // Llamada central al cerebro (texto y/o imagen)
   async function runBrain(payload: { text?: string; image?: ImagePayload; bubble: string }) {
@@ -195,11 +228,11 @@ export default function Chat({
             <span className="font-semibold">¡Listo!</span> Tengo todo lo necesario para tu documento.
           </p>
           <button
-            disabled
-            title="El generador de documentos se activa en el siguiente paso"
-            className="rounded-full bg-[color:var(--mc-navy)] text-white px-4 py-2 text-sm font-semibold opacity-50 cursor-not-allowed whitespace-nowrap"
+            onClick={generateDoc}
+            disabled={generating}
+            className="rounded-full bg-[color:var(--mc-navy)] text-white px-4 py-2 text-sm font-semibold hover:opacity-90 disabled:opacity-50 whitespace-nowrap"
           >
-            Generar documento
+            {generating ? "Generando…" : "Generar documento"}
           </button>
         </div>
       )}
