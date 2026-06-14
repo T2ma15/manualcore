@@ -29,6 +29,7 @@ export function generateHtml(data: DocData): string {
 h1{color:#0D1F3C;font-size:22px;margin:0 0 4px;}.muted{color:#5B6573;font-size:13px;margin:0 0 24px;}
 .flow>div{margin-bottom:0;}.foot{margin-top:28px;text-align:center;color:#5B6573;font-size:12px;}</style></head>
 <body><div class="wrap">
+${data.logoDataUrl ? `<img src="${esc(data.logoDataUrl)}" alt="logo" style="max-height:56px;margin-bottom:14px;">` : ""}
 <h1>${esc(data.processName)}</h1>
 <p class="muted">${esc(data.tenantName)} · ${esc(data.templateName)} · ${esc(docId)} · ${esc(data.revision)}</p>
 <div class="flow">${boxes}</div>

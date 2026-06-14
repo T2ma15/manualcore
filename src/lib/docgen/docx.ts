@@ -3,6 +3,7 @@ import {
   Packer,
   Paragraph,
   TextRun,
+  ImageRun,
   Table,
   TableRow,
   TableCell,
@@ -11,7 +12,7 @@ import {
   BorderStyle,
   WidthType,
 } from "docx";
-import { type DocData, groupBySection } from "./types";
+import { type DocData, groupBySection, parseDataUrl } from "./types";
 
 const NAVY = "0D1F3C";
 const TEAL = "15A888";
@@ -107,7 +108,25 @@ export async function generateDocx(data: DocData): Promise<Buffer> {
     ],
   });
 
-  const children: (Paragraph | Table)[] = [
+  const logo = parseDataUrl(data.logoDataUrl);
+  const children: (Paragraph | Table)[] = [];
+
+  if (logo) {
+    children.push(
+      new Paragraph({
+        spacing: { after: 80 },
+        children: [
+          new ImageRun({
+            data: logo.buffer,
+            type: logo.ext === "jpg" ? "jpg" : logo.ext === "gif" ? "gif" : "png",
+            transformation: { width: 150, height: 60 },
+          }),
+        ],
+      }),
+    );
+  }
+
+  children.push(
     new Paragraph({
       children: [new TextRun({ text: data.tenantName, bold: true, color: NAVY, size: 28 })],
     }),
@@ -115,7 +134,7 @@ export async function generateDocx(data: DocData): Promise<Buffer> {
       spacing: { after: 200 },
       children: [new TextRun({ text: data.templateName, color: TEAL, size: 22, bold: true })],
     }),
-  ];
+  );
 
   if (isDraft) {
     children.push(

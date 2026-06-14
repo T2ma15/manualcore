@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import LogoUploader from "./LogoUploader";
 
 const STATE_LABELS: Record<string, string> = {
   draft: "Borrador",
@@ -11,6 +12,16 @@ const STATE_LABELS: Record<string, string> = {
 
 export default async function DashboardPage() {
   const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const { data: profile } = await supabase
+    .from("users")
+    .select("tenants(logo_url)")
+    .eq("auth_user_id", user?.id ?? "")
+    .single();
+  const logo = (profile?.tenants as { logo_url?: string } | null)?.logo_url ?? null;
 
   const { data: documents } = await supabase
     .from("documents")
@@ -39,6 +50,11 @@ export default async function DashboardPage() {
         >
           + Nuevo documento
         </Link>
+      </div>
+
+      {/* Logo de la empresa */}
+      <div className="mt-6">
+        <LogoUploader initialLogo={logo} />
       </div>
 
       {/* Conteos por estado */}

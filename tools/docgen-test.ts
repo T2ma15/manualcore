@@ -3,8 +3,12 @@ import { generateDocx } from "../src/lib/docgen/docx";
 import { generateXlsx } from "../src/lib/docgen/xlsx";
 import type { DocData } from "../src/lib/docgen/types";
 
+const TEST_LOGO =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
+
 const base: DocData = {
   tenantName: "Industrias Quisqueya SRL",
+  logoDataUrl: TEST_LOGO,
   templateCode: "sop_mfg",
   templateName: "SOP — Manufactura",
   processName: "Ensamble de tapa con riveteadora",

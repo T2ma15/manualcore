@@ -35,7 +35,7 @@ export async function POST(req: Request) {
 
   const { data: profile } = await supabase
     .from("users")
-    .select("tenant_id, tenants(name)")
+    .select("tenant_id, tenants(name, logo_url)")
     .eq("auth_user_id", user.id)
     .single();
   if (!profile) return NextResponse.json({ error: "Sin perfil." }, { status: 403 });
@@ -63,8 +63,10 @@ export async function POST(req: Request) {
     );
   }
 
+  const tenant = profile.tenants as { name?: string; logo_url?: string } | null;
   const data: DocData = {
-    tenantName: (profile.tenants as { name?: string } | null)?.name ?? "Mi empresa",
+    tenantName: tenant?.name ?? "Mi empresa",
+    logoDataUrl: tenant?.logo_url ?? null,
     templateCode: code,
     templateName: TEMPLATE_NAMES[code]?.es ?? "Documento",
     processName: session.process_name ?? "Proceso sin nombre",

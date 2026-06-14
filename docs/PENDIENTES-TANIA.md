@@ -11,6 +11,12 @@ Actualizado: 14 jun 2026. Marca lo que falte para no perder ninguno.
 - Landing rediseñada (arreglo Monday/Scribe + claridad McKinsey, navy/teal) — EN REVISIÓN de Tania
 - **Plan de Inspección de Calidad** (especificaciones por producto) → agregado (requiere correr SQL 0007)
 
+## Requisitos para onboarding (Tania, 14-jun) — deben vivir en el sistema
+- **Logo de la empresa:** pedirlo en el onboarding, guardarlo, y ponerlo en TODOS los documentos generados (ManualCore invisible; la marca es del cliente).
+- **Numeración:** se crea y vive en el sistema. Default nuestro (PRD-MFG0001…), PERO **editable por el cliente** para que pueda poner su propio código si luego migra a un QMS propio. (No somos QMS.)
+- **Aprobación:** flujo persistido en el sistema (estados, quién elabora/aprueba).
+- **Matriz de referenciamiento:** llevar el registro/matriz de TODOS los documentos y sus referencias cruzadas (qué doc referencia a cuál) — base de la Lista Maestra.
+
 ## Pendiente ⏳
 - **Idioma de salida (Fase 1):** selector al iniciar (asistente + documento en ES/EN). NO empezado.
 - **App multilingüe (Fase 2):** interfaz en varios idiomas. Requisito, no opcional.

@@ -3,6 +3,7 @@ export type DocField = { field: string; value: string; category: string };
 
 export type DocData = {
   tenantName: string;
+  logoDataUrl: string | null; // data:image/...;base64,... — logo del cliente
   templateCode: string;
   templateName: string; // nombre en español
   processName: string;
@@ -15,6 +16,20 @@ export type DocData = {
   approver: string | null;
   extracted: DocField[];
 };
+
+// Parsea un data URL (data:image/png;base64,...) a sus partes.
+export function parseDataUrl(
+  dataUrl: string | null,
+): { buffer: Buffer; base64: string; ext: "png" | "jpg" | "gif"; mime: string } | null {
+  if (!dataUrl) return null;
+  const m = dataUrl.match(/^data:(image\/(png|jpeg|jpg|gif));base64,(.+)$/);
+  if (!m) return null;
+  const mime = m[1];
+  const raw = m[2];
+  const ext = raw === "jpeg" || raw === "jpg" ? "jpg" : raw === "gif" ? "gif" : "png";
+  const base64 = m[3];
+  return { buffer: Buffer.from(base64, "base64"), base64, ext, mime };
+}
 
 // Etiqueta de sección por categoría del brain (orden de presentación).
 export const SECTION_ORDER: { key: string; label: string }[] = [
