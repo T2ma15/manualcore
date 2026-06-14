@@ -8,6 +8,7 @@ export const TEMPLATE_NAMES: Record<string, { es: string; en: string }> = {
   sop_mfg: { es: "SOP — Manufactura", en: "SOP — Manufacturing" },
   sop_admin: { es: "SOP — Administrativo", en: "SOP — Administrative" },
   flowchart: { es: "Flujograma de Proceso", en: "Process Flowchart" },
+  inspection_plan: { es: "Plan de Inspección de Calidad", en: "Quality Inspection Plan" },
   risk_analysis: { es: "Análisis de Riesgos", en: "Risk Analysis" },
   quality_policy: { es: "Política de Calidad", en: "Quality Policy" },
   quality_objectives: { es: "Objetivos de Calidad", en: "Quality Objectives" },
@@ -69,6 +70,23 @@ export const TEMPLATE_GUIDE: Record<string, TemplateGuide> = {
     resultado: "Un diagrama listo para abrir en cualquier navegador.",
     ejemplo:
       "Recibe la pieza, la inspecciona. ¿Pasa la inspección? Si sí, la empaca. Si no, la envía a retrabajo. Al final pasa al almacén.",
+  },
+  inspection_plan: {
+    que_es: "Una tabla que define qué se inspecciona en cada producto/proceso, con sus límites y cómo verificarlo.",
+    objetivo:
+      "Asegurar que cada característica de calidad se revise de forma consistente: qué medir, contra qué valor, cómo, cada cuánto, y qué hacer si sale fuera de rango.",
+    datos_clave: [
+      "Qué características se inspeccionan (ej: diámetro, peso, torque, temperatura)",
+      "Valor objetivo y límites aceptables (nominal, mínimo, máximo)",
+      "Con qué se mide (instrumento / método)",
+      "Cada cuánto se inspecciona (frecuencia / tamaño de muestra)",
+      "Qué hacer si sale fuera de rango (plan de reacción)",
+      "Quién es responsable de la inspección",
+    ],
+    resultado:
+      "Una tabla Excel con cada característica, su especificación, método, frecuencia y plan de reacción — lista para usar en planta.",
+    ejemplo:
+      "En la tapa inspeccionamos el torque del remache: objetivo 12 Nm, entre 10 y 14 Nm, con torquímetro, una pieza cada 30 minutos. Si sale fuera de rango, se detiene la línea y se avisa al supervisor.",
   },
   risk_analysis: {
     que_es: "Una tabla que identifica qué puede salir mal en un proceso y cómo se controla.",

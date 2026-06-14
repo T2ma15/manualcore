@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "ManualCore — Every process. Fully documented.",
+  title: "ManualCore — Cada proceso. Totalmente documentado.",
   description:
-    "Process Knowledge Formalization Engine. Turn unstructured process knowledge into formal industrial documentation.",
+    "Formaliza y controla la documentación de tus procesos con un asistente de IA: SOPs, flujogramas y análisis de riesgos formales, con control de revisiones y aprobaciones.",
 };
 
 export default function RootLayout({

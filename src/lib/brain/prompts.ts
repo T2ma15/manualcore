@@ -31,6 +31,14 @@ const REQUIRED_FIELDS: Record<string, string[]> = {
     "Puntos de decisión (sí/no)",
     "Qué pasa al final (conecta con otro proceso o termina)",
   ],
+  inspection_plan: [
+    "Características de calidad a inspeccionar",
+    "Valor objetivo y límites (nominal, mínimo/máximo)",
+    "Método o instrumento de medición",
+    "Frecuencia de inspección y tamaño de muestra",
+    "Plan de reacción si sale fuera de rango",
+    "Responsable de la inspección",
+  ],
   risk_analysis: [
     "Riesgos identificados del proceso",
     "Causa de cada riesgo",

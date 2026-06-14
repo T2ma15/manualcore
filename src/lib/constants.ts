@@ -25,6 +25,7 @@ export const TEMPLATES_BY_INDUSTRY: Record<IndustryCode, string[]> = {
   manufacturing: [
     "sop_mfg",
     "flowchart",
+    "inspection_plan",
     "risk_analysis",
     "quality_policy",
     "quality_objectives",
@@ -34,6 +35,7 @@ export const TEMPLATES_BY_INDUSTRY: Record<IndustryCode, string[]> = {
   admin_services: [
     "sop_admin",
     "flowchart",
+    "inspection_plan",
     "risk_analysis",
     "quality_policy",
     "quality_objectives",

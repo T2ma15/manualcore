@@ -1,0 +1,107 @@
+﻿{
+    "resumen":  "ManualCore debe verse como una publicación editorial-corporativa con peso institucional —el cruce entre un despacho de consultoría (McKinsey) y una papelería de lujo (Smythson)— no como una app SaaS de moda. La autoridad nace de RESTAR: tinta navy profunda sobre papel crema cálido, jerarquía tipográfica fuerte (serif editorial en titulos + grotesca con carácter en cuerpo/UI), muchísimo aire, hairlines en vez de sombras, y un único acento verde-profundo usado con disciplina semántica. El documento generado (SOP, flujograma, análisis de riesgo) es el héroe visual: limpio, navegable, con trazabilidad visible (versiones, fechas, responsables) que comunica criterio sin prometer \"ISO-ready\". La regla rectora: si un elemento no reduce la carga cognitiva del usuario intimidado por la documentación, sobra.",
+    "tipografia":  {
+                       "display_font":  "Fraunces (Google Fonts, variable: opsz 72-144, peso 500-600, tracking -1% a -2% en titulos grandes) para titulos de pantalla, nombres de documento y encabezados de seccion. Lleva toda la voz de autoridad editorial.",
+                       "body_font":  "Hanken Grotesk (Google Fonts, variable) para cuerpo, UI, botones, campos, tablas, breadcrumbs y ayudas. Grotesca humanista con mas caracter que Inter; base 16-18px, line-height 1.55-1.65 en cuerpo largo (SOPs). Alternativa equivalente: IBM Plex Sans.",
+                       "pairing_rationale":  "Es el patron exacto de las consultoras y fintech que venden autoridad (McKinsey: serif Bower + sans propio; Stripe/Mercury: Sohne): serif display que comanda la voz institucional + grotesca neutra-con-caracter que hace el trabajo de lectura. El contraste serif/sans es justo lo que separa \u0027documento serio\u0027 de \u0027formulario tech generico\u0027. Se evita Inter/Roboto/Arial por ser la firma exacta del look \u0027LLM glorificado\u0027. Fraunces da personalidad editorial gratis (eje optico abre el interletrado a tamaños chicos), y reserva el drama para titulos; el cuerpo va en una grotesca limpia para no intimidar.",
+                       "escala":  "Escala modular ratio 1.25 (Major Third) sobre base 16px: 13 / 16 / 20 / 25 / 31 / 39 / 49 / 61px. Line-height: 1.55-1.65 en cuerpo de SOP (lectura larga), 1.15-1.25 en titulos serif grandes. Tracking levemente negativo (-1 a -2%) en titulos serif; tracking ABIERTO +4 a +8% en labels MAYUSCULAS pequeñas (ej. PROCEDIMIENTO, RIESGO CRITICO). Numeros, versiones, fechas y columnas de tabla en cifras tabulares (Hanken tiene tnum) o una mono discreta (IBM Plex Mono) para precision documental. El \u0027mucho aire\u0027 viene del interlineado y los margenes, NO de añadir gris.",
+                       "alternativas":  [
+                                            "GRATIS - opcion \u0027Garamond puro\u0027 que pidio Tania literalmente: Cormorant Garamond SOLO en titulos 28px+ (nunca menor, se rompe) + EB Garamond para portadas/cuerpo de documento (92% similar a Garamond, escala bien) + Hanken Grotesk/IBM Plex Sans en la UI funcional",
+                                            "GRATIS display alternativo: Libre Baskerville o Source Serif 4 para titulos si Fraunces se siente demasiado \u0027calido/wonky\u0027",
+                                            "DE PAGO (upgrade natural al vender V0): Tiempos Headline o Canela Deck en titulos + Sohne o GT America en cuerpo/UI — el stack exacto McKinsey/Stripe",
+                                            "Mono para datos/codigos/versiones: IBM Plex Mono o Geist Mono"
+                                        ]
+                   },
+    "paleta":  [
+                   {
+                       "rol":  "Tinta / color base de marca (Ink Navy)",
+                       "hex":  "#0F2238",
+                       "uso":  "~22% de pantalla. Titulos serif, header, footer, elementos de marca, texto sobre fondos claros de maxima jerarquia. Mas profundo que el #0D1F3C actual: el navy mas oscuro y saturado lee mas caro y con mas autoridad (azul profundo sube confianza percibida ~42% en servicios profesionales). Rango aceptable #0A2540-#0F2238."
+                   },
+                   {
+                       "rol":  "Neutro base / fondo (Paper)",
+                       "hex":  "#FAF8F4",
+                       "uso":  "~70% de pantalla. Fondo principal de toda la app y el sitio. Off-white crema cálido (alineado con Pantone \u0027Cloud Dancer\u0027 2026). NUNCA blanco puro frío ni gris IA como fondo dominante: el crema da la sensacion \u0027papel de calidad / editorial\u0027 y es el antidoto directo al look colegial/LLM."
+                   },
+                   {
+                       "rol":  "Superficie de documento (Document White)",
+                       "hex":  "#FFFFFF",
+                       "uso":  "Reservado SOLO para las superficies de \u0027documento\u0027 dentro de la UI (el SOP/flujograma/riesgo generado), para que el contenido se sienta como papel impreso sobre un escritorio crema. Crea jerarquia: el documento es el héroe, flota sobre el fondo paper."
+                   },
+                   {
+                       "rol":  "Texto principal (Graphite)",
+                       "hex":  "#1F2933",
+                       "uso":  "Cuerpo y texto de lectura. Carbón cálido, NO negro puro ni gris frío genérico #6B7280. Se lee como \u0027documento impreso de calidad\u0027 y refuerza la autoridad documental."
+                   },
+                   {
+                       "rol":  "Texto secundario (Slate)",
+                       "hex":  "#5B6573",
+                       "uso":  "Metadatos, ayudas, captions, labels secundarios. Gris azulado sobrio derivado del navy — no gris frío plano."
+                   },
+                   {
+                       "rol":  "Bordes / divisores / hairlines (Mist)",
+                       "hex":  "#E7E2D9",
+                       "uso":  "Lineas de 1px a baja opacidad para separar (greige cálido tipo Notion). Se separa con hairlines y rejilla, NO con sombras. Esto es lo que se lee como \u0027formal e integro\u0027."
+                   },
+                   {
+                       "rol":  "Acento primario / accion (Pine Green)",
+                       "hex":  "#0F5C4E",
+                       "uso":  "~6% de pantalla. SUSTITUYE al teal brillante #1ABC9C (que lee \u0027flashy/de moda\u0027). Verde-azulado profundo de joya que conserva el ADN verde de la marca pero lo vuelve patrimonial. Solo para CTAs primarios, estados activos, links y acentos de navegacion clave. Contraste suficiente para texto blanco de boton."
+                   },
+                   {
+                       "rol":  "Sello / detalle oficial (Brass)",
+                       "hex":  "#B08D57",
+                       "uso":  "~2%, opcional y muy puntual. Latón apagado usado \u0027como joya, no como pintura\u0027: solo en sellos de \u0027documento aprobado/oficial\u0027, badges, números clave o filetes finos. Aporta aire notarial/de autoridad. NUNCA como fondo ni superficie grande."
+                   },
+                   {
+                       "rol":  "Estados semánticos",
+                       "hex":  "#B3261E",
+                       "uso":  "Rojo sobrio para peligro/error/criticidad (CCP, riesgo critico). Verde Pine #0F5C4E para exito. Ambar discreto #946200 para advertencia. El color SIEMPRE significa algo, nunca decora. Criticidades de seguridad/CCP deben ser visibles e inequivocas."
+                   }
+               ],
+    "layout":  [
+                   "Proporcion 70/22/6/2: ~70% neutro crema (paper + blanco de documento), ~22% tinta navy (estructura, titulos, header/footer), ~6% verde Pine (accion), ~2% brass (sellos). El color de accion NUNCA supera al neutro; lo premium viene del AIRE, no del color.",
+                   "Rejilla base de 8px estricta para todo espaciado, padding y posicionamiento. Radios de borde bajos y consistentes (4-6px), nunca pildoras redondeadas por todos lados.",
+                   "Separar con hairlines (1px sobre Mist/navy a baja opacidad) en vez de sombras. Sombras planas o minimas, jamas glow ni drop-shadow grande (es señal de plantilla).",
+                   "Divulgacion progresiva: vista por defecto muestra solo lo necesario para el paso actual. Las funciones de poder existen pero no estan en la cara del usuario hasta que se necesitan. Critico para el usuario intimidado por la documentacion: no abrumar.",
+                   "Divulgacion en capas DENTRO del documento generado: resumen corto arriba + detalle expandible. Un SOP/analisis de riesgo debe verse limpio, jerarquizado y navegable, NUNCA un muro de texto denso (los documentos densos destruyen la confianza).",
+                   "La tipografia hace la jerarquia, no los iconos ni el color. Contraste claro entre niveles de la escala modular + interlineado generoso = sensacion de aire y orden.",
+                   "Transparencia como héroe: mostrar de donde sale cada seccion del documento, que criterios y criticidades (seguridad/CCP) aplico la IA, y trazabilidad visible (version, fecha, responsable) al estilo del linaje de Palantir. El producto mismo es la prueba de autoridad — no sellos \u0027ISO-ready\u0027.",
+                   "Tratar el sitio de marketing como una PUBLICACION editorial-corporativa: layouts tipo revista, casos que se lean como periodismo (antes/despues, dia en la vida de un consultor/PyME), narrativa larga con tipografia de alta calidad. No una landing de startup.",
+                   "Dos sets de iconografia: uno editorial/expresivo para marketing y portadas; uno monolineal, fino y monocromo para la UI del producto. Nunca emojis como iconos ni iconos multicolor.",
+                   "Datos, numeros, versiones, fechas y tablas en cifras tabulares/mono alineadas en columnas — refuerza precision tecnica y la sensacion de SOP formal y trazable.",
+                   "Definir 6 estados por elemento interactivo (default, hover, focus, active, disabled, loading) con curvas y duraciones de animacion consistentes. La percepcion \u0027producto serio vs demo\u0027 vive en las micro-interacciones, no en una pantalla estatica.",
+                   "Si se usa imagen: fotografia profesional real, pocas y buenas. Nunca ilustraciones cartoon coloridas tipo IA."
+               ],
+    "hacer":  [
+                  "Usar serif editorial (Fraunces / EB Garamond) en titulos y nombres de documento; grotesca con caracter (Hanken Grotesk / IBM Plex Sans) en todo lo funcional",
+                  "Definir tokens (espaciado 8px, escala tipografica, colores semanticos con HEX exactos, radios 4-6px, opacidad de hairlines) ANTES de pedir pantallas a la IA — un design system minimo bloquea el slop de raiz",
+                  "Ir mas profundo en el navy (#0F2238) y usarlo como neutro dominante de estructura, no como relleno",
+                  "Fondo crema cálido #FAF8F4; reservar blanco puro #FFFFFF solo para superficies de documento",
+                  "Texto en carbón cálido #1F2933, secundario en slate azulado #5B6573 — nunca gris frío plano",
+                  "Tratar el verde Pine #0F5C4E como acento semantico escaso (accion/exito), monocromatico + un solo acento = señal de solidez",
+                  "Mucho aire via interlineado y margenes generosos; line-height 1.55-1.65 en SOPs largos",
+                  "Mostrar trazabilidad y razonamiento del documento (versiones, fechas, responsables, criterios, criticidades) como prueba de autoridad",
+                  "Cifras tabulares/mono para numeros, fechas, versiones y tablas",
+                  "6 estados definidos por elemento interactivo con curvas y duraciones consistentes",
+                  "Hairlines de 1px + rejilla 8px disciplinada para la sensacion \u0027formal e integro\u0027",
+                  "Guia paso a paso, lenguaje claro y prompts que prevengan errores — la guia explicita ES un signo de autoridad para el no-experto"
+              ],
+    "evitar":  [
+                   "Inter / Roboto / Arial / Open Sans / Lato / fuentes de sistema como tipografia de marca — la firma exacta del look \u0027LLM glorificado\u0027",
+                   "Cualquier morado / violeta / indigo y gradientes morado-azul (el \u0027VibeCode Purple\u0027 / bg-indigo-500) en hero, CTA o fondos",
+                   "El teal brillante saturado #1ABC9C como color dominante o relleno decorativo — lee \u0027app web flashy de moda\u0027",
+                   "Borde de color de 3-4px en un lado de las tarjetas (el tell #1 mas confiable de UI generada por IA)",
+                   "Glassmorphism / frosted glass",
+                   "Tres feature-cards identicas con icono arriba; hero centrado con badge pegado encima",
+                   "Sombras grandes, glow o drop-shadows pesados (señal de plantilla, no de autoridad)",
+                   "Cormorant Garamond bajo 20px (se rompe) y EB Garamond/serif display en parrafos de UI funcional",
+                   "Gris medio frío plano (#6B7280) como fondo o texto dominante — el look \u0027colegial/IA\u0027",
+                   "Blanco puro frío como fondo principal de la app",
+                   "Emojis como iconos de navegacion; iconos multicolor; ilustraciones cartoon tipo IA",
+                   "Prometer \u0027ISO-ready\u0027 o apilar sellos/badges genericos — la confianza se gana mostrando el documento real, no la decoracion",
+                   "Componentes shadcn/ui sin modificar; grids bento decorativos; titulares vagos que no dicen nada del producto",
+                   "Densidad y jerga: formal e integro NO debe significar denso ni intimidante"
+               ],
+    "diferenciadores_vs_ia":  "Cinco cosas hacen que NO se vea generado por IA, todas verificables de un vistazo: (1) PAPEL, NO PANTALLA — fondo crema cálido #FAF8F4 con texto carbón, en lugar del blanco clínico frío o el dark-mode + gris IA; da sensacion de documento impreso de calidad. (2) SERIF QUE COMANDA — Fraunces/Garamond cargando los titulos con personalidad editorial, no Inter plano en todo; el contraste serif/sans es la firma de la autoridad consultora (McKinsey/Stripe), imposible de confundir con el centro estadistico de la IA. (3) VERDE PATRIMONIAL, CERO MORADO — un unico acento verde-profundo de joya #0F5C4E usado con disciplina semantica, nunca el gradiente morado-azul ni el teal flashy; el color significa, no decora. (4) HAIRLINES Y AIRE, NO SOMBRAS NI CARDS — separacion por lineas finas de 1px sobre rejilla 8px, sin las tres-tarjetas-con-borde-de-color-de-3px ni el glassmorphism que delatan la plantilla. (5) EL DOCUMENTO ES EL HEROE — trazabilidad visible (versiones, criterios, criticidades, responsables) mostrada como prueba de autoridad al estilo Palantir/Wise, en vez de sellos \u0027ISO-ready\u0027 y badges decorativos. En conjunto: la belleza sirve a la comprension del usuario intimidado, y esa intencion (restar en vez de añadir) es precisamente lo que la IA sin direccion nunca produce."
+}
