@@ -5,6 +5,7 @@ import {
   TEMPLATES_BY_INDUSTRY,
   type IndustryCode,
 } from "@/lib/constants";
+import { TEMPLATE_GUIDE, TEMPLATE_NAMES } from "@/lib/templates-guide";
 import { createDraft } from "./actions";
 
 export default async function NuevoPage({
@@ -60,25 +61,76 @@ export default async function NuevoPage({
       title={`${industry.label}: ¿qué documento quieres crear?`}
       back
     >
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {ordered.map((t) => (
-          <form key={t.id} action={createDraft}>
-            <input type="hidden" name="template_id" value={t.id} />
-            <input type="hidden" name="template_name" value={t.name_es} />
-            <input type="hidden" name="industry" value={industry.code} />
-            <button
-              type="submit"
-              className="w-full text-left rounded-2xl border border-[color:var(--mc-border)] bg-white p-5 hover:border-[color:var(--mc-teal)] hover:shadow-lg transition"
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
+        {ordered.map((t) => {
+          const g = TEMPLATE_GUIDE[t.code];
+          const nombre = TEMPLATE_NAMES[t.code]?.es ?? t.name_es;
+          return (
+            <div
+              key={t.id}
+              className="rounded-2xl border border-[color:var(--mc-border)] bg-white p-5 flex flex-col"
             >
               <span className="text-xs font-mono uppercase tracking-wide text-[color:var(--mc-teal)]">
                 {t.output_format}
               </span>
               <h3 className="mt-2 font-semibold text-[color:var(--mc-navy)]">
-                {t.name_es}
+                {nombre}
               </h3>
-            </button>
-          </form>
-        ))}
+              {g?.que_es && (
+                <p className="mt-2 text-sm text-[color:var(--mc-steel)] leading-snug">
+                  {g.que_es}
+                </p>
+              )}
+
+              {/* Desplegable explicativo — cerrado por defecto, no cansa */}
+              {g && (
+                <details className="mt-3 text-sm">
+                  <summary className="cursor-pointer select-none font-semibold text-[color:var(--mc-teal)] hover:underline list-none">
+                    ⓘ ¿Qué es y qué necesito?
+                  </summary>
+                  <div className="mt-3 space-y-3 text-[color:var(--mc-ink)]">
+                    <p>
+                      <span className="font-semibold">Para qué sirve: </span>
+                      {g.objetivo}
+                    </p>
+                    <div>
+                      <span className="font-semibold">Qué necesito de ti:</span>
+                      <ul className="mt-1 space-y-0.5">
+                        {g.datos_clave.map((d) => (
+                          <li key={d} className="flex gap-2">
+                            <span className="text-[color:var(--mc-teal)]">•</span>
+                            <span>{d}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <p>
+                      <span className="font-semibold">Qué obtendrás: </span>
+                      {g.resultado}
+                    </p>
+                    {g.diferencia && (
+                      <p className="rounded-lg bg-[color:var(--mc-muted)] p-2 text-[color:var(--mc-steel)]">
+                        {g.diferencia}
+                      </p>
+                    )}
+                  </div>
+                </details>
+              )}
+
+              <form action={createDraft} className="mt-4 pt-3 border-t border-[color:var(--mc-border)]">
+                <input type="hidden" name="template_id" value={t.id} />
+                <input type="hidden" name="template_name" value={nombre} />
+                <input type="hidden" name="industry" value={industry.code} />
+                <button
+                  type="submit"
+                  className="w-full rounded-full bg-[color:var(--mc-teal)] text-[color:var(--mc-navy)] px-4 py-2 text-sm font-semibold hover:opacity-90"
+                >
+                  Crear este documento
+                </button>
+              </form>
+            </div>
+          );
+        })}
       </div>
     </Shell>
   );

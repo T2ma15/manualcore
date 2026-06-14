@@ -1,13 +1,19 @@
 import { NextResponse } from "next/server";
+import type Anthropic from "@anthropic-ai/sdk";
 import { createClient } from "@/lib/supabase/server";
 import { anthropic, BRAIN_MODEL, estimateCostUsd } from "@/lib/brain/client";
 import { buildSystemPrompt } from "@/lib/brain/prompts";
 import { EXTRACTION_SCHEMA, type Extraction } from "@/lib/brain/schema";
 
+type ImagePayload = { data: string; mediaType: "image/jpeg" | "image/png" | "image/gif" | "image/webp" };
+
 export async function POST(req: Request) {
-  const { sessionId, text } = await req.json().catch(() => ({}));
-  if (!sessionId || !text || typeof text !== "string") {
-    return NextResponse.json({ error: "Falta sessionId o texto." }, { status: 400 });
+  const body = await req.json().catch(() => ({}));
+  const sessionId: string | undefined = body.sessionId;
+  const text: string = typeof body.text === "string" ? body.text : "";
+  const image: ImagePayload | undefined = body.image;
+  if (!sessionId || (!text.trim() && !image)) {
+    return NextResponse.json({ error: "Falta sessionId, texto o imagen." }, { status: 400 });
   }
 
   const supabase = await createClient();
@@ -51,7 +57,7 @@ export async function POST(req: Request) {
     session_id: sessionId,
     role: "engineer",
     msg_type: "free_text",
-    content: text,
+    content: text.trim() || "(imagen adjunta)",
   });
 
   // Cargar la conversación completa (ya incluye el mensaje recién insertado)
@@ -63,15 +69,27 @@ export async function POST(req: Request) {
     .order("created_at", { ascending: true })
     .limit(60);
 
-  const isFirstTurn = (history ?? []).filter((m) => m.role === "brain").length === 0;
+  const hist = history ?? [];
+  const isFirstTurn = hist.filter((m) => m.role === "brain").length === 0;
 
-  const convo = (history ?? []).map((m) => ({
+  // Turnos previos como texto (todos menos el último, que es el recién enviado)
+  const convo: Anthropic.MessageParam[] = hist.slice(0, -1).map((m) => ({
     role: m.role === "engineer" ? ("user" as const) : ("assistant" as const),
     content: m.content,
   }));
-  // El esquema exige terminar en turno de usuario; garantizarlo.
-  if (convo.length === 0 || convo[convo.length - 1].role !== "user") {
-    convo.push({ role: "user", content: text });
+
+  // Turno final del usuario — con imagen si la adjuntó
+  const finalText = text.trim() || "Lee esta imagen y extrae el proceso que describe.";
+  if (image?.data) {
+    convo.push({
+      role: "user",
+      content: [
+        { type: "image", source: { type: "base64", media_type: image.mediaType, data: image.data } },
+        { type: "text", text: finalText },
+      ],
+    });
+  } else {
+    convo.push({ role: "user", content: finalText });
   }
 
   // 2) Llamar al brain (Claude Opus 4.8) con salida estructurada
