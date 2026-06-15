@@ -3,7 +3,14 @@ import { type DocData } from "./types";
 // Flujograma vertical simple (HTML+SVG) a partir de los pasos extraídos.
 // V0: flujo lineal limpio; los rombos de decisión llegan en V1.
 export function generateHtml(data: DocData): string {
-  const pasos = data.extracted.filter((e) => e.category === "paso" || e.category === "operacion");
+  // Prefiere los pasos redactados por el cerebro; si no, usa lo extraído.
+  const fromSections = (data.sections ?? [])
+    .filter((s): s is Extract<typeof s, { kind: "steps" }> => s.kind === "steps")
+    .flatMap((s) => s.steps.map((t) => ({ field: t, value: "", category: "paso" })));
+  const pasos =
+    fromSections.length > 0
+      ? fromSections
+      : data.extracted.filter((e) => e.category === "paso" || e.category === "operacion");
   const items = pasos.length ? pasos : data.extracted;
   const docId = data.docNumber ?? "BORRADOR";
 

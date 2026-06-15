@@ -67,23 +67,77 @@ export async function generateDocx(data: DocData): Promise<Buffer> {
     ],
   });
 
-  const sectionBlocks = groupBySection(data.extracted).flatMap((sec) => [
+  const heading = (t: string) =>
     new Paragraph({
       spacing: { before: 280, after: 120 },
-      children: [new TextRun({ text: sec.label, bold: true, color: NAVY, size: 24 })],
-    }),
-    ...sec.items.map(
-      (it) =>
-        new Paragraph({
-          spacing: { after: 80 },
-          bullet: { level: 0 },
-          children: [
-            new TextRun({ text: `${it.field}: `, bold: true, color: "1F2933", size: 20 }),
-            new TextRun({ text: it.value, color: "1F2933", size: 20 }),
-          ],
+      children: [new TextRun({ text: t, bold: true, color: NAVY, size: 24 })],
+    });
+
+  function dataTable(columns: string[], rows: string[][]) {
+    return new Table({
+      width: { size: 100, type: WidthType.PERCENTAGE },
+      borders: {
+        top: { style: BorderStyle.SINGLE, size: 2, color: LIGHT },
+        bottom: { style: BorderStyle.SINGLE, size: 2, color: LIGHT },
+        left: { style: BorderStyle.SINGLE, size: 2, color: LIGHT },
+        right: { style: BorderStyle.SINGLE, size: 2, color: LIGHT },
+        insideHorizontal: { style: BorderStyle.SINGLE, size: 2, color: LIGHT },
+        insideVertical: { style: BorderStyle.SINGLE, size: 2, color: LIGHT },
+      },
+      rows: [
+        new TableRow({
+          tableHeader: true,
+          children: columns.map((c) => cell(c, { bold: true, color: NAVY })),
         }),
-    ),
-  ]);
+        ...rows.map((r) => new TableRow({ children: r.map((v) => cell(v ?? "")) })),
+      ],
+    });
+  }
+
+  let sectionBlocks: (Paragraph | Table)[];
+  if (data.sections && data.sections.length) {
+    sectionBlocks = data.sections.flatMap((sec): (Paragraph | Table)[] => {
+      const out: (Paragraph | Table)[] = [heading(sec.heading)];
+      if (sec.kind === "steps") {
+        sec.steps.forEach((s, i) =>
+          out.push(
+            new Paragraph({
+              spacing: { after: 80 },
+              children: [
+                new TextRun({ text: `${i + 1}. `, bold: true, color: TEAL, size: 20 }),
+                new TextRun({ text: s, color: "1F2933", size: 20 }),
+              ],
+            }),
+          ),
+        );
+      } else if (sec.kind === "table") {
+        out.push(dataTable(sec.columns, sec.rows.map((r) => r.cells)));
+      } else {
+        out.push(
+          new Paragraph({
+            spacing: { after: 80 },
+            children: [new TextRun({ text: sec.text, color: "1F2933", size: 20 })],
+          }),
+        );
+      }
+      return out;
+    });
+  } else {
+    sectionBlocks = groupBySection(data.extracted).flatMap((sec): (Paragraph | Table)[] => [
+      heading(sec.label),
+      ...sec.items.map(
+        (it) =>
+          new Paragraph({
+            spacing: { after: 80 },
+            bullet: { level: 0 },
+            children: [
+              new TextRun({ text: `${it.field}: `, bold: true, color: "1F2933", size: 20 }),
+              new TextRun({ text: it.value, color: "1F2933", size: 20 }),
+            ],
+          }),
+      ),
+    ]);
+  }
 
   const approval = new Table({
     width: { size: 100, type: WidthType.PERCENTAGE },

@@ -50,3 +50,5 @@ next-env.d.ts
 # artefactos de prueba de generación
 tools/_out_*
 tools/proceso-foto.png
+tools/value-test.ts
+tools/docgen-test.ts

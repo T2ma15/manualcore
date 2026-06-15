@@ -60,25 +60,73 @@ export async function generateXlsx(data: DocData): Promise<Buffer> {
   }
   row++;
 
-  for (const sec of groupBySection(data.extracted)) {
+  const sectionHeading = (label: string) => {
     ws.mergeCells(`B${row}:C${row}`);
     const h = ws.getCell(`B${row}`);
-    h.value = sec.label;
+    h.value = label;
     h.font = { name: "Arial", size: 11, bold: true, color: { argb: NAVY } };
     h.fill = { type: "pattern", pattern: "solid", fgColor: { argb: LIGHT } };
     row++;
-    for (const it of sec.items) {
-      const fc = ws.getCell(`B${row}`);
-      fc.value = it.field;
-      fc.font = { name: "Arial", size: 10, bold: true };
-      fc.alignment = { vertical: "top", wrapText: true };
-      const vc = ws.getCell(`C${row}`);
-      vc.value = it.value;
-      vc.font = { name: "Arial", size: 10 };
-      vc.alignment = { vertical: "top", wrapText: true };
+  };
+
+  if (data.sections && data.sections.length) {
+    for (const sec of data.sections) {
+      sectionHeading(sec.heading);
+      if (sec.kind === "steps") {
+        sec.steps.forEach((s, i) => {
+          ws.getCell(`B${row}`).value = i + 1;
+          ws.getCell(`B${row}`).font = { name: "Arial", size: 10, bold: true };
+          const vc = ws.getCell(`C${row}`);
+          vc.value = s;
+          vc.font = { name: "Arial", size: 10 };
+          vc.alignment = { vertical: "top", wrapText: true };
+          row++;
+        });
+      } else if (sec.kind === "table") {
+        const headerRow = ws.getRow(row);
+        sec.columns.forEach((c, i) => {
+          const cellRef = headerRow.getCell(2 + i);
+          cellRef.value = c;
+          cellRef.font = { name: "Arial", size: 10, bold: true, color: { argb: NAVY } };
+          cellRef.fill = { type: "pattern", pattern: "solid", fgColor: { argb: LIGHT } };
+        });
+        row++;
+        for (const r of sec.rows) {
+          const dataRow = ws.getRow(row);
+          r.cells.forEach((v, i) => {
+            const cellRef = dataRow.getCell(2 + i);
+            cellRef.value = v;
+            cellRef.font = { name: "Arial", size: 10 };
+            cellRef.alignment = { vertical: "top", wrapText: true };
+          });
+          row++;
+        }
+      } else {
+        ws.mergeCells(`B${row}:C${row}`);
+        const tc = ws.getCell(`B${row}`);
+        tc.value = sec.text;
+        tc.font = { name: "Arial", size: 10 };
+        tc.alignment = { vertical: "top", wrapText: true };
+        row++;
+      }
       row++;
     }
-    row++;
+  } else {
+    for (const sec of groupBySection(data.extracted)) {
+      sectionHeading(sec.label);
+      for (const it of sec.items) {
+        const fc = ws.getCell(`B${row}`);
+        fc.value = it.field;
+        fc.font = { name: "Arial", size: 10, bold: true };
+        fc.alignment = { vertical: "top", wrapText: true };
+        const vc = ws.getCell(`C${row}`);
+        vc.value = it.value;
+        vc.font = { name: "Arial", size: 10 };
+        vc.alignment = { vertical: "top", wrapText: true };
+        row++;
+      }
+      row++;
+    }
   }
 
   const ab = await wb.xlsx.writeBuffer();

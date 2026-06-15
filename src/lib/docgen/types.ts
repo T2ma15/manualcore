@@ -1,6 +1,14 @@
 // Datos normalizados que consumen los generadores de documentos.
 export type DocField = { field: string; value: string; category: string };
 
+// Contenido redactado por el cerebro (secciones profesionales).
+export type DocSection =
+  | { heading: string; kind: "text"; text: string }
+  | { heading: string; kind: "steps"; steps: string[] }
+  | { heading: string; kind: "table"; columns: string[]; rows: { cells: string[] }[] };
+
+export type DocContent = { title: string; sections: DocSection[] };
+
 export type DocData = {
   tenantName: string;
   logoDataUrl: string | null; // data:image/...;base64,... — logo del cliente
@@ -15,6 +23,7 @@ export type DocData = {
   owner: string | null;
   approver: string | null;
   extracted: DocField[];
+  sections: DocSection[] | null; // contenido redactado; si null se usa `extracted`
 };
 
 // Parsea un data URL (data:image/png;base64,...) a sus partes.

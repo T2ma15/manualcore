@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { generateDocx } from "@/lib/docgen/docx";
 import { generateXlsx } from "@/lib/docgen/xlsx";
 import { generateHtml } from "@/lib/docgen/html";
+import { generateDocumentContent } from "@/lib/brain/document";
 import { TEMPLATE_NAMES } from "@/lib/templates-guide";
 import type { DocData } from "@/lib/docgen/types";
 
@@ -42,7 +43,7 @@ export async function POST(req: Request) {
 
   const { data: session } = await supabase
     .from("sessions")
-    .select("id, process_name, document_templates(code, output_format)")
+    .select("id, process_name, language, document_templates(code, output_format)")
     .eq("id", sessionId)
     .single();
   if (!session) return NextResponse.json({ error: "Sesión no encontrada." }, { status: 404 });
@@ -50,6 +51,7 @@ export async function POST(req: Request) {
   const tpl = session.document_templates as { code?: string; output_format?: string } | null;
   const code = tpl?.code ?? "sop_mfg";
   const format = tpl?.output_format ?? "docx";
+  const language = (session.language as "es" | "en") ?? "es";
 
   // Estado del documento (numeración/aprobación)
   const { data: doc } = await supabase
@@ -72,6 +74,24 @@ export async function POST(req: Request) {
     );
   }
 
+  // El cerebro REDACTA el documento (secciones, pasos, tablas) desde la conversación.
+  const { data: history } = await supabase
+    .from("chat_messages")
+    .select("role, content")
+    .eq("session_id", sessionId)
+    .order("created_at", { ascending: true })
+    .limit(80);
+  const conversation = (history ?? []).map((m) => ({
+    role: m.role === "engineer" ? ("user" as const) : ("assistant" as const),
+    content: m.content,
+  }));
+  const content = await generateDocumentContent(
+    conversation,
+    code,
+    TEMPLATE_NAMES[code]?.es ?? "Documento",
+    language,
+  );
+
   const tenant = profile.tenants as { name?: string; logo_url?: string } | null;
   const revNum = (doc?.revision_number ?? 0) as number;
   const data: DocData = {
@@ -92,6 +112,7 @@ export async function POST(req: Request) {
       value: r.extracted_value ?? "",
       category: r.category ?? "otro",
     })),
+    sections: content?.sections ?? null,
   };
 
   let body: Buffer | string;
