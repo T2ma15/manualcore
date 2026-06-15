@@ -29,8 +29,13 @@ export const EXTRACTION_SCHEMA = {
             enum: ["operacion", "paso", "material", "especificacion", "seguridad", "responsable", "riesgo", "otro"],
           },
           confidence: { type: "string", enum: ["alta", "media", "baja"] },
+          is_critical: {
+            type: "boolean",
+            description:
+              "true si este dato es un PUNTO DE CONTROL crítico (seguridad, parámetro crítico, límite CCP/USL/LSL, EPP). No se puede omitir ni perder de vista.",
+          },
         },
-        required: ["field", "value", "category", "confidence"],
+        required: ["field", "value", "category", "confidence", "is_critical"],
       },
     },
     questions: {
@@ -52,15 +57,41 @@ export const EXTRACTION_SCHEMA = {
     related_docs: {
       type: "array",
       description:
-        "Documentos mencionados o implicados en el texto que podrían necesitar crearse o referenciarse (ej: un checklist, un análisis de riesgo). El usuario decidirá si ya existen.",
+        "Documentos o REGISTROS implicados por el proceso. REGLA: todo lo que se mide, inspecciona, verifica o registra DEBE quedar en un registro/formato — inclúyelo aquí. También otros SOP, políticas o análisis mencionados. El usuario decidirá si ya existe o se crea.",
       items: {
         type: "object",
         additionalProperties: false,
         properties: {
-          name: { type: "string", description: "Nombre del documento relacionado." },
+          name: { type: "string", description: "Nombre del documento o registro relacionado." },
+          type: {
+            type: "string",
+            enum: [
+              "registro",
+              "checklist",
+              "formato",
+              "instructivo",
+              "sop",
+              "politica",
+              "analisis_riesgo",
+              "plan_inspeccion",
+              "otro",
+            ],
+            description:
+              "Tipo de documento. Si en él se anotan mediciones/inspecciones, usa 'registro' o 'checklist'.",
+          },
+          relation: {
+            type: "string",
+            description:
+              "Cómo se relaciona con este documento (ej: 'Se registra aquí la fuerza de remachado por lote', 'Deriva de este SOP', 'Se usa como entrada').",
+          },
+          frequency: {
+            type: "string",
+            description:
+              "Con qué frecuencia se registra/usa (ej: 'cada pieza', 'por lote', 'por turno', 'diario'). Vacío si no aplica o aún se desconoce.",
+          },
           reason: { type: "string", description: "Por qué se relaciona con este proceso." },
         },
-        required: ["name", "reason"],
+        required: ["name", "type", "relation", "frequency", "reason"],
       },
     },
     still_missing: {
@@ -86,12 +117,35 @@ export const EXTRACTION_SCHEMA = {
   ],
 } as const;
 
+export type RelatedDocType =
+  | "registro"
+  | "checklist"
+  | "formato"
+  | "instructivo"
+  | "sop"
+  | "politica"
+  | "analisis_riesgo"
+  | "plan_inspeccion"
+  | "otro";
+
 export type Extraction = {
   process_name: string;
   summary: string;
-  extracted: { field: string; value: string; category: string; confidence: string }[];
+  extracted: {
+    field: string;
+    value: string;
+    category: string;
+    confidence: string;
+    is_critical: boolean;
+  }[];
   questions: { field: string; question: string; why: string; is_critical: boolean }[];
-  related_docs: { name: string; reason: string }[];
+  related_docs: {
+    name: string;
+    type: RelatedDocType;
+    relation: string;
+    frequency: string;
+    reason: string;
+  }[];
   still_missing: string[];
   ready_to_generate: boolean;
 };

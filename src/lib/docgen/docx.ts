@@ -12,7 +12,13 @@ import {
   BorderStyle,
   WidthType,
 } from "docx";
-import { type DocData, groupBySection, parseDataUrl } from "./types";
+import {
+  type DocData,
+  groupBySection,
+  parseDataUrl,
+  RELATED_TYPE_LABEL,
+  RELATED_STATUS_LABEL,
+} from "./types";
 
 const NAVY = "0D1F3C";
 const TEAL = "15A888";
@@ -139,6 +145,24 @@ export async function generateDocx(data: DocData): Promise<Buffer> {
     ]);
   }
 
+  // Documentos y registros relacionados (matriz de referenciamiento).
+  const relatedBlocks: (Paragraph | Table)[] = [];
+  if (data.relatedDocs && data.relatedDocs.length) {
+    relatedBlocks.push(
+      heading("Documentos y registros relacionados"),
+      dataTable(
+        ["Documento", "Tipo", "Relación / qué se registra", "Frecuencia", "Estado"],
+        data.relatedDocs.map((r) => [
+          r.code ? `${r.title} (${r.code})` : r.title,
+          RELATED_TYPE_LABEL[r.type] ?? "Documento",
+          r.relation,
+          r.frequency || "—",
+          RELATED_STATUS_LABEL[r.status] ?? "",
+        ]),
+      ),
+    );
+  }
+
   const approval = new Table({
     width: { size: 100, type: WidthType.PERCENTAGE },
     borders: {
@@ -214,6 +238,7 @@ export async function generateDocx(data: DocData): Promise<Buffer> {
     }),
     headerTable,
     ...sectionBlocks,
+    ...relatedBlocks,
     new Paragraph({
       spacing: { before: 320, after: 120 },
       children: [new TextRun({ text: "Aprobación", bold: true, color: NAVY, size: 24 })],

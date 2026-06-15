@@ -9,6 +9,36 @@ export type DocSection =
 
 export type DocContent = { title: string; sections: DocSection[] };
 
+// Documento o registro relacionado con éste (matriz de referenciamiento).
+export type RelatedDoc = {
+  title: string;
+  type: string; // registro, checklist, sop, formato, politica, analisis_riesgo, plan_inspeccion, instructivo, otro
+  relation: string; // cómo se conecta (ej: "Se registra aquí la fuerza por lote")
+  frequency: string | null; // cada cuánto se registra/usa
+  code: string | null; // código si ya existe en el sistema
+  status: "existing" | "suggested" | "created"; // ya existe / sugerido por crear / creado por ManualCore
+};
+
+// Etiqueta legible por tipo de documento relacionado.
+export const RELATED_TYPE_LABEL: Record<string, string> = {
+  registro: "Registro",
+  checklist: "Checklist",
+  formato: "Formato",
+  instructivo: "Instructivo",
+  sop: "SOP",
+  politica: "Política",
+  analisis_riesgo: "Análisis de riesgo",
+  plan_inspeccion: "Plan de inspección",
+  otro: "Documento",
+};
+
+// Etiqueta legible por estado del documento relacionado.
+export const RELATED_STATUS_LABEL: Record<string, string> = {
+  existing: "Ya existe",
+  suggested: "Por crear",
+  created: "Creado",
+};
+
 export type DocData = {
   tenantName: string;
   logoDataUrl: string | null; // data:image/...;base64,... — logo del cliente
@@ -24,6 +54,7 @@ export type DocData = {
   approver: string | null;
   extracted: DocField[];
   sections: DocSection[] | null; // contenido redactado; si null se usa `extracted`
+  relatedDocs?: RelatedDoc[]; // matriz de referenciamiento: registros y documentos enlazados
 };
 
 // Parsea un data URL (data:image/png;base64,...) a sus partes.

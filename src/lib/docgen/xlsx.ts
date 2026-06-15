@@ -1,5 +1,11 @@
 import ExcelJS from "exceljs";
-import { type DocData, groupBySection, parseDataUrl } from "./types";
+import {
+  type DocData,
+  groupBySection,
+  parseDataUrl,
+  RELATED_TYPE_LABEL,
+  RELATED_STATUS_LABEL,
+} from "./types";
 
 const NAVY = "FF0D1F3C";
 const TEAL = "FF15A888";
@@ -12,7 +18,14 @@ export async function generateXlsx(data: DocData): Promise<Buffer> {
   const ws = wb.addWorksheet(data.templateName.slice(0, 28), {
     views: [{ showGridLines: false }],
   });
-  ws.columns = [{ width: 4 }, { width: 38 }, { width: 60 }];
+  ws.columns = [
+    { width: 4 },
+    { width: 38 },
+    { width: 60 },
+    { width: 22 },
+    { width: 16 },
+    { width: 14 },
+  ];
 
   const docId = data.docNumber ?? "BORRADOR";
   const logo = parseDataUrl(data.logoDataUrl);
@@ -127,6 +140,38 @@ export async function generateXlsx(data: DocData): Promise<Buffer> {
       }
       row++;
     }
+  }
+
+  // Documentos y registros relacionados (matriz de referenciamiento).
+  if (data.relatedDocs && data.relatedDocs.length) {
+    sectionHeading("Documentos y registros relacionados");
+    const cols = ["Documento", "Tipo", "Relación / qué se registra", "Frecuencia", "Estado"];
+    const hr = ws.getRow(row);
+    cols.forEach((c, i) => {
+      const cellRef = hr.getCell(2 + i);
+      cellRef.value = c;
+      cellRef.font = { name: "Arial", size: 10, bold: true, color: { argb: NAVY } };
+      cellRef.fill = { type: "pattern", pattern: "solid", fgColor: { argb: LIGHT } };
+    });
+    row++;
+    for (const r of data.relatedDocs) {
+      const dr = ws.getRow(row);
+      const vals = [
+        r.code ? `${r.title} (${r.code})` : r.title,
+        RELATED_TYPE_LABEL[r.type] ?? "Documento",
+        r.relation,
+        r.frequency || "—",
+        RELATED_STATUS_LABEL[r.status] ?? "",
+      ];
+      vals.forEach((v, i) => {
+        const cellRef = dr.getCell(2 + i);
+        cellRef.value = v;
+        cellRef.font = { name: "Arial", size: 10 };
+        cellRef.alignment = { vertical: "top", wrapText: true };
+      });
+      row++;
+    }
+    row++;
   }
 
   const ab = await wb.xlsx.writeBuffer();

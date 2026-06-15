@@ -56,7 +56,7 @@ const STRUCTURE: Record<string, string> = {
 3. Responsabilidades (text o table) — quién hace qué.
 4. Materiales y equipos (table: Material/Equipo | Especificación/SKU | Cantidad).
 5. Procedimiento (steps) — pasos numerados, claros, accionables.
-6. Parámetros críticos (table: Parámetro | Valor objetivo | Límites | Cómo se mide).
+6. Puntos de control críticos (table: Parámetro | Valor objetivo | Límites | Cómo se mide | Frecuencia | Dónde se registra). Incluye TODO parámetro crítico; si no se sabe dónde se registra, pon "[Pendiente]".
 7. Seguridad y EPP (text o steps).
 8. Qué hacer ante una desviación (text).`,
   sop_admin: `Secciones de un SOP administrativo:
