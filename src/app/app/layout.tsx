@@ -35,6 +35,11 @@ export default async function AppLayout({
             <span className="font-semibold tracking-tight">ManualCore</span>
           </Link>
           <div className="flex items-center gap-4 text-sm">
+            {profile?.role === "platform_owner" && (
+              <Link href="/platform" className="text-[color:var(--mc-teal)] hover:underline hidden sm:inline">
+                Plataforma
+              </Link>
+            )}
             <span className="text-white/70 hidden sm:inline">{companyName}</span>
             <span className="text-white/40">·</span>
             <span className="text-white/90">{profile?.full_name}</span>

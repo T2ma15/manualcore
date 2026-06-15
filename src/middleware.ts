@@ -32,8 +32,8 @@ export async function middleware(request: NextRequest) {
 
   const path = request.nextUrl.pathname;
 
-  // Sin sesión y entrando a /app → al login
-  if (!user && path.startsWith("/app")) {
+  // Sin sesión y entrando a /app o /platform → al login
+  if (!user && (path.startsWith("/app") || path.startsWith("/platform"))) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
@@ -50,5 +50,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/app/:path*", "/login", "/registro"],
+  matcher: ["/app/:path*", "/platform/:path*", "/login", "/registro"],
 };
