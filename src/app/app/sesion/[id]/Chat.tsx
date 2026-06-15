@@ -31,11 +31,17 @@ export default function Chat({
   initialMessages,
   initialReady = false,
   example,
+  codePrefix = "DOC",
+  initialApproved = false,
+  initialDocNumber = "",
 }: {
   sessionId: string;
   initialMessages: Msg[];
   initialReady?: boolean;
   example?: string;
+  codePrefix?: string;
+  initialApproved?: boolean;
+  initialDocNumber?: string;
 }) {
   const [messages, setMessages] = useState<Msg[]>(initialMessages);
   const [text, setText] = useState("");
@@ -46,6 +52,48 @@ export default function Chat({
   const [generating, setGenerating] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const recRef = useRef<SpeechRec | null>(null);
+
+  // Aprobación + numeración
+  const [showApprove, setShowApprove] = useState(false);
+  const [approving, setApproving] = useState(false);
+  const [approved, setApproved] = useState(initialApproved);
+  const [approvedCode, setApprovedCode] = useState(initialDocNumber);
+  const [code, setCode] = useState(initialDocNumber || `${codePrefix}-001`);
+  const [ownerName, setOwnerName] = useState("");
+  const [approverName, setApproverName] = useState("");
+  const [reviewDue, setReviewDue] = useState("");
+
+  async function approve() {
+    if (approving) return;
+    if (!code.trim() || !ownerName.trim() || !approverName.trim() || !reviewDue) {
+      setError("Completa el código, quién elaboró, quién aprobó y la fecha de revisión.");
+      return;
+    }
+    setApproving(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/document/approve", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sessionId,
+          docNumber: code.trim(),
+          ownerName: ownerName.trim(),
+          approverName: approverName.trim(),
+          reviewDue,
+        }),
+      });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error ?? "No se pudo aprobar");
+      setApproved(true);
+      setApprovedCode(d.docNumber);
+      setShowApprove(false);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "No se pudo aprobar");
+    } finally {
+      setApproving(false);
+    }
+  }
 
   async function generateDoc() {
     if (generating) return;
@@ -222,20 +270,95 @@ export default function Chat({
         </p>
       )}
 
-      {ready && (
-        <div className="mt-3 rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-3 flex items-center justify-between gap-3">
+      {approved ? (
+        <div className="mt-3 rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
           <p className="text-sm text-emerald-800">
-            <span className="font-semibold">¡Listo!</span> Tengo todo lo necesario para tu documento.
+            <span className="font-semibold">Aprobado</span> · código{" "}
+            <span className="font-mono">{approvedCode}</span>
           </p>
           <button
             onClick={generateDoc}
             disabled={generating}
-            className="rounded-full bg-[color:var(--mc-navy)] text-white px-4 py-2 text-sm font-semibold hover:opacity-90 disabled:opacity-50 whitespace-nowrap"
+            className="rounded-full bg-[color:var(--mc-teal)] text-[color:var(--mc-navy)] px-4 py-2 text-sm font-semibold hover:opacity-90 disabled:opacity-50 whitespace-nowrap"
           >
-            {generating ? "Generando…" : "Generar documento"}
+            {generating ? "Generando…" : "Descargar documento"}
           </button>
         </div>
-      )}
+      ) : ready ? (
+        <div className="mt-3 rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-3">
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <p className="text-sm text-emerald-800">
+              <span className="font-semibold">¡Listo!</span> Tengo todo lo necesario.
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={generateDoc}
+                disabled={generating}
+                className="rounded-full border border-[color:var(--mc-navy)] text-[color:var(--mc-navy)] px-4 py-2 text-sm font-semibold hover:bg-white disabled:opacity-50 whitespace-nowrap"
+              >
+                {generating ? "Generando…" : "Generar borrador"}
+              </button>
+              <button
+                onClick={() => setShowApprove((s) => !s)}
+                className="rounded-full bg-[color:var(--mc-navy)] text-white px-4 py-2 text-sm font-semibold hover:opacity-90 whitespace-nowrap"
+              >
+                Aprobar y numerar
+              </button>
+            </div>
+          </div>
+
+          {showApprove && (
+            <div className="mt-3 border-t border-emerald-200 pt-3 space-y-2">
+              <Field label="Código del documento (editable)">
+                <input
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                  className="w-full rounded-lg border border-[color:var(--mc-border)] px-3 py-2 text-sm font-mono focus:outline-none focus:border-[color:var(--mc-teal)]"
+                />
+              </Field>
+              <div className="grid sm:grid-cols-2 gap-2">
+                <Field label="Elaboró">
+                  <input
+                    value={ownerName}
+                    onChange={(e) => setOwnerName(e.target.value)}
+                    placeholder="Nombre"
+                    className="w-full rounded-lg border border-[color:var(--mc-border)] px-3 py-2 text-sm focus:outline-none focus:border-[color:var(--mc-teal)]"
+                  />
+                </Field>
+                <Field label="Aprobó">
+                  <input
+                    value={approverName}
+                    onChange={(e) => setApproverName(e.target.value)}
+                    placeholder="Nombre"
+                    className="w-full rounded-lg border border-[color:var(--mc-border)] px-3 py-2 text-sm focus:outline-none focus:border-[color:var(--mc-teal)]"
+                  />
+                </Field>
+              </div>
+              <Field label="Fecha de próxima revisión">
+                <input
+                  type="date"
+                  value={reviewDue}
+                  onChange={(e) => setReviewDue(e.target.value)}
+                  className="w-full rounded-lg border border-[color:var(--mc-border)] px-3 py-2 text-sm focus:outline-none focus:border-[color:var(--mc-teal)]"
+                />
+              </Field>
+              {ownerName.trim() && ownerName.trim() === approverName.trim() && (
+                <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+                  Buena práctica: que elabore y apruebe <strong>personas distintas</strong>. Puedes
+                  continuar, pero un auditor lo valora.
+                </p>
+              )}
+              <button
+                onClick={approve}
+                disabled={approving}
+                className="w-full rounded-full bg-[color:var(--mc-navy)] text-white px-4 py-2.5 text-sm font-semibold hover:opacity-90 disabled:opacity-50"
+              >
+                {approving ? "Aprobando…" : "Confirmar aprobación"}
+              </button>
+            </div>
+          )}
+        </div>
+      ) : null}
 
       <div className="mt-3 border-t border-[color:var(--mc-border)] pt-3">
         <textarea
@@ -296,6 +419,15 @@ export default function Chat({
         </div>
       </div>
     </div>
+  );
+}
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <label className="block">
+      <span className="text-xs font-semibold text-[color:var(--mc-steel)]">{label}</span>
+      <div className="mt-1">{children}</div>
+    </label>
   );
 }
 

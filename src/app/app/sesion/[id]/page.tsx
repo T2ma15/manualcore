@@ -4,6 +4,18 @@ import { createClient } from "@/lib/supabase/server";
 import { TEMPLATE_GUIDE, TEMPLATE_NAMES } from "@/lib/templates-guide";
 import Chat from "./Chat";
 
+const CODE_PREFIX: Record<string, string> = {
+  sop_mfg: "SOP-MFG",
+  sop_admin: "SOP-ADM",
+  flowchart: "FLU",
+  inspection_plan: "INSP",
+  risk_analysis: "RIE",
+  quality_policy: "POL",
+  quality_objectives: "OBJ",
+  qms_scope: "ALC",
+  master_list: "LM",
+};
+
 export default async function SesionPage({
   params,
 }: {
@@ -32,6 +44,16 @@ export default async function SesionPage({
     .order("created_at", { ascending: true });
   const initialMessages = chatRows ?? [];
 
+  const { data: docRow } = await supabase
+    .from("documents")
+    .select("doc_number, status")
+    .eq("session_id", id)
+    .order("created_at", { ascending: true })
+    .limit(1)
+    .maybeSingle();
+  const isApproved = docRow?.status === "approved";
+  const codePrefix = (tpl?.code && CODE_PREFIX[tpl.code]) || "DOC";
+
   return (
     <div className="max-w-6xl mx-auto px-6 py-8">
       <Link href="/app" className="text-sm text-[color:var(--mc-steel)] hover:underline">
@@ -48,8 +70,11 @@ export default async function SesionPage({
           <Chat
             sessionId={session.id}
             initialMessages={initialMessages}
-            initialReady={session.status === "confirmed"}
+            initialReady={session.status === "confirmed" || isApproved}
             example={guide?.ejemplo}
+            codePrefix={codePrefix}
+            initialApproved={isApproved}
+            initialDocNumber={docRow?.doc_number ?? ""}
           />
         </section>
 

@@ -51,6 +51,15 @@ export async function POST(req: Request) {
   const code = tpl?.code ?? "sop_mfg";
   const format = tpl?.output_format ?? "docx";
 
+  // Estado del documento (numeración/aprobación)
+  const { data: doc } = await supabase
+    .from("documents")
+    .select("doc_number, status, owner_name, approver_name, review_due, effective_date, revision_number")
+    .eq("session_id", sessionId)
+    .order("created_at", { ascending: true })
+    .limit(1)
+    .maybeSingle();
+
   const { data: rows } = await supabase
     .from("brain_extractions")
     .select("field_path, extracted_value, category")
@@ -64,19 +73,20 @@ export async function POST(req: Request) {
   }
 
   const tenant = profile.tenants as { name?: string; logo_url?: string } | null;
+  const revNum = (doc?.revision_number ?? 0) as number;
   const data: DocData = {
     tenantName: tenant?.name ?? "Mi empresa",
     logoDataUrl: tenant?.logo_url ?? null,
     templateCode: code,
     templateName: TEMPLATE_NAMES[code]?.es ?? "Documento",
     processName: session.process_name ?? "Proceso sin nombre",
-    docNumber: null, // se asigna al aprobar
-    revision: "REV00",
-    status: "draft",
-    effectiveDate: null,
-    reviewDue: null,
-    owner: null,
-    approver: null,
+    docNumber: (doc?.doc_number as string | null) ?? null, // null hasta aprobar → BORRADOR
+    revision: `REV${String(revNum).padStart(2, "0")}`,
+    status: (doc?.status as string) ?? "draft",
+    effectiveDate: (doc?.effective_date as string | null) ?? null,
+    reviewDue: (doc?.review_due as string | null) ?? null,
+    owner: (doc?.owner_name as string | null) ?? null,
+    approver: (doc?.approver_name as string | null) ?? null,
     extracted: rows.map((r) => ({
       field: r.field_path ?? "",
       value: r.extracted_value ?? "",
