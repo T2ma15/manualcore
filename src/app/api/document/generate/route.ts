@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { generateDocx } from "@/lib/docgen/docx";
 import { generateXlsx } from "@/lib/docgen/xlsx";
 import { generateHtml } from "@/lib/docgen/html";
+import { generateFlowchart } from "@/lib/docgen/flowchart";
 import { generatePdf } from "@/lib/docgen/pdf";
 import { generateDocumentContent } from "@/lib/brain/document";
 import { TEMPLATE_NAMES } from "@/lib/templates-guide";
@@ -172,8 +173,14 @@ export async function POST(req: Request) {
       const printedBy = (profile.full_name as string | null) || "Usuario";
       body = await generatePdf(data, { printedBy, printedAt, copyNumber });
     } else if (outFormat === "xlsx") body = await generateXlsx(data);
-    else if (outFormat === "html_svg") body = generateHtml(data);
-    else body = await generateDocx(data);
+    else if (outFormat === "html_svg") {
+      // Flujograma ANSI con Graphviz; si falla, cae al flujo simple.
+      try {
+        body = await generateFlowchart(data);
+      } catch {
+        body = generateHtml(data);
+      }
+    } else body = await generateDocx(data);
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Error generando";
     return NextResponse.json({ error: `No se pudo generar: ${msg}` }, { status: 500 });
