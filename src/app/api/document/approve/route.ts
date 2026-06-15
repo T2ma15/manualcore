@@ -32,6 +32,25 @@ export async function POST(req: Request) {
     .maybeSingle();
   if (!doc) return NextResponse.json({ error: "No encuentro el documento." }, { status: 404 });
 
+  // Control de cambios: no se aprueba si hay relacionados pendientes de revisar.
+  try {
+    const { data: pending } = await supabase
+      .from("document_relations")
+      .select("to_title")
+      .or(`from_document_id.eq.${doc.id},to_document_id.eq.${doc.id}`)
+      .eq("needs_review", true);
+    if (pending && pending.length) {
+      return NextResponse.json(
+        {
+          error: `Hay ${pending.length} documento(s) relacionado(s) pendientes de revisar por un cambio. Confírmalos en la matriz antes de aprobar.`,
+        },
+        { status: 409 },
+      );
+    }
+  } catch {
+    // tabla no creada todavía — se ignora
+  }
+
   const { error } = await supabase
     .from("documents")
     .update({

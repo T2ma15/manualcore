@@ -5,7 +5,7 @@ import { generateXlsx } from "@/lib/docgen/xlsx";
 import { generateHtml } from "@/lib/docgen/html";
 import { generateDocumentContent } from "@/lib/brain/document";
 import { TEMPLATE_NAMES } from "@/lib/templates-guide";
-import type { DocData } from "@/lib/docgen/types";
+import type { DocData, RelatedDoc } from "@/lib/docgen/types";
 
 const MIME: Record<string, string> = {
   docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -56,11 +56,33 @@ export async function POST(req: Request) {
   // Estado del documento (numeración/aprobación)
   const { data: doc } = await supabase
     .from("documents")
-    .select("doc_number, status, owner_name, approver_name, review_due, effective_date, revision_number")
+    .select("id, doc_number, status, owner_name, approver_name, review_due, effective_date, revision_number")
     .eq("session_id", sessionId)
     .order("created_at", { ascending: true })
     .limit(1)
     .maybeSingle();
+
+  // Matriz de referenciamiento: documentos/registros relacionados (best-effort).
+  let relatedDocs: RelatedDoc[] = [];
+  try {
+    if (doc?.id) {
+      const { data: rels } = await supabase
+        .from("document_relations")
+        .select("to_title, to_code, rel_type, relation, frequency, status")
+        .eq("from_document_id", doc.id)
+        .order("created_at", { ascending: true });
+      relatedDocs = (rels ?? []).map((r) => ({
+        title: (r.to_title as string) ?? "",
+        type: (r.rel_type as string) ?? "otro",
+        relation: (r.relation as string) ?? "",
+        frequency: (r.frequency as string | null) ?? null,
+        code: (r.to_code as string | null) ?? null,
+        status: ((r.status as RelatedDoc["status"]) ?? "suggested"),
+      }));
+    }
+  } catch {
+    // tabla no creada todavía
+  }
 
   const { data: rows } = await supabase
     .from("brain_extractions")
@@ -113,6 +135,7 @@ export async function POST(req: Request) {
       category: r.category ?? "otro",
     })),
     sections: content?.sections ?? null,
+    relatedDocs,
   };
 
   let body: Buffer | string;

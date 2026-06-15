@@ -53,12 +53,20 @@ export default async function DashboardPage() {
             Tus documentos formales, en un solo lugar.
           </p>
         </div>
-        <Link
-          href="/app/nuevo"
-          className="rounded-full bg-[color:var(--mc-teal)] text-[color:var(--mc-navy)] px-6 py-3 font-semibold hover:opacity-90"
-        >
-          + Nuevo documento
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/app/matriz"
+            className="rounded-full border border-[color:var(--mc-navy)] text-[color:var(--mc-navy)] px-5 py-3 font-semibold hover:bg-white"
+          >
+            Matriz de referenciamiento
+          </Link>
+          <Link
+            href="/app/nuevo"
+            className="rounded-full bg-[color:var(--mc-teal)] text-[color:var(--mc-navy)] px-6 py-3 font-semibold hover:opacity-90"
+          >
+            + Nuevo documento
+          </Link>
+        </div>
       </div>
 
       <div className="mt-6">

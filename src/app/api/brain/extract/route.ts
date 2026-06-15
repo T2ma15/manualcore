@@ -138,16 +138,51 @@ export async function POST(req: Request) {
   //    (el brain devuelve todo lo acumulado cada turno).
   await supabase.from("brain_extractions").delete().eq("session_id", sessionId);
   if (extraction.extracted?.length) {
-    await supabase.from("brain_extractions").insert(
-      extraction.extracted.map((x) => ({
-        tenant_id: profile.tenant_id,
-        session_id: sessionId,
-        field_path: x.field,
-        extracted_value: x.value,
-        category: x.category,
-        status: "auto_written",
-      })),
-    );
+    const base = extraction.extracted.map((x) => ({
+      tenant_id: profile.tenant_id,
+      session_id: sessionId,
+      field_path: x.field,
+      extracted_value: x.value,
+      category: x.category,
+      status: "auto_written",
+    }));
+    // Con criticidad; si la columna aún no existe (SQL pendiente), degrada sin romper.
+    const withCritical = base.map((b, i) => ({ ...b, is_critical: !!extraction.extracted[i].is_critical }));
+    const ins = await supabase.from("brain_extractions").insert(withCritical);
+    if (ins.error) await supabase.from("brain_extractions").insert(base);
+  }
+
+  // Persistir los documentos/registros relacionados en la matriz de referenciamiento.
+  // Best-effort: si la tabla aún no existe (SQL pendiente), no rompe la conversación.
+  try {
+    const { data: docRow } = await supabase
+      .from("documents")
+      .select("id")
+      .eq("session_id", sessionId)
+      .order("created_at", { ascending: true })
+      .limit(1)
+      .maybeSingle();
+    if (docRow?.id && extraction.related_docs?.length) {
+      const { data: existing } = await supabase
+        .from("document_relations")
+        .select("to_title")
+        .eq("from_document_id", docRow.id);
+      const have = new Set((existing ?? []).map((r) => String(r.to_title ?? "").toLowerCase()));
+      const toInsert = extraction.related_docs
+        .filter((d) => d.name && !have.has(d.name.toLowerCase()))
+        .map((d) => ({
+          tenant_id: profile.tenant_id,
+          from_document_id: docRow.id,
+          to_title: d.name,
+          rel_type: d.type ?? "registro",
+          relation: d.relation || null,
+          frequency: d.frequency || null,
+          status: "suggested",
+        }));
+      if (toInsert.length) await supabase.from("document_relations").insert(toInsert);
+    }
+  } catch {
+    // tabla no creada todavía — se ignora
   }
 
   // 4) Construir los mensajes del brain para el chat
@@ -161,14 +196,15 @@ export async function POST(req: Request) {
   }
   messages.push({ role: "brain", msg_type: "confirmation", content: confirmationLines.join("\n") });
 
-  // Documentos relacionados: solo en el primer turno (sugerencia, no asunción)
+  // Documentos/registros relacionados: se agregan a la matriz de referenciamiento.
   if (isFirstTurn && extraction.related_docs?.length) {
     for (const d of extraction.related_docs) {
+      const freq = d.frequency ? ` — frecuencia: ${d.frequency}` : "";
       messages.push({
         role: "brain",
         msg_type: "question",
-        content: `Mencionas algo relacionado con "${d.name}" (${d.reason}). ¿Ese documento ya existe?`,
-        options: ["Sí, ya existe", "No, agéndalo"],
+        content: `Registro relacionado: "${d.name}"${freq}. ${d.relation || d.reason}. Lo agregué a tu matriz de referenciamiento — desde ahí marcas si ya existe o lo creas.`,
+        options: ["Ya existe", "Crear ahora", "Dejar pendiente"],
       });
     }
   }
