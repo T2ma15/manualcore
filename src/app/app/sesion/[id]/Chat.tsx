@@ -95,7 +95,7 @@ export default function Chat({
     }
   }
 
-  async function generateDoc() {
+  async function generateDoc(format?: "pdf") {
     if (generating) return;
     setGenerating(true);
     setError(null);
@@ -103,7 +103,7 @@ export default function Chat({
       const res = await fetch("/api/document/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId }),
+        body: JSON.stringify({ sessionId, format }),
       });
       if (!res.ok) {
         const d = await res.json().catch(() => ({}));
@@ -276,13 +276,23 @@ export default function Chat({
             <span className="font-semibold">Aprobado</span> · código{" "}
             <span className="font-mono">{approvedCode}</span>
           </p>
-          <button
-            onClick={generateDoc}
-            disabled={generating}
-            className="rounded-full bg-[color:var(--mc-teal)] text-[color:var(--mc-navy)] px-4 py-2 text-sm font-semibold hover:opacity-90 disabled:opacity-50 whitespace-nowrap"
-          >
-            {generating ? "Generando…" : "Descargar documento"}
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => generateDoc()}
+              disabled={generating}
+              className="rounded-full bg-[color:var(--mc-teal)] text-[color:var(--mc-navy)] px-4 py-2 text-sm font-semibold hover:opacity-90 disabled:opacity-50 whitespace-nowrap"
+            >
+              {generating ? "Generando…" : "Descargar documento"}
+            </button>
+            <button
+              onClick={() => generateDoc("pdf")}
+              disabled={generating}
+              title="PDF con pie de trazabilidad de impresión (quién imprimió, copia #)"
+              className="rounded-full border border-[color:var(--mc-navy)] text-[color:var(--mc-navy)] px-4 py-2 text-sm font-semibold hover:bg-white disabled:opacity-50 whitespace-nowrap"
+            >
+              PDF trazable
+            </button>
+          </div>
         </div>
       ) : ready ? (
         <div className="mt-3 rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-3">
@@ -292,7 +302,7 @@ export default function Chat({
             </p>
             <div className="flex gap-2">
               <button
-                onClick={generateDoc}
+                onClick={() => generateDoc()}
                 disabled={generating}
                 className="rounded-full border border-[color:var(--mc-navy)] text-[color:var(--mc-navy)] px-4 py-2 text-sm font-semibold hover:bg-white disabled:opacity-50 whitespace-nowrap"
               >

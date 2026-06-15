@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { generateDocx } from "@/lib/docgen/docx";
 import { generateXlsx } from "@/lib/docgen/xlsx";
 import { generateHtml } from "@/lib/docgen/html";
+import { generatePdf } from "@/lib/docgen/pdf";
 import { generateDocumentContent } from "@/lib/brain/document";
 import { TEMPLATE_NAMES } from "@/lib/templates-guide";
 import type { DocData, RelatedDoc } from "@/lib/docgen/types";
@@ -11,8 +12,9 @@ const MIME: Record<string, string> = {
   docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   html_svg: "text/html; charset=utf-8",
+  pdf: "application/pdf",
 };
-const EXT: Record<string, string> = { docx: "docx", xlsx: "xlsx", html_svg: "html" };
+const EXT: Record<string, string> = { docx: "docx", xlsx: "xlsx", html_svg: "html", pdf: "pdf" };
 
 function slug(s: string) {
   return (s || "documento")
@@ -25,7 +27,9 @@ function slug(s: string) {
 }
 
 export async function POST(req: Request) {
-  const { sessionId } = await req.json().catch(() => ({}));
+  const reqBody = await req.json().catch(() => ({}));
+  const sessionId: string | undefined = reqBody.sessionId;
+  const formatReq: string | undefined = reqBody.format;
   if (!sessionId) return NextResponse.json({ error: "Falta sessionId." }, { status: 400 });
 
   const supabase = await createClient();
@@ -36,7 +40,7 @@ export async function POST(req: Request) {
 
   const { data: profile } = await supabase
     .from("users")
-    .select("tenant_id, tenants(name, logo_url)")
+    .select("id, full_name, tenant_id, tenants(name, logo_url)")
     .eq("auth_user_id", user.id)
     .single();
   if (!profile) return NextResponse.json({ error: "Sin perfil." }, { status: 403 });
@@ -138,23 +142,50 @@ export async function POST(req: Request) {
     relatedDocs,
   };
 
+  // El usuario puede pedir PDF explícitamente (con trazabilidad de impresión).
+  const outFormat = formatReq === "pdf" ? "pdf" : format;
+
   let body: Buffer | string;
   try {
-    if (format === "xlsx") body = await generateXlsx(data);
-    else if (format === "html_svg") body = generateHtml(data);
+    if (outFormat === "pdf") {
+      // Número de copia real + registro de impresión (best-effort).
+      let copyNumber = 1;
+      try {
+        if (doc?.id) {
+          const { count } = await supabase
+            .from("print_events")
+            .select("id", { count: "exact", head: true })
+            .eq("document_id", doc.id);
+          copyNumber = (count ?? 0) + 1;
+          await supabase.from("print_events").insert({
+            tenant_id: profile.tenant_id,
+            document_id: doc.id,
+            printed_by: profile.id,
+            copy_number: copyNumber,
+            total_copies: copyNumber,
+          });
+        }
+      } catch {
+        copyNumber = 1;
+      }
+      const printedAt = new Date().toISOString().slice(0, 16).replace("T", " ");
+      const printedBy = (profile.full_name as string | null) || "Usuario";
+      body = await generatePdf(data, { printedBy, printedAt, copyNumber });
+    } else if (outFormat === "xlsx") body = await generateXlsx(data);
+    else if (outFormat === "html_svg") body = generateHtml(data);
     else body = await generateDocx(data);
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Error generando";
     return NextResponse.json({ error: `No se pudo generar: ${msg}` }, { status: 500 });
   }
 
-  const filename = `${slug(data.templateName)}-${slug(data.processName)}.${EXT[format] ?? "docx"}`;
+  const filename = `${slug(data.templateName)}-${slug(data.processName)}.${EXT[outFormat] ?? "docx"}`;
   const payload = typeof body === "string" ? Buffer.from(body, "utf-8") : body;
 
   return new Response(new Uint8Array(payload), {
     status: 200,
     headers: {
-      "Content-Type": MIME[format] ?? MIME.docx,
+      "Content-Type": MIME[outFormat] ?? MIME.docx,
       "Content-Disposition": `attachment; filename="${filename}"`,
     },
   });
