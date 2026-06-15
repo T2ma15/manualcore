@@ -2,6 +2,7 @@
 // profesionales, pasos numerados y tablas, a partir de la conversación.
 import { anthropic, BRAIN_MODEL } from "./client";
 import type { DocContent } from "@/lib/docgen/types";
+import { DocContentZ } from "./zod-schemas";
 
 export type { DocContent };
 
@@ -106,7 +107,8 @@ ${STRUCTURE[templateCode] ?? "Organiza el documento en secciones lógicas y prof
     });
     const block = resp.content.find((b) => b.type === "text");
     if (!block || !("text" in block)) return null;
-    return JSON.parse(block.text) as DocContent;
+    // Validación tolerante: garantiza la forma de las secciones.
+    return DocContentZ.parse(JSON.parse(block.text)) as unknown as DocContent;
   } catch {
     return null;
   }

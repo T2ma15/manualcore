@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { anthropic, BRAIN_MODEL, estimateCostUsd } from "@/lib/brain/client";
 import { buildSystemPrompt } from "@/lib/brain/prompts";
 import { EXTRACTION_SCHEMA, type Extraction } from "@/lib/brain/schema";
+import { ExtractionZ } from "@/lib/brain/zod-schemas";
 
 type ImagePayload = { data: string; mediaType: "image/jpeg" | "image/png" | "image/gif" | "image/webp" };
 
@@ -113,7 +114,9 @@ export async function POST(req: Request) {
     });
 
     const block = resp.content.find((b) => b.type === "text");
-    extraction = JSON.parse(block && "text" in block ? block.text : "{}");
+    const raw = JSON.parse(block && "text" in block ? block.text : "{}");
+    // Validación tolerante: normaliza la salida a una forma válida sin lanzar.
+    extraction = ExtractionZ.parse(raw) as unknown as Extraction;
 
     // Registrar costo de la llamada (variable de negocio)
     await supabase.from("llm_calls").insert({
