@@ -102,7 +102,7 @@ ${STRUCTURE[templateCode] ?? "Organiza el documento en secciones lógicas y prof
     const client = anthropic();
     const resp = await client.messages.create({
       model: BRAIN_MODEL,
-      max_tokens: 8000,
+      max_tokens: 16000,
       system: [{ type: "text", text: system, cache_control: { type: "ephemeral" } }],
       output_config: { format: { type: "json_schema", schema: SCHEMA } },
       messages: conversation.length

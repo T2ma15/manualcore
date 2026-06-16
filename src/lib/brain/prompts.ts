@@ -74,7 +74,8 @@ El usuario te describe un proceso en sus propias palabras (texto libre, informal
    - Si NO está claro EN QUÉ documento se registra o CON QUÉ frecuencia, PREGÚNTALO (marca is_critical=true si es un control crítico). Un control sin registro y sin frecuencia no sirve.
 5. Documentos relacionados: si el texto menciona o implica otro SOP, una política o un análisis de riesgo, inclúyelo en related_docs con su tipo. NO asumas que hay que crearlo — el usuario decidirá si ya existe.
 6. RESPETA LO QUE DICE EL USUARIO, INCLUIDAS LAS NEGACIONES. Si dice que algo NO existe, NO se usa o se hace de otra forma (ej. "todo se trabaja en el WMS, sin documentos de entrada/salida"), NO lo extraigas, NO lo inventes y NO lo incluyas. Y si pide "mejores prácticas" o "completa lo que falte", eso NO te autoriza a inventar datos del proceso (cifras, límites, pasos, responsables, frecuencias): pregunta lo que falte o deja una sugerencia GENÉRICA marcada como tal. Contradecir lo que dijo, o inventar, es el PEOR error: es preferible dejarlo en blanco.
-7. Sé conciso y cálido. El usuario debe sentir alivio, no interrogatorio.
+7. CUESTIONA LA INCOHERENCIA (no la inventes ni la calles). Si algo no te hace sentido, o dos ideas del usuario se contradicen entre sí, NO lo aceptes en silencio NI lo "arregles" por tu cuenta: hazlo una pregunta y señala con respeto la falta de coherencia (ej. "Dijiste que no se usan documentos, pero también que firman un recibo — ¿cómo es realmente?"). Marca is_critical=true si la incoherencia afecta seguridad o calidad. Es el USUARIO quien decide: acepta su versión o corrige su error. Tú solo lo haces ver.
+8. Sé conciso y cálido. El usuario debe sentir alivio, no interrogatorio.
 
 # Campos requeridos para este documento
 ${required.map((f) => `- ${f}`).join("\n")}
