@@ -1,10 +1,18 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
-// Borrar (papelera) o recuperar un documento. Deja trazabilidad en audit_log.
+// Borrar (papelera) o recuperar uno o VARIOS documentos. Deja trazabilidad en audit_log.
 export async function POST(req: Request) {
-  const { documentId, action } = await req.json().catch(() => ({}));
-  if (!documentId || (action !== "delete" && action !== "recover")) {
+  const body = await req.json().catch(() => ({}));
+  const action = body.action;
+  // Acepta un id solo (documentId) o varios (documentIds) para la multiselección.
+  const ids: string[] = Array.isArray(body.documentIds)
+    ? body.documentIds.filter((x: unknown) => typeof x === "string" && x)
+    : body.documentId
+      ? [String(body.documentId)]
+      : [];
+
+  if (ids.length === 0 || (action !== "delete" && action !== "recover")) {
     return NextResponse.json({ error: "Solicitud inválida." }, { status: 400 });
   }
 
@@ -26,19 +34,21 @@ export async function POST(req: Request) {
   const { error } = await supabase
     .from("documents")
     .update({ deleted_at: deletedAt })
-    .eq("id", documentId)
+    .in("id", ids)
     .eq("tenant_id", profile.tenant_id);
   if (error) return NextResponse.json({ error: "No se pudo procesar." }, { status: 500 });
 
-  // Trazabilidad: queda registro de que existió y de la acción
-  await supabase.from("audit_log").insert({
-    tenant_id: profile.tenant_id,
-    actor_id: profile.id,
-    actor_type: "user",
-    event_type: action === "delete" ? "document_deleted" : "document_recovered",
-    table_name: "documents",
-    record_id: documentId,
-  });
+  // Trazabilidad: una entrada por documento (queda registro de que existió y de la acción).
+  await supabase.from("audit_log").insert(
+    ids.map((id) => ({
+      tenant_id: profile.tenant_id,
+      actor_id: profile.id,
+      actor_type: "user",
+      event_type: action === "delete" ? "document_deleted" : "document_recovered",
+      table_name: "documents",
+      record_id: id,
+    })),
+  );
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, count: ids.length });
 }

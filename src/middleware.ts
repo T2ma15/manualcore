@@ -50,5 +50,9 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/app/:path*", "/platform/:path*", "/login", "/registro"],
+  // Incluye /api para que la sesión de Supabase se refresque también en las
+  // llamadas a la API (borrar, aprobar, generar). Sin esto, una acción de API
+  // con token vencido dejaba la sesión sin refrescar y el siguiente render
+  // del layout redirigía a /login.
+  matcher: ["/app/:path*", "/platform/:path*", "/api/:path*", "/login", "/registro"],
 };
