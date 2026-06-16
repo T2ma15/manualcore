@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ManualCore — Gantt Chart A-01</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: Arial, sans-serif; background:#f4f6f8; }
+.page { width:1200px; margin:20px auto; background:white; box-shadow:0 2px 12px rgba(0,0,0,.12); }
+.doc-header { display:grid; grid-template-columns:1fr auto; background:#0D1F3C; }
+.doc-header-left { padding:14px 20px; }
+.doc-header-left h1 { color:#fff; font-size:14px; font-weight:700; margin-bottom:3px; }
+.doc-header-left p { color:#A8D8EA; font-size:10px; font-style:italic; }
+.doc-header-right { background:#f4f6f8; border-left:2px solid #1ABC9C; padding:8px 14px; display:flex; flex-direction:column; justify-content:center; align-items:center; min-width:140px; }
+.doc-header-right span { font-size:9px; color:#5D6D7E; font-weight:700; }
+.doc-header-right strong { font-size:12px; color:#0D1F3C; }
+.meta-row { display:grid; grid-template-columns:repeat(5,1fr); border-bottom:3px solid #1ABC9C; }
+.meta-cell { padding:5px 10px; border-right:1px solid #D5D8DC; font-size:9px; }
+.meta-cell:last-child { border-right:none; }
+.meta-cell .lbl { color:#5D6D7E; font-weight:700; display:block; margin-bottom:2px; }
+.meta-cell:nth-child(odd) { background:#F4F6F8; }
+.diagram-area { padding:16px 20px 24px; }
+.legend { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:14px; padding:7px 12px; background:#F4F6F8; border-radius:4px; border-left:4px solid #1ABC9C; font-size:9px; color:#5D6D7E; align-items:center; }
+.legend-item { display:flex; align-items:center; gap:5px; }
+.doc-footer { border-top:2px solid #1ABC9C; padding:7px 20px; display:flex; justify-content:space-between; background:#F4F6F8; font-size:9px; color:#5D6D7E; }
+.draft { background:#F39C12; text-align:center; padding:6px; color:white; font-size:10px; font-weight:700; }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="doc-header">
+  <div class="doc-header-left">
+    <h1>[COMPANY NAME] &nbsp;|&nbsp; PROJECT GANTT CHART</h1>
+    <p>Cover Assembly — Node A-01 Launch &nbsp;|&nbsp; Node B-01 Sequential Start &nbsp;|&nbsp; Ref SOP: SOP-A01-001</p>
+  </div>
+  <div class="doc-header-right">
+    <span>DOC NO.</span><strong>GNT-A01-001</strong>
+    <span style="margin-top:5px">REVISION</span><strong>Rev. 00</strong>
+  </div>
+</div>
+<div class="meta-row">
+  <div class="meta-cell"><span class="lbl">PROJECT START</span>[DD-MMM-YYYY]</div>
+  <div class="meta-cell"><span class="lbl">TOTAL DURATION</span>20 working days</div>
+  <div class="meta-cell"><span class="lbl">NODE A-01 END</span>Day 7 → triggers B-01</div>
+  <div class="meta-cell"><span class="lbl">NODE B-01 START</span>Day 8 (sequential)</div>
+  <div class="meta-cell"><span class="lbl">REVIEW DUE</span><span style="color:#C0392B;font-weight:700">[DD-MMM-YYYY]</span></div>
+</div>
+
+<div class="diagram-area">
+<div class="legend">
+  <div class="legend-item"><div style="width:40px;height:12px;background:#1B4F72;border-radius:2px"></div> Node A-01 Production</div>
+  <div class="legend-item"><div style="width:40px;height:12px;background:#148F77;border-radius:2px"></div> Node B-01 Production</div>
+  <div class="legend-item"><div style="width:40px;height:12px;background:#1E8449;border-radius:2px"></div> Quality tasks</div>
+  <div class="legend-item"><div style="width:40px;height:12px;background:#7D3C98;border-radius:2px"></div> Documentation</div>
+  <div class="legend-item"><div style="width:40px;height:12px;background:#E67E22;border-radius:2px"></div> Training</div>
+  <div class="legend-item"><div style="width:40px;height:12px;background:#2E4057;border-radius:2px"></div> Project milestones</div>
+  <div class="legend-item"><div style="width:20px;height:3px;background:#C0392B"></div>&nbsp;<div style="width:20px;height:3px;background:#C0392B;opacity:.4"></div> Finish-to-start dependency</div>
+  <div class="legend-item">◆ Milestone</div>
+</div>
+
+<div style="overflow-x:auto;">
+<svg width="1155" height="560" viewBox="0 0 1155 560" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="dep" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1L9,5L0,9Z" fill="#C0392B"/></marker>
+  <marker id="fwd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1L9,5L0,9Z" fill="#5D6D7E"/></marker>
+</defs>
+
+<!-- ── LAYOUT CONSTANTS ──
+     Row height: 30px
+     Task label col: 260px wide
+     Owner col: 110px
+     Day cols: start x=380, each day = 38px wide, 20 days = 760px
+     Total width = 380 + 760 = 1140
+-->
+
+<!-- ── HEADER ROW ── -->
+<rect x="0" y="0" width="260" height="46" fill="#0D1F3C"/>
+<text x="130" y="17" text-anchor="middle" font-size="10" font-weight="700" fill="white">TASK / DELIVERABLE</text>
+<rect x="260" y="0" width="110" height="46" fill="#1B4F72"/>
+<text x="315" y="17" text-anchor="middle" font-size="10" font-weight="700" fill="white">OWNER</text>
+
+<!-- Day number headers -->
+<!-- Week 1 header -->
+<rect x="370" y="0" width="190" height="22" fill="#2E4057"/>
+<text x="465" y="15" text-anchor="middle" font-size="9" font-weight="700" fill="white">WEEK 1 — Node A-01 Setup + Docs + Training</text>
+<!-- Week 2 header -->
+<rect x="560" y="0" width="190" height="22" fill="#1B4F72"/>
+<text x="655" y="15" text-anchor="middle" font-size="9" font-weight="700" fill="white">WEEK 2 — Node A-01 Production Run</text>
+<!-- Week 3 header — B-01 starts -->
+<rect x="750" y="0" width="190" height="22" fill="#148F77"/>
+<text x="845" y="15" text-anchor="middle" font-size="9" font-weight="700" fill="white">WEEK 3 — Node B-01 Sequential Start</text>
+<!-- Week 4 header -->
+<rect x="940" y="0" width="215" height="22" fill="#0F6E56"/>
+<text x="1047" y="15" text-anchor="middle" font-size="9" font-weight="700" fill="white">WEEK 4 — Node B-01 + Closeout</text>
+
+<!-- Day numbers row -->
+<rect x="370" y="22" width="785" height="24" fill="#EBF5FB"/>
+<!-- Days 1-20 at x = 370 + (d-1)*38 + 19 (center) -->
+<script type="text/javascript">/* placeholder */</script>
+
+<!-- Render day numbers and vertical grid via SVG -->
+<!-- Day labels: each day col is 38px wide starting at x=370 -->
+<!-- Day 1: x=370+0=370, center=389 -->
+<!-- Using fixed positions for 20 days -->
+<!-- cols: d=1..20, x_left=370+(d-1)*38, x_center=370+(d-1)*38+19 -->
+
+<!-- Separator line between header and data -->
+<line x1="0" y1="46" x2="1155" y2="46" stroke="#1ABC9C" stroke-width="2"/>
+
+<!-- Day col backgrounds alternating and grid lines -->
+<!-- Even days light blue, odd days white, weekends darker -->
+<!-- Days 5,10,15,20 are Fridays (end of week) — slightly darker -->
+
+<!-- generate 20 day columns -->
+<!-- d1 -->
+<rect x="370" y="22" width="38" height="24" fill="#D6EAF8"/><text x="389" y="38" text-anchor="middle" font-size="9" fill="#1B4F72" font-weight="700">1</text>
+<rect x="408" y="22" width="38" height="24" fill="#EBF5FB"/><text x="427" y="38" text-anchor="middle" font-size="9" fill="#1B4F72" font-weight="700">2</text>
+<rect x="446" y="22" width="38" height="24" fill="#D6EAF8"/><text x="465" y="38" text-anchor="middle" font-size="9" fill="#1B4F72" font-weight="700">3</text>
+<rect x="484" y="22" width="38" height="24" fill="#EBF5FB"/><text x="503" y="38" text-anchor="middle" font-size="9" fill="#1B4F72" font-weight="700">4</text>
+<rect x="522" y="22" width="38" height="24" fill="#D6EAF8"/><text x="541" y="38" text-anchor="middle" font-size="9" fill="#1B4F72" font-weight="700">5</text>
+<rect x="560" y="22" width="38" height="24" fill="#EBF5FB"/><text x="579" y="38" text-anchor="middle" font-size="9" fill="#1B4F72" font-weight="700">6</text>
+<rect x="598" y="22" width="38" height="24" fill="#D6EAF8"/><text x="617" y="38" text-anchor="middle" font-size="9" fill="#1B4F72" font-weight="700">7</text>
+<rect x="636" y="22" width="38" height="24" fill="#EBF5FB"/><text x="655" y="38" text-anchor="middle" font-size="9" fill="#148F77" font-weight="700">8</text>
+<rect x="674" y="22" width="38" height="24" fill="#D6EAF8"/><text x="693" y="38" text-anchor="middle" font-size="9" fill="#148F77" font-weight="700">9</text>
+<rect x="712" y="22" width="38" height="24" fill="#EBF5FB"/><text x="731" y="38" text-anchor="middle" font-size="9" fill="#148F77" font-weight="700">10</text>
+<rect x="750" y="22" width="38" height="24" fill="#D6EAF8"/><text x="769" y="38" text-anchor="middle" font-size="9" fill="#148F77" font-weight="700">11</text>
+<rect x="788" y="22" width="38" height="24" fill="#EBF5FB"/><text x="807" y="38" text-anchor="middle" font-size="9" fill="#148F77" font-weight="700">12</text>
+<rect x="826" y="22" width="38" height="24" fill="#D6EAF8"/><text x="845" y="38" text-anchor="middle" font-size="9" fill="#148F77" font-weight="700">13</text>
+<rect x="864" y="22" width="38" height="24" fill="#EBF5FB"/><text x="883" y="38" text-anchor="middle" font-size="9" fill="#148F77" font-weight="700">14</text>
+<rect x="902" y="22" width="38" height="24" fill="#D6EAF8"/><text x="921" y="38" text-anchor="middle" font-size="9" fill="#0F6E56" font-weight="700">15</text>
+<rect x="940" y="22" width="38" height="24" fill="#EBF5FB"/><text x="959" y="38" text-anchor="middle" font-size="9" fill="#0F6E56" font-weight="700">16</text>
+<rect x="978" y="22" width="38" height="24" fill="#D6EAF8"/><text x="997" y="38" text-anchor="middle" font-size="9" fill="#0F6E56" font-weight="700">17</text>
+<rect x="1016" y="22" width="38" height="24" fill="#EBF5FB"/><text x="1035" y="38" text-anchor="middle" font-size="9" fill="#0F6E56" font-weight="700">18</text>
+<rect x="1054" y="22" width="38" height="24" fill="#D6EAF8"/><text x="1073" y="38" text-anchor="middle" font-size="9" fill="#0F6E56" font-weight="700">19</text>
+<rect x="1092" y="22" width="63" height="24" fill="#EBF5FB"/><text x="1123" y="38" text-anchor="middle" font-size="9" fill="#0F6E56" font-weight="700">20</text>
+
+<!-- ── VERTICAL GRID LINES ── -->
+<!-- One line per day boundary -->
+<g stroke="#E0E8F0" stroke-width="0.5">
+<line x1="370" y1="46" x2="370" y2="540"/><line x1="408" y1="46" x2="408" y2="540"/><line x1="446" y1="46" x2="446" y2="540"/>
+<line x1="484" y1="46" x2="484" y2="540"/><line x1="522" y1="46" x2="522" y2="540"/>
+<line x1="560" y1="46" x2="560" y2="540" stroke="#A0B0C0" stroke-width="1"/>
+<line x1="598" y1="46" x2="598" y2="540"/><line x1="636" y1="46" x2="636" y2="540"/>
+<line x1="674" y1="46" x2="674" y2="540" stroke="#1ABC9C" stroke-width="1.5" stroke-dasharray="4 3"/>
+<line x1="712" y1="46" x2="712" y2="540"/><line x1="750" y1="46" x2="750" y2="540" stroke="#A0B0C0" stroke-width="1"/>
+<line x1="788" y1="46" x2="788" y2="540"/><line x1="826" y1="46" x2="826" y2="540"/>
+<line x1="864" y1="46" x2="864" y2="540"/><line x1="902" y1="46" x2="902" y2="540"/>
+<line x1="940" y1="46" x2="940" y2="540" stroke="#A0B0C0" stroke-width="1"/>
+<line x1="978" y1="46" x2="978" y2="540"/><line x1="1016" y1="46" x2="1016" y2="540"/>
+<line x1="1054" y1="46" x2="1054" y2="540"/><line x1="1092" y1="46" x2="1092" y2="540"/>
+</g>
+
+<!-- Node B start marker line (day 8) -->
+<line x1="674" y1="46" x2="674" y2="540" stroke="#148F77" stroke-width="2" stroke-dasharray="6 3"/>
+<text x="680" y="58" font-size="8" fill="#148F77" font-weight="700" transform="rotate(-90,680,58)">Node B starts →</text>
+
+<!-- ── TASK ROWS ──
+     Row y positions: row 1 = 46, each row = 30px
+     Bar y = row_y + 6, height = 18
+     Day d bar x = 370 + (d-1)*38
+     Bar width for n days = n*38 - 2
+-->
+
+<!-- Helper: bar(x, y, w, color) -->
+<!-- x = 370 + (start_day-1)*38, w = num_days*38-4 -->
+
+<!-- ─── SECTION A: Node A-01 ─── -->
+<rect x="0" y="46" width="370" height="20" fill="#1B4F72"/>
+<text x="10" y="60" font-size="9" font-weight="700" fill="white">NODE A-01 — Cover Sub-Assembly</text>
+
+<!-- Row 1: Documentation approval — days 1-3 -->
+<rect x="0" y="66" width="260" height="26" fill="white"/>
+<rect x="260" y="66" width="110" height="26" fill="#F4F6F8"/>
+<text x="8" y="83" font-size="9" fill="#2E4057">SOP + WI + TWI document approval</text>
+<text x="315" y="83" text-anchor="middle" font-size="8.5" fill="#5D6D7E">Process Owner</text>
+<!-- Bar days 1-3 -->
+<rect x="372" y="72" width="110" height="14" rx="3" fill="#7D3C98"/>
+<text x="427" y="83" text-anchor="middle" font-size="8" fill="white">Days 1-3</text>
+<line x1="0" y1="92" x2="1155" y2="92" stroke="#E8ECF0" stroke-width="0.5"/>
+
+<!-- Row 2: Operator training — days 1-4 -->
+<rect x="0" y="92" width="260" height="26" fill="#F8F9FA"/>
+<rect x="260" y="92" width="110" height="26" fill="#F0F0F0"/>
+<text x="8" y="109" font-size="9" fill="#2E4057">Operator training — SOP/WI/TWI</text>
+<text x="315" y="109" text-anchor="middle" font-size="8.5" fill="#5D6D7E">Supervisor</text>
+<!-- Bar days 1-4 -->
+<rect x="372" y="98" width="148" height="14" rx="3" fill="#E67E22"/>
+<text x="446" y="109" text-anchor="middle" font-size="8" fill="white">Days 1-4</text>
+<line x1="0" y1="118" x2="1155" y2="118" stroke="#E8ECF0" stroke-width="0.5"/>
+
+<!-- Row 3: Equipment setup + die check — days 2-3 -->
+<rect x="0" y="118" width="260" height="26" fill="white"/>
+<rect x="260" y="118" width="110" height="26" fill="#F4F6F8"/>
+<text x="8" y="135" font-size="9" fill="#2E4057">Equipment setup — die, force calibration</text>
+<text x="315" y="135" text-anchor="middle" font-size="8.5" fill="#5D6D7E">Operator L2</text>
+<!-- Bar days 2-3 -->
+<rect x="410" y="124" width="72" height="14" rx="3" fill="#1B4F72"/>
+<text x="446" y="135" text-anchor="middle" font-size="8" fill="white">D2-3</text>
+<line x1="0" y1="144" x2="1155" y2="144" stroke="#E8ECF0" stroke-width="0.5"/>
+
+<!-- Row 4: First article inspection — day 4 -->
+<rect x="0" y="144" width="260" height="26" fill="#F8F9FA"/>
+<rect x="260" y="144" width="110" height="26" fill="#F0F0F0"/>
+<text x="8" y="161" font-size="9" fill="#2E4057">First article inspection + sign-off</text>
+<text x="315" y="161" text-anchor="middle" font-size="8.5" fill="#5D6D7E">QA Inspector</text>
+<!-- Bar day 4 -->
+<rect x="486" y="150" width="34" height="14" rx="3" fill="#1E8449"/>
+<text x="503" y="161" text-anchor="middle" font-size="8" fill="white">D4</text>
+<!-- Milestone diamond -->
+<polygon points="503,147 510,154 503,161 496,154" fill="#2E4057"/>
+<line x1="0" y1="170" x2="1155" y2="170" stroke="#E8ECF0" stroke-width="0.5"/>
+
+<!-- Row 5: Production run A-01 — days 5-7 -->
+<rect x="0" y="170" width="260" height="26" fill="white"/>
+<rect x="260" y="170" width="110" height="26" fill="#F4F6F8"/>
+<text x="8" y="187" font-size="9" fill="#2E4057">Production run — Cover sub-assembly</text>
+<text x="315" y="187" text-anchor="middle" font-size="8.5" fill="#5D6D7E">Operator L1+L2</text>
+<!-- Bar days 5-7 -->
+<rect x="524" y="176" width="110" height="14" rx="3" fill="#1B4F72"/>
+<text x="579" y="187" text-anchor="middle" font-size="8" fill="white">Days 5-7</text>
+<line x1="0" y1="196" x2="1155" y2="196" stroke="#E8ECF0" stroke-width="0.5"/>
+
+<!-- Row 6: In-process QC — days 5-7 (concurrent) -->
+<rect x="0" y="196" width="260" height="26" fill="#F8F9FA"/>
+<rect x="260" y="196" width="110" height="26" fill="#F0F0F0"/>
+<text x="8" y="213" font-size="9" fill="#2E4057">In-process QC — 100% per piece</text>
+<text x="315" y="213" text-anchor="middle" font-size="8.5" fill="#5D6D7E">QA Inspector</text>
+<!-- Bar days 5-7 (concurrent) -->
+<rect x="524" y="202" width="110" height="14" rx="3" fill="#1E8449" fill-opacity="0.7"/>
+<text x="579" y="213" text-anchor="middle" font-size="8" fill="white">D5-7 concurrent</text>
+<line x1="0" y1="222" x2="1155" y2="222" stroke="#E8ECF0" stroke-width="0.5"/>
+
+<!-- Row 7: NODE A-01 COMPLETE MILESTONE — day 7 -->
+<rect x="0" y="222" width="260" height="26" fill="#EBF5FB"/>
+<rect x="260" y="222" width="110" height="26" fill="#D6EAF8"/>
+<text x="8" y="239" font-size="9" font-weight="700" fill="#1B4F72">★ NODE A-01 COMPLETE — triggers B-01</text>
+<text x="315" y="239" text-anchor="middle" font-size="8.5" fill="#1B4F72">Process Owner</text>
+<!-- Milestone at end of day 7 -->
+<polygon points="634,230 644,239 634,248 624,239" fill="#1B4F72"/>
+<text x="652" y="242" font-size="8.5" fill="#1B4F72" font-weight="700">A-01 END</text>
+<line x1="0" y1="248" x2="1155" y2="248" stroke="#1ABC9C" stroke-width="1.5"/>
+
+<!-- ─── SECTION B: Node B-01 (sequential — starts day 8) ─── -->
+<rect x="0" y="248" width="370" height="20" fill="#148F77"/>
+<text x="10" y="262" font-size="9" font-weight="700" fill="white">NODE B-01 — Frame Assembly (Sequential — starts Day 8)</text>
+
+<!-- Dependency arrow: A-01 end → B-01 start -->
+<line x1="636" y1="239" x2="674" y2="270" stroke="#C0392B" stroke-width="1.5" marker-end="url(#dep)" stroke-dasharray="5 3"/>
+<text x="645" y="258" font-size="8" fill="#C0392B" font-style="italic">finish-to-start</text>
+
+<!-- Row 8: B-01 Setup — day 8 -->
+<rect x="0" y="268" width="260" height="26" fill="white"/>
+<rect x="260" y="268" width="110" height="26" fill="#F4F6F8"/>
+<text x="8" y="285" font-size="9" fill="#2E4057">Node B-01 station setup</text>
+<text x="315" y="285" text-anchor="middle" font-size="8.5" fill="#5D6D7E">Operator L2</text>
+<rect x="676" y="274" width="34" height="14" rx="3" fill="#148F77"/>
+<text x="693" y="285" text-anchor="middle" font-size="8" fill="white">D8</text>
+<line x1="0" y1="294" x2="1155" y2="294" stroke="#E8ECF0" stroke-width="0.5"/>
+
+<!-- Row 9: B-01 Production — days 9-16 -->
+<rect x="0" y="294" width="260" height="26" fill="#F8F9FA"/>
+<rect x="260" y="294" width="110" height="26" fill="#F0F0F0"/>
+<text x="8" y="311" font-size="9" fill="#2E4057">Frame assembly production run</text>
+<text x="315" y="311" text-anchor="middle" font-size="8.5" fill="#5D6D7E">Operator L1+L2</text>
+<rect x="714" y="300" width="304" height="14" rx="3" fill="#148F77"/>
+<text x="866" y="311" text-anchor="middle" font-size="8" fill="white">Days 9–16</text>
+<line x1="0" y1="320" x2="1155" y2="320" stroke="#E8ECF0" stroke-width="0.5"/>
+
+<!-- Row 10: B-01 QC — days 9-16 concurrent -->
+<rect x="0" y="320" width="260" height="26" fill="white"/>
+<rect x="260" y="320" width="110" height="26" fill="#F4F6F8"/>
+<text x="8" y="337" font-size="9" fill="#2E4057">In-process QC — 100% per piece</text>
+<text x="315" y="337" text-anchor="middle" font-size="8.5" fill="#5D6D7E">QA Inspector</text>
+<rect x="714" y="326" width="304" height="14" rx="3" fill="#1E8449" fill-opacity="0.7"/>
+<text x="866" y="337" text-anchor="middle" font-size="8" fill="white">D9-16 concurrent</text>
+<line x1="0" y1="346" x2="1155" y2="346" stroke="#E8ECF0" stroke-width="0.5"/>
+
+<!-- ─── SECTION C: Project closeout ─── -->
+<rect x="0" y="346" width="370" height="20" fill="#2E4057"/>
+<text x="10" y="360" font-size="9" font-weight="700" fill="white">PROJECT CLOSEOUT — Document release + final QC</text>
+
+<!-- Row 11: Final QC — days 15-17 -->
+<rect x="0" y="366" width="260" height="26" fill="#F8F9FA"/>
+<rect x="260" y="366" width="110" height="26" fill="#F0F0F0"/>
+<text x="8" y="383" font-size="9" fill="#2E4057">Final QC + product sign-off</text>
+<text x="315" y="383" text-anchor="middle" font-size="8.5" fill="#5D6D7E">QA Manager</text>
+<rect x="904" y="372" width="110" height="14" rx="3" fill="#1E8449"/>
+<text x="959" y="383" text-anchor="middle" font-size="8" fill="white">Days 15-17</text>
+<line x1="0" y1="392" x2="1155" y2="392" stroke="#E8ECF0" stroke-width="0.5"/>
+
+<!-- Row 12: Document package release — days 16-18 -->
+<rect x="0" y="392" width="260" height="26" fill="white"/>
+<rect x="260" y="392" width="110" height="26" fill="#F4F6F8"/>
+<text x="8" y="409" font-size="9" fill="#2E4057">Document package approval + release</text>
+<text x="315" y="409" text-anchor="middle" font-size="8.5" fill="#5D6D7E">Process Owner</text>
+<rect x="942" y="398" width="110" height="14" rx="3" fill="#7D3C98"/>
+<text x="997" y="409" text-anchor="middle" font-size="8" fill="white">Days 16-18</text>
+<line x1="0" y1="418" x2="1155" y2="418" stroke="#E8ECF0" stroke-width="0.5"/>
+
+<!-- Row 13: Training records complete — days 17-19 -->
+<rect x="0" y="418" width="260" height="26" fill="#F8F9FA"/>
+<rect x="260" y="418" width="110" height="26" fill="#F0F0F0"/>
+<text x="8" y="435" font-size="9" fill="#2E4057">Training records signed + filed</text>
+<text x="315" y="435" text-anchor="middle" font-size="8.5" fill="#5D6D7E">HR / Supervisor</text>
+<rect x="980" y="424" width="72" height="14" rx="3" fill="#E67E22"/>
+<text x="1016" y="435" text-anchor="middle" font-size="8" fill="white">D17-19</text>
+<line x1="0" y1="444" x2="1155" y2="444" stroke="#E8ECF0" stroke-width="0.5"/>
+
+<!-- Row 14: PROJECT COMPLETE milestone — day 20 -->
+<rect x="0" y="444" width="260" height="26" fill="#D5F5E3"/>
+<rect x="260" y="444" width="110" height="26" fill="#A9DFBF"/>
+<text x="8" y="461" font-size="9" font-weight="700" fill="#1E8449">★ PROJECT COMPLETE — all nodes approved</text>
+<text x="315" y="461" text-anchor="middle" font-size="8.5" fill="#1E8449">Management</text>
+<polygon points="1111,451 1121,460 1111,469 1101,460" fill="#1E8449"/>
+<text x="1130" y="463" font-size="9" fill="#1E8449" font-weight="700">DONE</text>
+<line x1="0" y1="470" x2="1155" y2="470" stroke="#1ABC9C" stroke-width="2"/>
+
+<!-- ── SUMMARY BOX ── -->
+<rect x="0" y="470" width="1155" height="80" fill="#F4F6F8"/>
+<text x="20" y="490" font-size="10" font-weight="700" fill="#0D1F3C">DEPENDENCY SUMMARY</text>
+<line x1="20" y1="495" x2="600" y2="495" stroke="#1ABC9C" stroke-width="1.5"/>
+<text x="20" y="512" font-size="9" fill="#2E4057">● Node A-01 (Days 1-7) → SEQUENTIAL TRIGGER → Node B-01 starts Day 8. Node B cannot start without Node A complete output.</text>
+<text x="20" y="528" font-size="9" fill="#2E4057">● Documentation and training run in PARALLEL with setup (Days 1-4) — not on the critical path.</text>
+<text x="20" y="544" font-size="9" fill="#2E4057">● Critical path: Equipment setup (D2-3) → First article (D4) → Production A-01 (D5-7) → Setup B-01 (D8) → Production B-01 (D9-16) → Final QC (D15-17) → Complete (D20)</text>
+
+<!-- Node A end / Node B start annotation at day 8 line -->
+<text x="680" y="470" font-size="8.5" fill="#148F77" font-weight="700">▲ Day 8: Node B-01 starts</text>
+<text x="680" y="481" font-size="8" fill="#148F77" font-style="italic">(output of A-01 is input to B-01)</text>
+
+</svg>
+</div>
+</div>
+
+<div class="doc-footer">
+  <span>Rev. 00 &nbsp;|&nbsp; Eff. [DD-MMM-YYYY] &nbsp;|&nbsp; Review due: <strong style="color:#C0392B">[DD-MMM-YYYY]</strong></span>
+  <span>Printed by: [Name] &nbsp;|&nbsp; Copy [#] of [#] &nbsp;|&nbsp; [Date]</span>
+</div>
+<div class="draft">DRAFT — PENDING APPROVAL — NOT FOR PRODUCTION USE</div>
+</div>
+</body>
+</html>

@@ -51,19 +51,23 @@ const SCHEMA = {
 
 // Guía de estructura por tipo de documento.
 const STRUCTURE: Record<string, string> = {
-  sop_mfg: `Secciones esperadas de un SOP de manufactura:
-1. Objetivo (text) — para qué sirve este procedimiento.
-2. Alcance (text) — a qué aplica y a qué no.
-3. Responsabilidades (text o table) — quién hace qué.
-4. Materiales y equipos (table: Material/Equipo | Especificación/SKU | Cantidad).
-5. Procedimiento (steps) — pasos numerados, claros, accionables.
-6. Puntos de control críticos (table: Parámetro | Valor objetivo | Límites | Cómo se mide | Frecuencia | Dónde se registra). Incluye TODO parámetro crítico; si no se sabe dónde se registra, pon "[Pendiente]".
-7. Seguridad y EPP (text o steps).
-8. Qué hacer ante una desviación (text).`,
-  sop_admin: `Secciones de un SOP administrativo:
-1. Objetivo (text). 2. Alcance (text). 3. Roles y responsabilidades (table: Rol | Responsabilidad).
-4. Documentos de entrada y salida (table: Entrada | Salida). 5. Procedimiento (steps numerados).
-6. Controles y puntos de verificación (text o steps).`,
+  sop_mfg: `Secciones EXACTAS de un SOP de manufactura (formato ManualCore). Usa estos encabezados y columnas tal cual; incluye solo lo que aplique:
+1. Propósito (text) — este SOP es la instrucción autorizada para la operación; toda desviación requiere autorización escrita del dueño del proceso.
+2. Alcance y aplicabilidad (table: Campo | Detalle) con filas: Inicio del proceso, Fin del proceso, Exclusiones, Aplica a, Perfil de industria.
+3. Requisitos operativos (5M) (table: M | Requisito | Método de verificación) con filas: Mano de obra, Máquina, Material, Método, Medición.
+4. Seguridad y EPP (table: EPP requerido | Peligros de seguridad).
+5. Pasos del proceso (table: OP | Paso | Descripción | Material/Herramienta (Nombre — SKU) | Parámetro crítico | Punto de control). Marca el punto de control con ✓ cuando aplique.
+6. Especificaciones del producto/servicio (table: Característica | Nominal | Superior | Inferior | Unidad | Método de medición).
+7. Documentos relacionados (table: Tipo | Título | N° de documento | Revisión).
+(La aprobación se agrega automáticamente aparte.)`,
+  sop_admin: `Secciones EXACTAS de un SOP administrativo / de servicios (formato ManualCore):
+1. Propósito (text).
+2. Alcance y aplicabilidad (table: Campo | Detalle): Inicio del proceso, Fin del proceso, Exclusiones, Aplica a.
+3. Recursos operativos (table: Recurso | Detalle): Responsable, Herramientas y sistemas, Información requerida, Método, Indicador de calidad (KPI/SLA).
+4. Cumplimiento y confidencialidad (table: Requisito | Detalle): Requisitos de cumplimiento, Nivel de confidencialidad.
+5. Pasos del proceso (table: Paso | Descripción | Responsable/Herramienta | SLA/Resultado esperado | Punto de control).
+6. Escalamiento y manejo de excepciones (table: Situación | Acción requerida | Escalar a).
+7. Documentos relacionados (table: Tipo | Título | N° de documento | Revisión).`,
   inspection_plan: `Plan de inspección — principalmente UNA tabla (kind=table):
 columns: Característica | Especificación (nominal/límites) | Método/Instrumento | Frecuencia | Plan de reacción.
 Añade una sección Objetivo (text) breve al inicio.`,

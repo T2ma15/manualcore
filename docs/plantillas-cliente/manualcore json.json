@@ -1,0 +1,718 @@
+{
+  "app": {
+    "name": "ManualCore",
+    "tagline": "Every process. Fully documented.",
+    "description": "Process knowledge formalization engine. Accepts unstructured input in any format and produces industry-standard engineering documentation using AI.",
+    "branding": {
+      "primary_color": "#0D1F3C",
+      "secondary_color": "#1B4F72",
+      "accent_color": "#1ABC9C",
+      "font": "Arial"
+    }
+  },
+
+  "subscription_tiers": [
+    {
+      "id": "pyme",
+      "name": "PYME",
+      "industry_profiles": 1,
+      "users_max": 5,
+      "sessions_per_month": 10,
+      "template_modification": "tier_1_only",
+      "print_config": "C",
+      "support_sla": "Email 72hr",
+      "api_access": false
+    },
+    {
+      "id": "professional",
+      "name": "Professional",
+      "industry_profiles": 3,
+      "users_max": 25,
+      "sessions_per_month": null,
+      "template_modification": "tier_1_and_2",
+      "print_config": "B",
+      "support_sla": "Chat 24hr",
+      "api_access": "read_only"
+    },
+    {
+      "id": "enterprise",
+      "name": "Enterprise",
+      "industry_profiles": "all",
+      "users_max": null,
+      "sessions_per_month": null,
+      "template_modification": "tier_1_2_3",
+      "print_config": "A",
+      "support_sla": "Dedicated 4hr",
+      "api_access": "full"
+    }
+  ],
+
+  "industry_profiles": [
+    "manufacturing",
+    "food_beverage",
+    "field_service",
+    "logistics",
+    "healthcare"
+  ],
+
+  "user_roles": [
+    "platform_owner",
+    "process_owner",
+    "approver",
+    "qa",
+    "operator",
+    "viewer"
+  ],
+
+  "input_types": [
+    {
+      "type": "voice",
+      "formats": ["MP3", "M4A", "WAV", "OGG", "WEBM"],
+      "max_size_mb": 500,
+      "pipeline": [
+        "Whisper transcription (multilingual)",
+        "Language detection",
+        "Entity extraction",
+        "Step sequence detection",
+        "SKU matching",
+        "Conflict comparison vs other inputs"
+      ],
+      "extracts": [
+        "process_steps_in_sequence",
+        "material_names_and_quantities",
+        "equipment_ids_and_parameters",
+        "quality_checks",
+        "safety_hazards_and_PPE",
+        "operator_qualification_references",
+        "numerical_specs"
+      ],
+      "failure_handling": {
+        "ambiguous_SKU": "chat question with options",
+        "inaudible_section": "flag transcript, engineer fills gap",
+        "step_count_unclear": "brain proposes sequence, engineer confirms",
+        "multiple_speakers": "label by speaker change, engineer assigns roles"
+      }
+    },
+    {
+      "type": "text_free_chat",
+      "delivery": "typed directly in chat interface",
+      "pipeline": [
+        "Intent detection",
+        "Entity extraction",
+        "Conflict comparison",
+        "Route to correct matrix field"
+      ]
+    },
+    {
+      "type": "photo_drawing",
+      "formats": ["JPG", "JPEG", "PNG", "WEBP", "HEIC", "PDF_single_page", "TIFF"],
+      "max_size_mb": 50,
+      "pipeline": [
+        "Claude vision analysis",
+        "Classification: instruction_photo / engineering_drawing / safety_sign / GD&T",
+        "Text and dimension extraction",
+        "Step association",
+        "Annotation suggestion"
+      ]
+    },
+    {
+      "type": "video",
+      "formats": ["MP4", "MOV", "AVI", "WEBM", "MKV"],
+      "max_size_mb": 2048,
+      "sub_types": {
+        "narrated_walkthrough": {
+          "pipeline": [
+            "Audio track Whisper transcription",
+            "Visual frames sampled every 3 seconds",
+            "Text labels visible on screen extracted",
+            "Steps matched audio timestamps to visual frames"
+          ]
+        },
+        "production_line_footage": {
+          "pipeline": [
+            "Frame sampling every 2 seconds",
+            "Action recognition",
+            "Step sequence proposed from visual sequence",
+            "Materials and equipment identified from visual"
+          ]
+        }
+      },
+      "processing": "asynchronous"
+    },
+    {
+      "type": "specification_files",
+      "formats": {
+        "PDF": ["spec sheets", "standards", "customer requirements"],
+        "XLSX": ["existing data forms", "BOMs", "control plans"],
+        "DOCX": ["existing SOPs", "WIs", "procedures"],
+        "DXF_DWG": ["CAD drawings - dimension extraction only"]
+      },
+      "max_size_mb": 100
+    }
+  ],
+
+  "brain_pipeline": {
+    "stage_1": {
+      "name": "File ingestion",
+      "service": "S3 cloud storage + file validation",
+      "output": "input_files record created, file URL stored, type classified"
+    },
+    "stage_2A": {
+      "name": "Audio transcription",
+      "applies_to": ["voice", "video_audio_track"],
+      "service": "OpenAI Whisper API - multilingual",
+      "output": "full transcript, language detected, timestamps, confidence score",
+      "low_confidence_threshold": 0.7
+    },
+    "stage_2B": {
+      "name": "Image and drawing analysis",
+      "applies_to": ["photo", "video_frames", "PDF_scanned", "DXF_DWG"],
+      "service": "Claude API vision (claude-sonnet-4-6) + Tesseract OCR fallback",
+      "output": "image classification, extracted text and values, dimension annotations, part numbers, safety symbols"
+    },
+    "stage_2C": {
+      "name": "Document parsing",
+      "applies_to": ["PDF_text", "XLSX", "DOCX"],
+      "service": {
+        "PDF": "pypdf + pdfplumber",
+        "XLSX": "openpyxl",
+        "DOCX": "python-docx"
+      },
+      "output": "structured text blocks, table data as JSON, step lists, spec tables"
+    },
+    "stage_3": {
+      "name": "Entity extraction",
+      "service": "Claude API (claude-sonnet-4-6) - extraction specialist system prompt",
+      "output": "structured JSON: {field_path, value, confidence, source_ref}"
+    },
+    "stage_4": {
+      "name": "Conflict detection",
+      "service": "Claude API for semantic comparison (e.g. 400N vs 0.4kN)",
+      "routing_outcomes": {
+        "high_confidence": "write directly to matrix, log in audit trail",
+        "inferred_or_ambiguous": "propose value in chat, wait for engineer confirmation",
+        "conflict": "surface both values in conflict bubble in chat, engineer decides",
+        "missing_required": "ask specifically in chat, block generation of affected documents"
+      }
+    },
+    "stage_5": {
+      "name": "Matrix write",
+      "service": "Prisma ORM + PostgreSQL",
+      "output": "field written to correct matrix table, audit_log entry, chat confirmation"
+    },
+    "stage_6": {
+      "name": "Validation check",
+      "trigger": "engineer requests document generation",
+      "result_pass": "generation job queued",
+      "result_fail": "list of blocking issues shown in chat"
+    }
+  },
+
+  "validation_rules": {
+    "blocks_generation": [
+      {
+        "rule": "node_link_type_not_confirmed",
+        "blocks": ["Flowchart", "Gantt", "VSM"],
+        "message": "Node has next_node_id but connection_type is null. Is this sequential or material?"
+      },
+      {
+        "rule": "spec_value_conflict_open",
+        "blocks": "every document using the conflicted field",
+        "message": "Conflict must be resolved before generation."
+      },
+      {
+        "rule": "required_field_missing",
+        "required_fields": ["review_due", "owner", "approver", "all_5M_fields"],
+        "blocks": "approval transition"
+      },
+      {
+        "rule": "TWI_photos_missing",
+        "condition": "step linked to TWI sheet must have uploaded photo with correct_condition and if_wrong text",
+        "blocks": "TWI generation"
+      },
+      {
+        "rule": "document_relationship_impact_pending",
+        "condition": "document revised but related documents not yet actioned",
+        "blocks": "new revision generation"
+      }
+    ]
+  },
+
+  "document_states": [
+    {
+      "state": "Draft",
+      "description": "Editable. Watermarked. Not printable."
+    },
+    {
+      "state": "Under Review",
+      "description": "Submitted for approval. Reviewers can comment. Owner and approver cannot be same person."
+    },
+    {
+      "state": "Approved",
+      "description": "Locked. Printable. Revision assigned. review_due must be set."
+    },
+    {
+      "state": "Released",
+      "description": "Approved and distributed. Print config executed. Recipients notified."
+    },
+    {
+      "state": "Obsolete",
+      "description": "Superseded. Retained 5 revision cycles then archived. Not printable."
+    }
+  ],
+
+  "print_configurations": {
+    "A_enterprise": "QA role authorises every print. Every copy logged and numbered.",
+    "B_professional": "Process owner approves. System emails locked PDF to distribution list.",
+    "C_pyme": "Admin approves. Locked PDF downloadable by admin only."
+  },
+
+  "templates": [
+    {
+      "id": 1,
+      "name": "SOP",
+      "full_name": "Standard Operating Procedure",
+      "format": "DOCX",
+      "orientation": "Portrait",
+      "type": "fully_derived",
+      "always_needed": true,
+      "purpose": "Defines WHAT must be done and WHY. Authoritative instruction for all personnel performing the operation.",
+      "hierarchy_level": 3,
+      "parent_of": ["WI", "TWI", "Checklist", "Flowchart", "PFMEA", "Control Plan"],
+      "required_fields": [
+        "company_name",
+        "department",
+        "doc_number",
+        "revision",
+        "effective_date",
+        "review_due_date",
+        "node_id",
+        "industry_profile",
+        "process_owner",
+        "approver",
+        "purpose_paragraph",
+        "scope_start",
+        "scope_end",
+        "scope_exclusions",
+        "scope_applies_to",
+        "5M_man",
+        "5M_machine",
+        "5M_material",
+        "5M_method",
+        "5M_measurement",
+        "PPE_required",
+        "safety_hazards",
+        "process_steps"
+      ],
+      "sections": [
+        "Document Header",
+        "Purpose",
+        "Scope and Applicability",
+        "Operational Requirements (5M)",
+        "Safety and PPE",
+        "Process Steps",
+        "Product Specifications",
+        "Related Documents",
+        "Approval Block"
+      ],
+      "process_steps_table_columns": [
+        "OP",
+        "STEP",
+        "DESCRIPTION",
+        "Material/Tool (Name - SKU)",
+        "Critical Parameter",
+        "Quality Gate"
+      ],
+      "review_date_defaults_months": {
+        "manufacturing": 12,
+        "food_beverage": 6,
+        "healthcare": 6,
+        "field_service": 24,
+        "logistics": 24
+      }
+    },
+    {
+      "id": 2,
+      "name": "WI",
+      "full_name": "Work Instruction",
+      "format": "DOCX",
+      "orientation": "Portrait",
+      "type": "fully_derived",
+      "always_needed": "for complex operations",
+      "purpose": "Defines exactly HOW to perform one specific operation. More granular than SOP. Machine params, setup, measurements.",
+      "hierarchy_level": 4,
+      "parent": "SOP",
+      "parent_of": ["TWI"],
+      "references": ["Checklist", "Data Form"],
+      "sections": [
+        "Document Header",
+        "Scope: Input / Output / Equipment / References",
+        "Operational Requirements (5M)",
+        "Safety and PPE",
+        "Step-by-Step Instructions",
+        "Specifications",
+        "Related Documents",
+        "Approval Block"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "TWI",
+      "full_name": "Training Within Industry - Job Breakdown Sheet",
+      "format": "DOCX",
+      "orientation": "A3 Landscape",
+      "type": "fully_derived",
+      "always_needed": "when training required",
+      "purpose": "Teaching document for trainers. One operation per sheet. 3-4 photos with correct/if-wrong per step.",
+      "hierarchy_level": 5,
+      "parent": "WI",
+      "photos_per_step": "3-4",
+      "photos_mandatory": true,
+      "columns": [
+        "Important Step",
+        "Key Point",
+        "Reason for Key Point",
+        "Photo - Correct Condition",
+        "Photo - If Wrong"
+      ],
+      "blocks_generation_if": "TWI step photo missing correct_condition or if_wrong text"
+    },
+    {
+      "id": 4,
+      "name": "BOM",
+      "full_name": "Bill of Materials - Segmented by Operation",
+      "format": "XLSX",
+      "orientation": "Portrait",
+      "type": "fully_derived",
+      "always_needed": "if materials used",
+      "purpose": "Lists all materials per operation. Auto-calculates totals and subtotals.",
+      "source": "Material Flowchart quantities (direct source)",
+      "columns": [
+        "ITEM",
+        "OP ID",
+        "OPERATION NAME",
+        "MATERIAL NAME",
+        "SKU / PART NO.",
+        "QTY / OP",
+        "UNIT",
+        "REPETITIONS",
+        "TOTAL QTY (formula: QTY_OP * REPETITIONS)",
+        "NOTES"
+      ],
+      "formulas_live": true
+    },
+    {
+      "id": 5,
+      "name": "Checklist",
+      "full_name": "Quality Inspection Checklist",
+      "format": "XLSX",
+      "orientation": "Portrait",
+      "type": "fully_derived",
+      "always_needed": "if quality gates exist",
+      "purpose": "100% inspection record per piece. Quality gates with spec values. Pass/Fail per characteristic.",
+      "source": "Quality gate flags from SOP and Control Plan",
+      "NC_action_strip": "non-removable"
+    },
+    {
+      "id": 6,
+      "name": "Data Form",
+      "full_name": "Production Recording Form",
+      "format": "XLSX",
+      "orientation": "Landscape",
+      "type": "fully_derived",
+      "always_needed": "conditional",
+      "purpose": "Operator enters measurements. Auto-calculates mean and PASS/FAIL vs USL/LSL.",
+      "reading_columns": 10,
+      "auto_calculated": ["mean", "PASS_FAIL vs USL/LSL"]
+    },
+    {
+      "id": 7,
+      "name": "Time Study",
+      "full_name": "Time Study Sheet",
+      "format": "XLSX",
+      "orientation": "Portrait",
+      "type": "floor_data_required",
+      "always_needed": "conditional",
+      "purpose": "Captures observed cycle times. Calculates normal time and standard time with allowances.",
+      "observation_columns": 10,
+      "auto_calculated": ["normal_time", "standard_time"]
+    },
+    {
+      "id": 8,
+      "name": "Routing Sheet",
+      "format": "XLSX",
+      "orientation": "Portrait",
+      "type": "derived_from_time_study",
+      "always_needed": "conditional",
+      "purpose": "Standard times, work centers, cost centers, setup time per operation.",
+      "source": "Time Study"
+    },
+    {
+      "id": 9,
+      "name": "OBC + Capacity Table",
+      "full_name": "Operator Balance Chart + Capacity Table",
+      "format": "XLSX",
+      "orientation": "Landscape",
+      "type": "derived_from_routing",
+      "always_needed": "conditional",
+      "purpose": "Bar chart of std time vs takt. Bottleneck identification. Capacity per shift.",
+      "source": "Routing Sheet"
+    },
+    {
+      "id": 10,
+      "name": "PFMEA",
+      "full_name": "Process Failure Mode and Effects Analysis - AIAG-VDA 2019",
+      "format": "XLSX",
+      "orientation": "Landscape",
+      "type": "partially_derived",
+      "always_needed": "conditional - industry specific",
+      "purpose": "Risk analysis per process step.",
+      "brain_fills": ["process function column from SOP steps"],
+      "engineer_fills": ["failure modes", "S/O/D ratings", "action priority H/M/L"],
+      "standard": "AIAG-VDA 2019"
+    },
+    {
+      "id": 11,
+      "name": "Control Plan",
+      "full_name": "Control Plan - AIAG-VDA Aligned",
+      "format": "XLSX",
+      "orientation": "Landscape",
+      "type": "partially_derived",
+      "always_needed": "conditional - follows PFMEA",
+      "purpose": "Defines what to control, how to measure, sample size, frequency, reaction plan.",
+      "brain_fills": ["process column", "characteristic column"],
+      "engineer_fills": ["sample size", "frequency", "control method"],
+      "columns": [
+        "OP NO",
+        "OP ID",
+        "OPERATION NAME / PROCESS STEP",
+        "PRODUCT / PROCESS CHARACTERISTIC",
+        "SPECIAL CHAR CLASS",
+        "SPEC / TOLERANCE",
+        "UNIT",
+        "MEASUREMENT METHOD / GAUGE",
+        "SAMPLE SIZE",
+        "FREQUENCY",
+        "CONTROL METHOD",
+        "REACTION PLAN",
+        "NOTES / RECORD"
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Process Flowchart",
+      "format": "HTML/SVG",
+      "orientation": "Landscape",
+      "type": "fully_derived",
+      "always_needed": "recommended",
+      "purpose": "Sequential process flow with ANSI symbols and decision branches.",
+      "symbols": {
+        "process_box": "rectangle",
+        "decision_diamond": "diamond with YES/NO branches",
+        "NC_paths": "red",
+        "start_end": "rounded rectangle"
+      },
+      "source": "SOP steps + node connection type"
+    },
+    {
+      "id": 13,
+      "name": "Material Flowchart",
+      "format": "HTML/SVG",
+      "orientation": "Landscape",
+      "type": "fully_derived",
+      "always_needed": "yes - if BOM needed",
+      "purpose": "Material movement with quantities. Direct source for BOM.",
+      "symbols": {
+        "flow_direction": "left-to-right",
+        "push_pull_arrows": true,
+        "WH_inventory_triangles": true,
+        "tool_boxes": "dashed orange"
+      }
+    },
+    {
+      "id": 14,
+      "name": "Gantt Chart",
+      "format": "HTML/SVG",
+      "orientation": "Landscape",
+      "type": "partially_derived",
+      "always_needed": "recommended",
+      "purpose": "Project timeline with horizontal bars per task and dependencies.",
+      "columns": [
+        "SEQ", "NODE", "TASK / DELIVERABLE", "TYPE", "OWNER",
+        "START (day)", "END (day)", "DEPENDENCY", "days 1-20 (bar fill)"
+      ],
+      "dependency_types": {
+        "sequential": "finish-to-start arrows",
+        "material": "independent bars"
+      },
+      "source": "Routing Sheet standard times + Flowchart sequence"
+    },
+    {
+      "id": 15,
+      "name": "VSM",
+      "full_name": "Value Stream Map Data Block",
+      "format": "HTML/SVG",
+      "orientation": "Landscape",
+      "type": "partially_derived",
+      "always_needed": "conditional",
+      "purpose": "Three sections: information flow (top), material flow (middle), timeline (bottom).",
+      "brain_fills": ["cycle time from Routing", "push/pull arrows from node connection type"],
+      "engineer_fills": ["changeover time", "uptime %", "operator count"],
+      "source": "OBC + Capacity + node connection types"
+    },
+    {
+      "id": 16,
+      "name": "Delivery Ownership Matrix",
+      "format": "XLSX",
+      "orientation": "Landscape",
+      "type": "fully_derived",
+      "always_needed": true,
+      "purpose": "Records who owns, approves, and reviews each document. Tracks status per document.",
+      "triggers_training_alerts": true
+    },
+    {
+      "id": 17,
+      "name": "Training Matrix",
+      "format": "XLSX",
+      "orientation": "Landscape",
+      "type": "fully_derived",
+      "always_needed": "yes - if training required",
+      "purpose": "Grid of operators vs operations showing certification status.",
+      "status_codes": {
+        "C": "Certified",
+        "T": "In Training",
+        "X": "Not qualified",
+        "-": "Not applicable"
+      },
+      "source": "trained_operator_required flags + TWI content"
+    }
+  ],
+
+  "document_connections": [
+    { "from": "SOP", "to": "WI", "type": "Parent to Child", "passes": "Process steps, scope, critical parameters, material references, quality requirements" },
+    { "from": "SOP", "to": "TWI", "type": "Parent to Grandchild", "passes": "Operation sequence and step descriptions" },
+    { "from": "SOP", "to": "Checklist", "type": "Quality gates to inspection items", "passes": "Each quality gate flag becomes one checklist row with spec value" },
+    { "from": "SOP", "to": "Flowchart", "type": "Steps to flow nodes", "passes": "Each SOP step becomes a process box. Decision points become diamonds." },
+    { "from": "SOP", "to": "PFMEA", "type": "Process steps to PFMEA rows", "passes": "Brain populates process function column" },
+    { "from": "SOP", "to": "Control Plan", "type": "Steps + specs to control rows", "passes": "Operations and characteristics populate control plan" },
+    { "from": "WI", "to": "TWI", "type": "Exact steps to teaching script", "passes": "TWI rewrites WI steps into important step / key point / reason format" },
+    { "from": "WI", "to": "Checklist", "type": "Setup params to setup checks", "passes": "Machine setup parameters become setup verification rows" },
+    { "from": "WI", "to": "Data Form", "type": "Process specs to recording fields", "passes": "Spec values (nominal, USL, LSL, gauge) populate Data Form rows" },
+    { "from": "Material Flowchart", "to": "BOM", "type": "Material + qty to BOM rows", "passes": "Every confirmed material row becomes a BOM line item - DIRECT SOURCE" },
+    { "from": "BOM", "to": "Routing Sheet", "type": "Materials + ops to cost structure", "passes": "BOM operation segments align with Routing sequence" },
+    { "from": "Time Study", "to": "Routing Sheet", "type": "Observed times to standard times", "passes": "Standard time populates STD TIME column in Routing" },
+    { "from": "Routing Sheet", "to": "OBC + Capacity", "type": "Standard times to bar heights", "passes": "Std time per operation becomes bar height. Takt = benchmark line." },
+    { "from": "Routing Sheet", "to": "Gantt", "type": "Standard times to duration estimates", "passes": "Std time x batch quantity estimates task duration" },
+    { "from": "OBC + Capacity", "to": "VSM", "type": "Cycle time + capacity to data block", "passes": "VSM cycle time and capacity fields" },
+    { "from": "Flowchart", "to": "Gantt", "type": "Step sequence to task sequence", "passes": "Step order determines Gantt task order. Sequential = finish-to-start." },
+    { "from": "PFMEA", "to": "Control Plan", "type": "Risk to controls", "passes": "High action-priority items drive tighter control methods and frequencies" },
+    { "from": "Control Plan", "to": "Checklist", "type": "Characteristics to inspection items", "passes": "Control plan characteristics, specs, frequency become checklist rows" }
+  ],
+
+  "node_architecture": {
+    "description": "A node is the atomic unit. One node = one process or operation. Every document set belongs to one node.",
+    "hierarchy": [
+      { "level": 1, "name": "Company SOP", "scope": "Entire organization. All departments." },
+      { "level": 2, "name": "Area SOP", "scope": "One department or area." },
+      { "level": 3, "name": "Process SOP", "scope": "The what and why for a specific process." },
+      { "level": 4, "name": "WI + Checklist", "scope": "Exactly how to execute one operation." },
+      { "level": 5, "name": "TWI", "scope": "How to teach the operation. Trainer document." }
+    ],
+    "connection_types": {
+      "sequential": {
+        "description": "Node A output directly triggers Node B. Finish-to-start in Gantt. Push arrow in VSM.",
+        "gantt": "finish-to-start arrows",
+        "vsm": "push arrow, no WH buffer",
+        "flowchart": "direct END to START connector"
+      },
+      "material": {
+        "description": "Node A output goes to warehouse buffer. Node B starts independently when it pulls.",
+        "gantt": "independent bars",
+        "vsm": "WH inventory triangle",
+        "flowchart": "END node shows buffer destination"
+      },
+      "terminal": {
+        "description": "No downstream connection.",
+        "gantt": "terminal task",
+        "vsm": "output to finished goods warehouse"
+      }
+    }
+  },
+
+  "document_control": {
+    "traceability_footer": "Printed by [Name/ID] | Copy [#] of [#] | [DateTime] - injected at print time, cannot be removed",
+    "non_removable_fields": [
+      "revision_number",
+      "effective_date",
+      "review_date",
+      "approval_block",
+      "document_number",
+      "print_traceability_footer"
+    ],
+    "revision_retention": "5 cycles then archived",
+    "revision_impact": "When any document revised, brain checks document_relationships and identifies all related documents. Only owners of actually-affected documents receive action items.",
+    "QR_codes": {
+      "public_link": "Opens approved document without login",
+      "authenticated": "Requires login and access_grant on document",
+      "verification_only": "Shows revision status, effective date, review date only. No content."
+    }
+  },
+
+  "management_dashboard": {
+    "alert_levels": {
+      "red_immediate": [
+        "Expired documents past review date",
+        "Operators missing required certification for active operations",
+        "Overdue approvals blocking document release"
+      ],
+      "amber_action_soon": [
+        "Documents within 30 days of review date",
+        "Operators in training (T status) plateaued for 14+ days",
+        "Processes with 3+ revisions in past 6 months (instability flag)"
+      ],
+      "predictive": [
+        "Certification expiry forecasts 60 days out",
+        "Review date batching suggestions",
+        "Bottleneck operations from OBC data"
+      ]
+    }
+  },
+
+  "database_schema_summary": {
+    "total_tables": 29,
+    "core_entity_tables": ["tenants", "users", "sessions", "nodes"],
+    "matrix_1_master_data": ["operations", "steps", "materials", "product_specs", "process_specs", "specs_5m", "photos"],
+    "matrix_2_document_relationships": "directional links between documents, shared fields, criticality, impact check results",
+    "matrix_3_ownership_approval": "process owner, approver, QA per document, trainable positions, training due dates",
+    "matrix_4_revision_audit": "every revision event, print events, access grants, immutable audit log",
+    "brain_tables": ["input_files", "brain_extractions", "conflicts", "chat_messages", "generation_jobs", "audit_log"]
+  },
+
+  "mvp_build_order": {
+    "description": "Recommended build sequence for Base44 - start simple, add complexity progressively",
+    "phase_1": {
+      "name": "Core SOP generator",
+      "what_to_build": "Form-based input for all SOP required fields, AI-powered gap detection, SOP document generation in correct format",
+      "inputs": ["text only - no voice/video yet"],
+      "outputs": ["SOP DOCX"],
+      "validates": "core value proposition - does the output satisfy a real engineer?"
+    },
+    "phase_2": {
+      "name": "Add WI and Checklist",
+      "what_to_build": "WI generation from SOP data, Checklist generation from quality gates",
+      "adds": "document relationship logic - SOP triggers WI and Checklist"
+    },
+    "phase_3": {
+      "name": "Orchestration engine",
+      "what_to_build": "System suggests related documents based on extracted data, stand-by document queue, user approval flow for suggested documents"
+    },
+    "phase_4": {
+      "name": "Voice input",
+      "what_to_build": "Whisper transcription integration, voice-to-field extraction"
+    },
+    "phase_5": {
+      "name": "Visual documents",
+      "what_to_build": "HTML/SVG generation for Flowchart, Material Flowchart, Gantt"
+    }
+  }
+}

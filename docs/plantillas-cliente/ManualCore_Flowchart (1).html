@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ManualCore Process Flowchart — A-01 Cover Sub-Assembly</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Arial, sans-serif; background: #f4f6f8; }
+
+  .page {
+    width: 860px;
+    margin: 20px auto;
+    background: white;
+    padding: 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+  }
+
+  /* Header */
+  .doc-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    background: #0D1F3C;
+  }
+  .doc-header-left { padding: 16px 20px; }
+  .doc-header-left h1 { color: #fff; font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .doc-header-left p  { color: #A8D8EA; font-size: 11px; font-style: italic; }
+  .doc-header-right {
+    background: #f4f6f8;
+    border-left: 2px solid #1ABC9C;
+    padding: 10px 16px;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    min-width: 160px;
+  }
+  .doc-header-right span { font-size: 10px; color: #5D6D7E; font-weight: 700; }
+  .doc-header-right strong { font-size: 13px; color: #0D1F3C; }
+
+  /* Meta row */
+  .meta-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    border-bottom: 3px solid #1ABC9C;
+  }
+  .meta-cell {
+    padding: 6px 12px;
+    border-right: 1px solid #D5D8DC;
+    font-size: 10px;
+  }
+  .meta-cell:last-child { border-right: none; }
+  .meta-cell .label { color: #5D6D7E; font-weight: 700; display: block; margin-bottom: 2px; }
+  .meta-cell .value { color: #0D1F3C; }
+  .meta-cell:nth-child(odd) { background: #F4F6F8; }
+
+  /* Diagram area */
+  .diagram-area {
+    padding: 20px 30px 30px;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding: 10px 14px;
+    background: #F4F6F8;
+    border-radius: 4px;
+    border-left: 4px solid #1ABC9C;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 10px; color: #5D6D7E;
+  }
+  .legend-shape { display: inline-block; }
+
+  /* SVG container */
+  .svg-wrap { display: flex; justify-content: center; }
+  svg text { font-family: Arial, sans-serif; }
+
+  /* Footer */
+  .doc-footer {
+    border-top: 2px solid #1ABC9C;
+    padding: 8px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: #F4F6F8;
+    font-size: 10px; color: #5D6D7E;
+  }
+  .draft-banner {
+    background: #F39C12;
+    text-align: center;
+    padding: 7px;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div class="doc-header-left">
+      <h1>[COMPANY NAME] &nbsp;|&nbsp; PROCESS FLOWCHART</h1>
+      <p>Cover Sub-Assembly — Riveting Operation &nbsp;|&nbsp; Node A-01 &nbsp;|&nbsp; Ref SOP: SOP-A01-001 &nbsp;|&nbsp; Ref WI: WI-A01-001</p>
+    </div>
+    <div class="doc-header-right">
+      <span>DOC NO.</span>
+      <strong>FC-A01-001</strong>
+      <span style="margin-top:6px">REVISION</span>
+      <strong>Rev. 00</strong>
+    </div>
+  </div>
+
+  <!-- META ROW -->
+  <div class="meta-row">
+    <div class="meta-cell"><span class="label">PROCESS OWNER</span><span class="value">[Name / Position]</span></div>
+    <div class="meta-cell"><span class="label">EFFECTIVE DATE</span><span class="value">[DD-MMM-YYYY]</span></div>
+    <div class="meta-cell"><span class="label">REVIEW DUE</span><span class="value" style="color:#C0392B;font-weight:700">[DD-MMM-YYYY]</span></div>
+    <div class="meta-cell"><span class="label">NODE LINK</span><span class="value">Sequential → Node B-01 Frame Assembly</span></div>
+  </div>
+
+  <!-- DIAGRAM -->
+  <div class="diagram-area">
+
+    <!-- LEGEND -->
+    <div class="legend">
+      <div class="legend-item">
+        <svg width="40" height="20"><rect x="2" y="3" width="36" height="14" rx="8" fill="none" stroke="#1B4F72" stroke-width="1.5"/><text x="20" y="14" text-anchor="middle" font-size="8" fill="#1B4F72">oval</text></svg>
+        Start / End
+      </div>
+      <div class="legend-item">
+        <svg width="40" height="20"><rect x="2" y="3" width="36" height="14" rx="2" fill="none" stroke="#1B4F72" stroke-width="1.5"/><text x="20" y="14" text-anchor="middle" font-size="8" fill="#1B4F72">rect</text></svg>
+        Operation step
+      </div>
+      <div class="legend-item">
+        <svg width="40" height="20"><polygon points="20,2 38,10 20,18 2,10" fill="none" stroke="#E67E22" stroke-width="1.5"/><text x="20" y="14" text-anchor="middle" font-size="7" fill="#E67E22">diam</text></svg>
+        Decision (Y/N)
+      </div>
+      <div class="legend-item">
+        <svg width="40" height="20"><circle cx="20" cy="10" r="8" fill="none" stroke="#5D6D7E" stroke-width="1.5"/><text x="20" y="14" text-anchor="middle" font-size="8" fill="#5D6D7E">B</text></svg>
+        Off-page connector
+      </div>
+      <div class="legend-item">
+        <svg width="40" height="20"><line x1="2" y1="10" x2="32" y2="10" stroke="#1ABC9C" stroke-width="1.5"/><polygon points="32,6 40,10 32,14" fill="#1ABC9C"/></svg>
+        Flow direction
+      </div>
+      <div class="legend-item">
+        <svg width="40" height="20"><line x1="2" y1="10" x2="32" y2="10" stroke="#C0392B" stroke-width="1.5" stroke-dasharray="4 2"/><polygon points="32,6 40,10 32,14" fill="#C0392B"/></svg>
+        Non-conforming path
+      </div>
+    </div>
+
+    <!-- SVG FLOWCHART -->
+    <div class="svg-wrap">
+    <svg width="780" height="1020" viewBox="0 0 780 1020" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Arrow markers -->
+        <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M 0 1 L 9 5 L 0 9 Z" fill="#1B4F72"/>
+        </marker>
+        <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M 0 1 L 9 5 L 0 9 Z" fill="#C0392B"/>
+        </marker>
+        <marker id="arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M 0 1 L 9 5 L 0 9 Z" fill="#148F77"/>
+        </marker>
+        <marker id="arrow-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M 0 1 L 9 5 L 0 9 Z" fill="#5D6D7E"/>
+        </marker>
+      </defs>
+
+      <!-- ═══════════════════════════════════════════════════════════
+           LEFT COLUMN — Main process flow
+           ═══════════════════════════════════════════════════════════ -->
+
+      <!-- Swimlane background (subtle) -->
+      <rect x="10" y="10" width="460" height="990" rx="6" fill="#F8FAFB" stroke="#E8ECF0" stroke-width="1"/>
+      <rect x="490" y="10" width="280" height="990" rx="6" fill="#FEF9F0" stroke="#E8ECF0" stroke-width="1"/>
+
+      <!-- Swimlane labels -->
+      <text x="240" y="30" text-anchor="middle" font-size="10" font-weight="700" fill="#5D6D7E">MAIN PROCESS FLOW</text>
+      <text x="630" y="30" text-anchor="middle" font-size="10" font-weight="700" fill="#E67E22">EXCEPTION / CORRECTIVE PATHS</text>
+
+      <!-- ─── NODE 1: START ─── -->
+      <!-- Oval: cx=240, cy=72 -->
+      <rect x="180" y="54" width="120" height="36" rx="18" fill="#0D1F3C" stroke="#0D1F3C" stroke-width="1.5"/>
+      <text x="240" y="71" text-anchor="middle" font-size="12" font-weight="700" fill="white">START</text>
+      <text x="240" y="84" text-anchor="middle" font-size="9" fill="#A8D8EA">Work order confirmed</text>
+
+      <!-- Arrow 1→2 -->
+      <line x1="240" y1="90" x2="240" y2="114" stroke="#1B4F72" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+
+      <!-- ─── NODE 2: Retrieve cover ─── -->
+      <rect x="150" y="114" width="180" height="52" rx="4" fill="#EBF5FB" stroke="#1B4F72" stroke-width="1.5"/>
+      <text x="240" y="134" text-anchor="middle" font-size="11" font-weight="700" fill="#1B4F72">Retrieve cover</text>
+      <text x="240" y="149" text-anchor="middle" font-size="9.5" fill="#2E4057">Urea Cover Black (SKU-1234)</text>
+      <text x="240" y="162" text-anchor="middle" font-size="8.5" fill="#5D6D7E">from incoming area — verify WO</text>
+      <!-- Step badge -->
+      <rect x="150" y="114" width="28" height="20" rx="3" fill="#1B4F72"/>
+      <text x="164" y="128" text-anchor="middle" font-size="9" font-weight="700" fill="white">1</text>
+
+      <!-- Arrow 2→3 -->
+      <line x1="240" y1="166" x2="240" y2="190" stroke="#1B4F72" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+
+      <!-- ─── NODE 3: DECISION — Part OK? ─── -->
+      <polygon points="240,190 330,224 240,258 150,224" fill="#FEF5E7" stroke="#E67E22" stroke-width="2"/>
+      <text x="240" y="218" text-anchor="middle" font-size="10" font-weight="700" fill="#E67E22">Part number</text>
+      <text x="240" y="231" text-anchor="middle" font-size="10" font-weight="700" fill="#E67E22">+ nubs OK?</text>
+      <!-- YES label -->
+      <text x="194" y="272" text-anchor="middle" font-size="9" fill="#1E8449" font-weight="700">YES</text>
+      <!-- NO label to rework -->
+      <text x="344" y="222" text-anchor="start" font-size="9" fill="#C0392B" font-weight="700">NO</text>
+
+      <!-- Arrow YES: 3→4 -->
+      <line x1="240" y1="258" x2="240" y2="284" stroke="#1B4F72" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+
+      <!-- Arrow NO: 3→reject box -->
+      <line x1="330" y1="224" x2="510" y2="224" stroke="#C0392B" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arrow-red)"/>
+
+      <!-- ─── REJECT BOX R1 (right side) ─── -->
+      <rect x="510" y="200" width="200" height="48" rx="4" fill="#FADBD8" stroke="#C0392B" stroke-width="1.5"/>
+      <text x="610" y="219" text-anchor="middle" font-size="10" font-weight="700" fill="#C0392B">REJECT — tag NC</text>
+      <text x="610" y="233" text-anchor="middle" font-size="9" fill="#922B21">Red tray → notify supervisor</text>
+      <text x="610" y="246" text-anchor="middle" font-size="8.5" fill="#922B21">Do not proceed to fixture</text>
+
+      <!-- ─── NODE 4: Inspect nubs + gap ─── -->
+      <rect x="150" y="284" width="180" height="52" rx="4" fill="#EBF5FB" stroke="#1B4F72" stroke-width="1.5"/>
+      <text x="240" y="304" text-anchor="middle" font-size="11" font-weight="700" fill="#1B4F72">Inspect nubs + gap</text>
+      <text x="240" y="319" text-anchor="middle" font-size="9.5" fill="#2E4057">Feeler gauge — tip gap</text>
+      <text x="240" y="332" text-anchor="middle" font-size="8.5" fill="#C0392B">SPEC: 0.3 mm (0.1 – 0.5 mm)</text>
+      <rect x="150" y="284" width="28" height="20" rx="3" fill="#1B4F72"/>
+      <text x="164" y="298" text-anchor="middle" font-size="9" font-weight="700" fill="white">2</text>
+
+      <!-- Arrow 4→5 -->
+      <line x1="240" y1="336" x2="240" y2="360" stroke="#1B4F72" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+
+      <!-- ─── NODE 5: Seat in fixture ─── -->
+      <rect x="150" y="360" width="180" height="52" rx="4" fill="#EBF5FB" stroke="#1B4F72" stroke-width="1.5"/>
+      <text x="240" y="380" text-anchor="middle" font-size="11" font-weight="700" fill="#1B4F72">Seat cover in fixture</text>
+      <text x="240" y="395" text-anchor="middle" font-size="9.5" fill="#2E4057">Both nubs → locating pins</text>
+      <text x="240" y="408" text-anchor="middle" font-size="8.5" fill="#2E4057">Click felt on both sides</text>
+      <rect x="150" y="360" width="28" height="20" rx="3" fill="#1B4F72"/>
+      <text x="164" y="374" text-anchor="middle" font-size="9" font-weight="700" fill="white">3</text>
+
+      <!-- Arrow 5→6 -->
+      <line x1="240" y1="412" x2="240" y2="436" stroke="#1B4F72" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+
+      <!-- ─── NODE 6: DECISION — Seated? ─── -->
+      <polygon points="240,436 330,470 240,504 150,470" fill="#FEF5E7" stroke="#E67E22" stroke-width="2"/>
+      <text x="240" y="464" text-anchor="middle" font-size="10" font-weight="700" fill="#E67E22">Both nubs</text>
+      <text x="240" y="477" text-anchor="middle" font-size="10" font-weight="700" fill="#E67E22">clicked in?</text>
+      <text x="194" y="518" text-anchor="middle" font-size="9" fill="#1E8449" font-weight="700">YES</text>
+      <text x="344" y="468" text-anchor="start" font-size="9" fill="#C0392B" font-weight="700">NO</text>
+
+      <!-- Arrow YES: 6→7 -->
+      <line x1="240" y1="504" x2="240" y2="528" stroke="#1B4F72" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+
+      <!-- Arrow NO → re-seat -->
+      <line x1="330" y1="470" x2="510" y2="470" stroke="#C0392B" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arrow-red)"/>
+
+      <!-- REJECT R2 — re-seat -->
+      <rect x="510" y="446" width="200" height="48" rx="4" fill="#FADBD8" stroke="#C0392B" stroke-width="1.5"/>
+      <text x="610" y="465" text-anchor="middle" font-size="10" font-weight="700" fill="#C0392B">Re-seat cover</text>
+      <text x="610" y="479" text-anchor="middle" font-size="9" fill="#922B21">Do not force — if persists</text>
+      <text x="610" y="492" text-anchor="middle" font-size="8.5" fill="#922B21">call supervisor</text>
+
+      <!-- Loop back arrow from R2 to step 5 -->
+      <path d="M 510 470 Q 460 470 460 412 Q 460 360 330 360" fill="none" stroke="#C0392B" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#arrow-red)"/>
+      <text x="466" y="415" font-size="8" fill="#C0392B" font-style="italic">retry</text>
+
+      <!-- ─── NODE 7: Confirm riveter setup ─── -->
+      <rect x="150" y="528" width="180" height="52" rx="4" fill="#EBF5FB" stroke="#1B4F72" stroke-width="1.5"/>
+      <text x="240" y="548" text-anchor="middle" font-size="11" font-weight="700" fill="#1B4F72">Confirm riveter setup</text>
+      <text x="240" y="563" text-anchor="middle" font-size="9.5" fill="#2E4057">Die: WI-A01-001 spec</text>
+      <text x="240" y="576" text-anchor="middle" font-size="8.5" fill="#C0392B">SPEC: Force 450N ±20N</text>
+      <rect x="150" y="528" width="28" height="20" rx="3" fill="#1B4F72"/>
+      <text x="164" y="542" text-anchor="middle" font-size="9" font-weight="700" fill="white">4</text>
+
+      <!-- Arrow 7→8 -->
+      <line x1="240" y1="580" x2="240" y2="604" stroke="#1B4F72" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+
+      <!-- ─── NODE 8: DECISION — Force OK? ─── -->
+      <polygon points="240,604 330,638 240,672 150,638" fill="#FEF5E7" stroke="#E67E22" stroke-width="2"/>
+      <text x="240" y="632" text-anchor="middle" font-size="10" font-weight="700" fill="#E67E22">Force 430–470N</text>
+      <text x="240" y="645" text-anchor="middle" font-size="10" font-weight="700" fill="#E67E22">on display?</text>
+      <text x="194" y="686" text-anchor="middle" font-size="9" fill="#1E8449" font-weight="700">YES</text>
+      <text x="344" y="636" text-anchor="start" font-size="9" fill="#C0392B" font-weight="700">NO</text>
+
+      <!-- Arrow YES: 8→9 -->
+      <line x1="240" y1="672" x2="240" y2="696" stroke="#1B4F72" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+
+      <!-- Arrow NO: force OOR -->
+      <line x1="330" y1="638" x2="510" y2="638" stroke="#C0392B" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arrow-red)"/>
+
+      <!-- REJECT R3 — force OOR -->
+      <rect x="510" y="614" width="200" height="48" rx="4" fill="#FADBD8" stroke="#C0392B" stroke-width="1.5"/>
+      <text x="610" y="633" text-anchor="middle" font-size="10" font-weight="700" fill="#C0392B">STOP — force OOR</text>
+      <text x="610" y="647" text-anchor="middle" font-size="9" fill="#922B21">Do NOT cycle machine</text>
+      <text x="610" y="660" text-anchor="middle" font-size="8.5" fill="#922B21">Call supervisor to adjust</text>
+
+      <!-- ─── NODE 9: Apply 4 rivets ─── -->
+      <rect x="150" y="696" width="180" height="52" rx="4" fill="#EBF5FB" stroke="#1B4F72" stroke-width="1.5"/>
+      <text x="240" y="716" text-anchor="middle" font-size="11" font-weight="700" fill="#1B4F72">Apply rivets 1→2→3→4</text>
+      <text x="240" y="731" text-anchor="middle" font-size="9.5" fill="#2E4057">Rivet #4 Gold (SKU-5678) × 4</text>
+      <text x="240" y="744" text-anchor="middle" font-size="8.5" fill="#2E4057">Sequence per station diagram</text>
+      <rect x="150" y="696" width="28" height="20" rx="3" fill="#1B4F72"/>
+      <text x="164" y="710" text-anchor="middle" font-size="9" font-weight="700" fill="white">5</text>
+      <!-- QC badge -->
+      <rect x="302" y="696" width="28" height="20" rx="3" fill="#1E8449"/>
+      <text x="316" y="710" text-anchor="middle" font-size="8" font-weight="700" fill="white">QC</text>
+
+      <!-- Arrow 9→10 -->
+      <line x1="240" y1="748" x2="240" y2="772" stroke="#1B4F72" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+
+      <!-- ─── NODE 10: DECISION — All flush? ─── -->
+      <polygon points="240,772 330,806 240,840 150,806" fill="#FEF5E7" stroke="#E67E22" stroke-width="2"/>
+      <text x="240" y="800" text-anchor="middle" font-size="10" font-weight="700" fill="#E67E22">All 4 rivets</text>
+      <text x="240" y="813" text-anchor="middle" font-size="10" font-weight="700" fill="#E67E22">flush ±0.2mm?</text>
+      <text x="194" y="854" text-anchor="middle" font-size="9" fill="#1E8449" font-weight="700">YES</text>
+      <text x="344" y="804" text-anchor="start" font-size="9" fill="#C0392B" font-weight="700">NO</text>
+
+      <!-- Arrow YES: 10→11 -->
+      <line x1="240" y1="840" x2="240" y2="864" stroke="#1B4F72" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+
+      <!-- Arrow NO: rivet fail -->
+      <line x1="330" y1="806" x2="510" y2="806" stroke="#C0392B" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arrow-red)"/>
+
+      <!-- REJECT R4 — rivet fail -->
+      <rect x="510" y="782" width="200" height="48" rx="4" fill="#FADBD8" stroke="#C0392B" stroke-width="1.5"/>
+      <text x="610" y="801" text-anchor="middle" font-size="10" font-weight="700" fill="#C0392B">STOP — rivet OOR</text>
+      <text x="610" y="815" text-anchor="middle" font-size="9" fill="#922B21">Tag NC — do not continue</text>
+      <text x="610" y="828" text-anchor="middle" font-size="8.5" fill="#922B21">Call supervisor</text>
+
+      <!-- ─── NODE 11: Final inspection + log ─── -->
+      <rect x="150" y="864" width="180" height="52" rx="4" fill="#EBF5FB" stroke="#1B4F72" stroke-width="1.5"/>
+      <text x="240" y="884" text-anchor="middle" font-size="11" font-weight="700" fill="#1B4F72">Final inspection + log</text>
+      <text x="240" y="899" text-anchor="middle" font-size="9.5" fill="#2E4057">Visual check — sign quality log</text>
+      <text x="240" y="912" text-anchor="middle" font-size="8.5" fill="#2E4057">Place in GREEN approved tray</text>
+      <rect x="150" y="864" width="28" height="20" rx="3" fill="#1B4F72"/>
+      <text x="164" y="878" text-anchor="middle" font-size="9" font-weight="700" fill="white">6</text>
+      <rect x="302" y="864" width="28" height="20" rx="3" fill="#1E8449"/>
+      <text x="316" y="878" text-anchor="middle" font-size="8" font-weight="700" fill="white">QC</text>
+
+      <!-- Arrow 11→END -->
+      <line x1="240" y1="916" x2="240" y2="942" stroke="#148F77" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
+
+      <!-- ─── END NODE ─── -->
+      <rect x="165" y="942" width="150" height="40" rx="20" fill="#148F77" stroke="#0F6E56" stroke-width="1.5"/>
+      <text x="240" y="960" text-anchor="middle" font-size="11" font-weight="700" fill="white">END — Node A-01</text>
+      <text x="240" y="975" text-anchor="middle" font-size="9" fill="#A8D8EA">→ Sequential to Node B-01</text>
+
+      <!-- ═══════════════════════════════════════════════════════════
+           SPEC CALLOUT BOXES alongside main flow
+           ═══════════════════════════════════════════════════════════ -->
+
+      <!-- Spec callout for step 4 (nubs) — small note on left -->
+      <rect x="20" y="290" width="118" height="38" rx="3" fill="#D5F5E3" stroke="#1E8449" stroke-width="1"/>
+      <text x="79" y="305" text-anchor="middle" font-size="8.5" font-weight="700" fill="#1E8449">Tip gap spec:</text>
+      <text x="79" y="318" text-anchor="middle" font-size="8.5" fill="#1E8449">0.3 mm (0.1 – 0.5)</text>
+      <line x1="138" y1="309" x2="150" y2="309" stroke="#1E8449" stroke-width="1" stroke-dasharray="3 2"/>
+
+      <!-- Spec callout for step 5 (fixture) -->
+      <rect x="20" y="374" width="118" height="30" rx="3" fill="#D5F5E3" stroke="#1E8449" stroke-width="1"/>
+      <text x="79" y="389" text-anchor="middle" font-size="8.5" font-weight="700" fill="#1E8449">Zero rocking allowed</text>
+      <text x="79" y="401" text-anchor="middle" font-size="8.5" fill="#1E8449">Cover flush to fixture</text>
+      <line x1="138" y1="389" x2="150" y2="389" stroke="#1E8449" stroke-width="1" stroke-dasharray="3 2"/>
+
+      <!-- Spec callout for step 7 (force) -->
+      <rect x="20" y="542" width="118" height="30" rx="3" fill="#D5F5E3" stroke="#1E8449" stroke-width="1"/>
+      <text x="79" y="557" text-anchor="middle" font-size="8.5" font-weight="700" fill="#1E8449">Force: 450N ±20N</text>
+      <text x="79" y="569" text-anchor="middle" font-size="8.5" fill="#1E8449">Read display before cycle</text>
+      <line x1="138" y1="557" x2="150" y2="557" stroke="#1E8449" stroke-width="1" stroke-dasharray="3 2"/>
+
+      <!-- Spec callout for step 9 (rivets) -->
+      <rect x="20" y="706" width="118" height="30" rx="3" fill="#D5F5E3" stroke="#1E8449" stroke-width="1"/>
+      <text x="79" y="721" text-anchor="middle" font-size="8.5" font-weight="700" fill="#1E8449">Flush: 0.0 mm ±0.2</text>
+      <text x="79" y="733" text-anchor="middle" font-size="8.5" fill="#1E8449">Depth gauge after each</text>
+      <line x1="138" y1="721" x2="150" y2="721" stroke="#1E8449" stroke-width="1" stroke-dasharray="3 2"/>
+
+    </svg>
+    </div>
+
+  </div><!-- end diagram-area -->
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <span>Rev. 00 &nbsp;|&nbsp; Eff. [DD-MMM-YYYY] &nbsp;|&nbsp; Review due: <strong style="color:#C0392B">[DD-MMM-YYYY]</strong></span>
+    <span>Printed by: [Name] &nbsp;|&nbsp; Copy [#] of [#] &nbsp;|&nbsp; [Date Time]</span>
+  </div>
+  <div class="draft-banner">DRAFT — PENDING APPROVAL — NOT FOR PRODUCTION USE</div>
+
+</div><!-- end page -->
+</body>
+</html>

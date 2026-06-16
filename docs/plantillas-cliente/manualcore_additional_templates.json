@@ -1,0 +1,348 @@
+{
+  "instruction": "Add these 4 new SOP templates to the existing ManualCore system. Do NOT change anything that already works. These templates follow the exact same logic as the Manufacturing SOP: same AI extraction pipeline, same missing field detection (one question at a time), same revision control, same document numbering, same language selector, same PDF export with traceability footer, same header inheritance on revision. The only differences are the sections and fields inside each template, which are adapted to each industry. Claude interprets the user input and fills in the appropriate sections automatically.",
+
+  "integration_rule": "When the user starts a new document, the system must ask: What type of industry or area does this document belong to? The options are: Manufacturing (existing), Administrative and Services, Logistics and 3PL, Field Services, Regulated Non-Manufacturing (Food / Health / Pharma / Lab). The system loads the corresponding template and proceeds with the same AI-driven flow.",
+
+  "shared_behavior_all_templates": {
+    "input_sources": "Same as Manufacturing: free text, voice transcription, uploaded documents (single or multiple for consolidation), or revision of existing document",
+    "ai_extraction": "Claude analyzes the input and automatically fills all sections it can interpret from the information provided. The user does not fill the template manually.",
+    "missing_field_detection": "Before generating, the system identifies every required field that could not be filled from the input. It asks for each missing field one at a time, one question per screen, with its input field and a continue button. Never multiple questions on the same screen.",
+    "revision_flow": "Same as Manufacturing: Type A for point corrections (direct edit on document), Type B for structural changes (AI re-analyzes affected sections). Document inherits all data from previous revision. Only revision number increments.",
+    "document_numbering": "Same format as Manufacturing: [DEPARTMENT]-[SECTION 1-3 chars][4-digit serial]-REV[2 digits]. Serial auto-increments per department and section.",
+    "language": "Same language selector: Spanish or English. Document generates in selected language regardless of input language.",
+    "export": "PDF only, locked, non-editable. Same traceability footer on every page: Printed by [Name] | Copy [#] of [#] | [Date Time] | [Document Number] [Revision]",
+    "revision_retention": "Maximum 3 revisions stored per client per document. Older revisions become Obsolete automatically. Only active revision can be exported.",
+    "approval_flow": "Same states: Draft, Under Review, Approved, Released, Obsolete. Same reject flow: rejection requires a note, note determines if correction is Type A or Type B."
+  },
+
+  "templates": [
+    {
+      "id": "admin_services",
+      "name": "Administrative and Services SOP",
+      "applies_to": ["Consulting", "HR", "Sales", "Marketing", "Finance", "Legal", "Back office", "Any office-based process"],
+      "file_reference": "ManualCore_SOP_Administrative_Services.docx",
+      "sections": [
+        {
+          "number": "1",
+          "title": "PURPOSE",
+          "ai_behavior": "Claude drafts from the process name and description provided. Engineer confirms or edits.",
+          "required": true
+        },
+        {
+          "number": "2",
+          "title": "SCOPE AND APPLICABILITY",
+          "fields": [
+            { "label": "Process start", "description": "Triggering event — e.g. request received, ticket opened, client onboards", "required": true },
+            { "label": "Process end", "description": "Completion condition — e.g. deliverable approved, case closed, invoice sent", "required": true },
+            { "label": "Exclusions", "description": "What this SOP does not cover", "required": false },
+            { "label": "Applies to", "description": "Departments, roles, teams, locations", "required": true }
+          ]
+        },
+        {
+          "number": "3",
+          "title": "OPERATIONAL RESOURCES",
+          "description": "Replaces 5M for non-manufacturing context. Same logic: Claude extracts from input and asks for missing fields.",
+          "fields": [
+            { "label": "Responsible", "description": "Role, seniority level, required training or certification", "required": true },
+            { "label": "Tools and Systems", "description": "Software, platforms, tools required — e.g. CRM, ERP, email, spreadsheet", "required": true },
+            { "label": "Information Required", "description": "Data, documents, or inputs needed to start this process", "required": true },
+            { "label": "Method", "description": "Approved method or procedure version. Active exceptions or deviations.", "required": true },
+            { "label": "Quality Indicator", "description": "KPI, SLA, or metric that confirms this process is performed correctly", "required": true }
+          ],
+          "ai_behavior": "Claude identifies these from the input automatically. If a step mentions a tool like Excel or a CRM, it populates Tools and Systems. If a step mentions a deadline or SLA, it populates Quality Indicator. Asks for what it cannot infer."
+        },
+        {
+          "number": "4",
+          "title": "COMPLIANCE AND CONFIDENTIALITY REQUIREMENTS",
+          "fields": [
+            { "label": "Compliance requirements", "description": "Regulatory, legal, or policy requirements — e.g. data privacy, GDPR, internal policy", "required": false },
+            { "label": "Confidentiality level", "description": "Public / Internal / Confidential / Restricted", "required": true }
+          ]
+        },
+        {
+          "number": "5",
+          "title": "PROCESS STEPS",
+          "columns": ["STEP", "DESCRIPTION", "RESPONSIBLE / TOOL", "SLA / EXPECTED OUTPUT", "GATE"],
+          "ai_behavior": "Claude extracts steps from input in sequence. For each step detected: if it involves a tool or system, asks for the specific tool. If it involves a deadline, asks for the SLA. If it is a decision point or approval gate, marks it as a quality gate and asks for the acceptance criterion and what happens if it fails.",
+          "required": true
+        },
+        {
+          "number": "6",
+          "title": "ESCALATION AND EXCEPTION HANDLING",
+          "columns": ["SITUATION", "ACTION REQUIRED", "ESCALATE TO"],
+          "ai_behavior": "Claude infers escalation scenarios from any if-then language in the input, or from quality gates that have a fail condition. Asks for escalation owner if not provided.",
+          "required": false
+        },
+        {
+          "number": "7",
+          "title": "RELATED DOCUMENTS",
+          "columns": ["TYPE", "TITLE", "DOC NUMBER", "REVISION"],
+          "ai_behavior": "Auto-populated from document relationship matrix. Updated when related documents change.",
+          "required": false
+        },
+        {
+          "number": "8",
+          "title": "APPROVAL",
+          "fields": ["Process Owner", "Approver", "QA / Compliance (if applicable)"],
+          "required": true
+        }
+      ],
+      "missing_field_questions": [
+        "What is the name of this process or service?",
+        "What triggers this process to start?",
+        "What marks this process as complete?",
+        "Who is responsible for executing this process? What role or position?",
+        "What tools, software, or platforms are used in this process?",
+        "Is there a time limit or SLA for completing this process?",
+        "What is the confidentiality level of the output? (Public / Internal / Confidential / Restricted)",
+        "Who is the Process Owner?",
+        "Who is the Approver?",
+        "What is the effective date?",
+        "What is the review due date?"
+      ]
+    },
+
+    {
+      "id": "logistics_3pl",
+      "name": "Logistics and 3PL SOP",
+      "applies_to": ["Warehouses", "Distribution centers", "3PL operators", "Transport", "Dispatch", "Import and export", "Supply chain operations"],
+      "file_reference": "ManualCore_SOP_Logistics_3PL.docx",
+      "sections": [
+        { "number": "1", "title": "PURPOSE", "required": true },
+        {
+          "number": "2",
+          "title": "SCOPE",
+          "fields": [
+            { "label": "Operation start", "description": "e.g. Shipment arrives at dock / PO received / Transfer order created", "required": true },
+            { "label": "Operation end", "description": "e.g. Product stored in location / Shipment confirmed / Document filed", "required": true },
+            { "label": "Applies to", "description": "Warehouse zones, shifts, positions, clients (3PL)", "required": true },
+            { "label": "Exclusions", "description": "What is not covered", "required": false }
+          ]
+        },
+        {
+          "number": "3",
+          "title": "HANDLING AND STORAGE CONDITIONS",
+          "fields": [
+            { "label": "Temperature", "description": "Range required — e.g. 15-25C / Ambient / Cold chain", "required": false },
+            { "label": "Humidity", "description": "% RH if applicable", "required": false },
+            { "label": "Storage method", "description": "FIFO / FEFO / LIFO — specify which and why", "required": true },
+            { "label": "Stacking limit", "description": "Max units or weight per pallet or layer", "required": false },
+            { "label": "Hazardous or special handling", "description": "Fragile / flammable / refrigerated / high-value", "required": false }
+          ],
+          "ai_behavior": "Claude detects storage conditions from any mention of temperature, cold chain, fragility, or product type in the input. Asks only for conditions that are relevant to the product type detected."
+        },
+        {
+          "number": "4",
+          "title": "TRACEABILITY AND DOCUMENTATION",
+          "fields": [
+            { "label": "Lot or Serial tracking", "description": "Required: Yes / No — specify system: WMS, ERP, paper log", "required": true },
+            { "label": "Transport documents", "description": "Bill of Lading, Packing List, Invoice, CMR, AWB — specify which are required", "required": true },
+            { "label": "Receiving record", "description": "GRN / Entry ticket — who creates it, where it is filed", "required": true },
+            { "label": "Dispatch record", "description": "Dispatch note / Proof of delivery — who signs, retention period", "required": true }
+          ]
+        },
+        {
+          "number": "5",
+          "title": "PPE AND SAFETY",
+          "fields": [
+            { "label": "PPE required", "description": "Safety vest, steel-toe boots, gloves, hard hat — specify per zone and operation", "required": true },
+            { "label": "Safety hazards", "description": "Forklift traffic, falling objects, heavy loads, temperature extremes — specify per area", "required": true }
+          ]
+        },
+        {
+          "number": "6",
+          "title": "PROCESS STEPS",
+          "columns": ["STEP", "DESCRIPTION", "RESPONSIBLE", "SYSTEM / TOOL", "GATE", "DOCUMENT"],
+          "ai_behavior": "Same logic as Manufacturing. For each step: if it involves scanning or a WMS action, asks for the specific system. If it involves a quantity check, asks for the acceptance criterion and rejection action. Marks receiving and dispatch steps as quality gates automatically.",
+          "required": true
+        },
+        {
+          "number": "7",
+          "title": "NON-CONFORMANCE HANDLING",
+          "columns": ["NON-CONFORMANCE", "IMMEDIATE ACTION", "ESCALATE TO"],
+          "ai_behavior": "Claude pre-fills common logistics non-conformances (damaged product, quantity discrepancy) and asks the engineer to confirm or add specific ones.",
+          "required": true
+        },
+        {
+          "number": "8", "title": "RELATED DOCUMENTS", "required": false
+        },
+        {
+          "number": "9", "title": "APPROVAL", "required": true
+        }
+      ],
+      "missing_field_questions": [
+        "What type of logistics operation does this SOP cover?",
+        "What triggers this operation to start?",
+        "What marks this operation as complete?",
+        "What storage method is used? (FIFO / FEFO / LIFO)",
+        "Is lot or serial number tracking required for this product?",
+        "What transport documents are required for this operation?",
+        "What PPE is required for this operation?",
+        "Who is responsible for creating the receiving or dispatch record?",
+        "Who is the Process Owner?",
+        "Who is the Approver?",
+        "What is the effective date?",
+        "What is the review due date?"
+      ]
+    },
+
+    {
+      "id": "field_services",
+      "name": "Field Services SOP",
+      "applies_to": ["Maintenance", "Installations", "Technical repairs", "On-site inspections", "Equipment commissioning", "Any technical intervention at client site"],
+      "file_reference": "ManualCore_SOP_Field_Services.docx",
+      "sections": [
+        { "number": "1", "title": "PURPOSE", "required": true },
+        {
+          "number": "2",
+          "title": "SCOPE",
+          "fields": [
+            { "label": "Service start", "description": "e.g. Work order issued / Client request confirmed / Equipment failure reported", "required": true },
+            { "label": "Service end", "description": "e.g. Equipment operational / Client sign-off obtained / Report filed", "required": true },
+            { "label": "Applies to", "description": "Equipment type, client type, geographic area, technician level", "required": true },
+            { "label": "Exclusions", "description": "e.g. Emergency breakdown, warranty repairs handled by vendor", "required": false }
+          ]
+        },
+        {
+          "number": "3",
+          "title": "PRE-SERVICE REQUIREMENTS",
+          "fields": [
+            { "label": "Technician qualification", "description": "Required certification, training, or experience level", "required": true },
+            { "label": "Tools and equipment", "description": "Complete tool list — include calibrated instruments with calibration due date", "required": true },
+            { "label": "Permits required", "description": "Work permit / hot work / confined space / lockout-tagout", "required": false },
+            { "label": "Site safety check", "description": "Conditions to verify before starting: access, power isolation, bystander clearance", "required": true },
+            { "label": "Spare parts and materials", "description": "Parts list with part numbers if applicable", "required": false }
+          ],
+          "ai_behavior": "Claude detects from input if the work involves electrical systems (asks for lockout-tagout permit), working at height (asks for fall protection), or confined spaces (asks for confined space permit). Asks only for permits relevant to the work described."
+        },
+        {
+          "number": "4",
+          "title": "PPE AND SAFETY",
+          "fields": [
+            { "label": "PPE required", "description": "Hard hat, safety glasses, insulated gloves, arc flash suit, steel-toe boots — specify per task", "required": true },
+            { "label": "Safety hazards identified", "description": "Electrical hazard, pinch points, working at height, confined space, hot surfaces", "required": true }
+          ]
+        },
+        {
+          "number": "5",
+          "title": "SERVICE STEPS",
+          "columns": ["STEP", "DESCRIPTION", "TOOL / INSTRUMENT", "ACCEPTANCE CRITERION", "GATE", "IF FAILS"],
+          "ai_behavior": "For every step Claude detects as an inspection or test: asks for the acceptance criterion (what is ACCEPTED) and the rejection action (what to do IF FAILS). For every step involving a measuring instrument: asks for the instrument ID and calibration status. This mirrors the Manufacturing critical step logic.",
+          "required": true
+        },
+        {
+          "number": "6",
+          "title": "POST-SERVICE VERIFICATION",
+          "columns": ["VERIFICATION ITEM", "ACCEPTANCE CRITERION", "VERIFIED BY"],
+          "ai_behavior": "Claude pre-fills standard post-service checks (equipment operational test, site clean condition, client sign-off) and asks engineer to confirm or add specific ones.",
+          "required": true
+        },
+        {
+          "number": "7", "title": "RELATED DOCUMENTS", "required": false
+        },
+        {
+          "number": "8", "title": "APPROVAL", "required": true
+        }
+      ],
+      "missing_field_questions": [
+        "What type of technical intervention does this SOP cover?",
+        "What triggers this service to start?",
+        "What marks this service as complete?",
+        "What technician qualification or certification is required?",
+        "What tools or instruments are needed? Do any require calibration?",
+        "Are any work permits required for this intervention?",
+        "What PPE is required?",
+        "What are the main safety hazards at the work site?",
+        "How does the technician confirm the equipment is working correctly after the intervention?",
+        "Is a client signature required to close this service?",
+        "Who is the Process Owner?",
+        "Who is the Approver?",
+        "What is the effective date?",
+        "What is the review due date?"
+      ]
+    },
+
+    {
+      "id": "regulated_non_manufacturing",
+      "name": "Regulated Non-Manufacturing SOP",
+      "applies_to": ["Food and beverage", "Pharmaceutical", "Healthcare", "Clinical laboratories", "Any process regulated by ISO 22000, FDA, GMP, BPM, or similar standards"],
+      "file_reference": "ManualCore_SOP_Regulated_NonManufacturing.docx",
+      "sections": [
+        { "number": "1", "title": "PURPOSE", "required": true },
+        {
+          "number": "2",
+          "title": "SCOPE",
+          "fields": [
+            { "label": "Process start", "description": "Define triggering condition", "required": true },
+            { "label": "Process end", "description": "Define completion and record-keeping requirement", "required": true },
+            { "label": "Applies to", "description": "Products, processes, areas, personnel", "required": true },
+            { "label": "Regulatory reference", "description": "Specific clause or article of the applicable standard", "required": true }
+          ]
+        },
+        {
+          "number": "3",
+          "title": "HYGIENE AND SAFETY REQUIREMENTS",
+          "fields": [
+            { "label": "Personnel hygiene", "description": "Hand washing, gloves, hair cover, health certificate", "required": true },
+            { "label": "PPE required", "description": "Gloves, gown, mask, goggles — specify per zone", "required": true },
+            { "label": "Area sanitization", "description": "Sanitization frequency and method before this process starts", "required": true },
+            { "label": "Contamination risks", "description": "Cross-contamination, allergens, biological — specify", "required": true }
+          ],
+          "ai_behavior": "Claude detects from input if the process involves allergens (asks for allergen segregation protocol), cold chain (asks for temperature monitoring), or biological materials (asks for biosafety level). Asks only for what is relevant."
+        },
+        {
+          "number": "4",
+          "title": "CRITICAL CONTROL POINTS (CCP / HACCP)",
+          "columns": ["CCP NO.", "HAZARD", "CRITICAL LIMIT", "MONITORING METHOD", "CORRECTIVE ACTION", "RECORD"],
+          "ai_behavior": "Claude identifies potential CCPs from any mention of temperature limits, biological risks, chemical controls, or physical hazards in the input. For each CCP detected: asks for the critical limit, monitoring method, corrective action, and record name. If no CCPs are detected, asks the engineer: Are there any critical control points in this process where a specific limit must not be exceeded?",
+          "required": false
+        },
+        {
+          "number": "5",
+          "title": "TRACEABILITY",
+          "fields": [
+            { "label": "Lot or Batch tracking", "description": "Required: Yes / No — system used", "required": true },
+            { "label": "Expiry or best-before", "description": "FIFO / FEFO — specify and confirm method", "required": true },
+            { "label": "Supplier documentation", "description": "CoA / CoC / Spec sheet required per lot: Yes / No", "required": true },
+            { "label": "Retention period", "description": "How long records must be kept per regulation", "required": true }
+          ]
+        },
+        {
+          "number": "6",
+          "title": "PROCESS STEPS",
+          "columns": ["STEP", "DESCRIPTION", "RESPONSIBLE", "CRITICAL PARAMETER", "GATE", "RECORD"],
+          "ai_behavior": "Same critical step logic as Manufacturing. For any step with a temperature, pH, pressure, or time parameter: asks for the critical limit and what to do if exceeded. For any inspection step: asks for what ACCEPTED means and what DEFICIENT means.",
+          "required": true
+        },
+        {
+          "number": "7",
+          "title": "NON-CONFORMANCE AND RECALL",
+          "columns": ["NON-CONFORMANCE", "IMMEDIATE ACTION", "NOTIFICATION REQUIRED"],
+          "ai_behavior": "Claude pre-fills standard non-conformances for regulated industries (CCP limit exceeded, contamination detected) and asks engineer to add product-specific ones.",
+          "required": true
+        },
+        {
+          "number": "8", "title": "RELATED DOCUMENTS", "required": false
+        },
+        {
+          "number": "9", "title": "APPROVAL", "fields": ["Process Owner", "Approver", "QA / Regulatory Sign-Off"], "required": true }
+      ],
+      "missing_field_questions": [
+        "What process or operation does this SOP cover?",
+        "What regulatory standard applies? (ISO 22000 / FDA / GMP / BPM / other)",
+        "What triggers this process to start?",
+        "What marks this process as complete?",
+        "Are there any Critical Control Points where a specific limit must not be exceeded?",
+        "Is lot or batch tracking required for this process?",
+        "How long must records be retained according to the applicable regulation?",
+        "What hygiene requirements apply before personnel can start this process?",
+        "Are there any allergen risks in this process?",
+        "Who is the Process Owner?",
+        "Who is the Approver?",
+        "Who provides the regulatory or QA sign-off?",
+        "What is the effective date?",
+        "What is the review due date?"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ManualCore — Material Flowchart A-01</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: Arial, sans-serif; background:#f4f6f8; }
+.page { width:1100px; margin:20px auto; background:white; box-shadow:0 2px 12px rgba(0,0,0,.12); }
+.doc-header { display:grid; grid-template-columns:1fr auto; background:#0D1F3C; }
+.doc-header-left { padding:14px 20px; }
+.doc-header-left h1 { color:#fff; font-size:14px; font-weight:700; margin-bottom:3px; }
+.doc-header-left p { color:#A8D8EA; font-size:10px; font-style:italic; }
+.doc-header-right { background:#f4f6f8; border-left:2px solid #1ABC9C; padding:8px 14px; display:flex; flex-direction:column; justify-content:center; align-items:center; min-width:140px; }
+.doc-header-right span { font-size:9px; color:#5D6D7E; font-weight:700; }
+.doc-header-right strong { font-size:12px; color:#0D1F3C; }
+.meta-row { display:grid; grid-template-columns:repeat(5,1fr); border-bottom:3px solid #1ABC9C; }
+.meta-cell { padding:5px 10px; border-right:1px solid #D5D8DC; font-size:9px; }
+.meta-cell:last-child { border-right:none; }
+.meta-cell .lbl { color:#5D6D7E; font-weight:700; display:block; margin-bottom:2px; }
+.meta-cell:nth-child(odd) { background:#F4F6F8; }
+.diagram-area { padding:20px 24px 28px; }
+.legend { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:16px; padding:8px 12px; background:#F4F6F8; border-radius:4px; border-left:4px solid #1ABC9C; font-size:9px; color:#5D6D7E; align-items:center; }
+.doc-footer { border-top:2px solid #1ABC9C; padding:7px 20px; display:flex; justify-content:space-between; background:#F4F6F8; font-size:9px; color:#5D6D7E; }
+.draft { background:#F39C12; text-align:center; padding:6px; color:white; font-size:10px; font-weight:700; }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="doc-header">
+  <div class="doc-header-left">
+    <h1>[COMPANY NAME] &nbsp;|&nbsp; MATERIAL FLOWCHART</h1>
+    <p>Cover Sub-Assembly — Riveting Operation &nbsp;|&nbsp; Node A-01 &nbsp;|&nbsp; Ref BOM: BOM-A01-001 &nbsp;|&nbsp; Ref SOP: SOP-A01-001</p>
+  </div>
+  <div class="doc-header-right">
+    <span>DOC NO.</span><strong>MFC-A01-001</strong>
+    <span style="margin-top:5px">REVISION</span><strong>Rev. 00</strong>
+  </div>
+</div>
+<div class="meta-row">
+  <div class="meta-cell"><span class="lbl">INPUT STATE</span>Raw cover + rivets (uninspected)</div>
+  <div class="meta-cell"><span class="lbl">OUTPUT STATE</span>Riveted sub-assembly (approved)</div>
+  <div class="meta-cell"><span class="lbl">LINKED BOM</span>BOM-A01-001 Rev.00</div>
+  <div class="meta-cell"><span class="lbl">NODE LINK TYPE</span>Sequential → Node B-01</div>
+  <div class="meta-cell"><span class="lbl">REVIEW DUE</span><span style="color:#C0392B;font-weight:700">[DD-MMM-YYYY]</span></div>
+</div>
+
+<div class="diagram-area">
+<div class="legend">
+  <svg width="44" height="18"><rect x="1" y="1" width="42" height="16" rx="3" fill="#EBF5FB" stroke="#1B4F72" stroke-width="1.5"/><text x="22" y="13" text-anchor="middle" font-size="8" fill="#1B4F72">PROCESS</text></svg> Operation box
+  <svg width="44" height="18"><ellipse cx="22" cy="9" rx="20" ry="8" fill="#D5F5E3" stroke="#1E8449" stroke-width="1.5"/><text x="22" y="13" text-anchor="middle" font-size="8" fill="#1E8449">MATERIAL</text></svg> Material / component
+  <svg width="44" height="18"><polygon points="22,1 43,9 22,17 1,9" fill="#FEF5E7" stroke="#E67E22" stroke-width="1.5"/><text x="22" y="13" text-anchor="middle" font-size="7" fill="#E67E22">INSPECT</text></svg> Inspection / decision
+  <svg width="44" height="18"><polygon points="1,5 38,5 43,9 38,13 1,13" fill="#EDE7F6" stroke="#7D3C98" stroke-width="1.5"/><text x="21" y="13" text-anchor="middle" font-size="7" fill="#7D3C98">STORE</text></svg> Storage / WH
+  <svg width="44" height="18"><rect x="1" y="1" width="42" height="16" rx="8" fill="#0D1F3C" stroke="#0D1F3C" stroke-width="1.5"/><text x="22" y="13" text-anchor="middle" font-size="8" fill="white">A-01</text></svg> Node start/end
+  <svg width="44" height="18"><line x1="2" y1="9" x2="34" y2="9" stroke="#1B4F72" stroke-width="1.5" marker-end="url(#a1)"/><defs><marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1L9,5L0,9Z" fill="#1B4F72"/></marker></defs></svg> Push → flow
+  <svg width="44" height="18"><line x1="2" y1="9" x2="34" y2="9" stroke="#E67E22" stroke-width="1.5" stroke-dasharray="4 2" marker-end="url(#a2)"/><defs><marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1L9,5L0,9Z" fill="#E67E22"/></marker></defs></svg> Tool (not consumed)
+</div>
+
+<div style="display:flex;justify-content:center;">
+<svg width="1050" height="680" viewBox="0 0 1050 680" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1L9,5L0,9Z" fill="#1B4F72"/></marker>
+  <marker id="arr-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1L9,5L0,9Z" fill="#1E8449"/></marker>
+  <marker id="arr-o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1L9,5L0,9Z" fill="#E67E22"/></marker>
+  <marker id="arr-t" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1L9,5L0,9Z" fill="#148F77"/></marker>
+  <marker id="arr-r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1L9,5L0,9Z" fill="#C0392B"/></marker>
+</defs>
+
+<!-- ── BACKGROUND LANES ── -->
+<!-- Supplier/WH lane -->
+<rect x="10" y="10" width="155" height="660" rx="5" fill="#F8F9FA" stroke="#E0E0E0" stroke-width="1"/>
+<text x="87" y="30" text-anchor="middle" font-size="10" font-weight="700" fill="#5D6D7E">SUPPLIER / WH</text>
+
+<!-- Production lane -->
+<rect x="175" y="10" width="530" height="660" rx="5" fill="#EBF5FB" stroke="#D5E8F0" stroke-width="1" fill-opacity="0.4"/>
+<text x="440" y="30" text-anchor="middle" font-size="10" font-weight="700" fill="#1B4F72">PRODUCTION — NODE A-01</text>
+
+<!-- Output / Next node lane -->
+<rect x="715" y="10" width="325" height="660" rx="5" fill="#D5F5E3" stroke="#A9DFBF" stroke-width="1" fill-opacity="0.4"/>
+<text x="877" y="30" text-anchor="middle" font-size="10" font-weight="700" fill="#1E8449">OUTPUT → NEXT NODE</text>
+
+<!-- ═══════════════════════════════════════
+     ROW 1 — Inputs from supplier/WH
+═══════════════════════════════════════ -->
+
+<!-- WH Storage — Cover -->
+<polygon points="20,60 148,60 158,78 148,96 20,96" fill="#EDE7F6" stroke="#7D3C98" stroke-width="1.5"/>
+<text x="84" y="75" text-anchor="middle" font-size="9" font-weight="700" fill="#7D3C98">Incoming WH</text>
+<text x="84" y="88" text-anchor="middle" font-size="8.5" fill="#7D3C98">Urea Cover Black</text>
+
+<!-- Arrow WH→ inspect -->
+<line x1="158" y1="78" x2="193" y2="78" stroke="#1B4F72" stroke-width="1.5" marker-end="url(#arr)"/>
+<text x="175" y="72" text-anchor="middle" font-size="8" fill="#1B4F72">PUSH</text>
+
+<!-- Inspect incoming cover -->
+<polygon points="255,55 335,78 255,101 175,78" fill="#FEF5E7" stroke="#E67E22" stroke-width="2"/>
+<text x="255" y="74" text-anchor="middle" font-size="9" font-weight="700" fill="#E67E22">Incoming</text>
+<text x="255" y="87" text-anchor="middle" font-size="9" fill="#E67E22">inspection</text>
+
+<!-- Arrow inspect → op 1 -->
+<line x1="335" y1="78" x2="375" y2="78" stroke="#1B4F72" stroke-width="1.5" marker-end="url(#arr)"/>
+
+<!-- OP 1 — Retrieve + verify -->
+<rect x="375" y="54" width="160" height="48" rx="4" fill="#EBF5FB" stroke="#1B4F72" stroke-width="1.5"/>
+<text x="455" y="72" text-anchor="middle" font-size="10" font-weight="700" fill="#1B4F72">OP 1 — Retrieve + verify</text>
+<text x="455" y="85" text-anchor="middle" font-size="9" fill="#2E4057">Part no. vs WO</text>
+<text x="455" y="97" text-anchor="middle" font-size="8.5" fill="#C0392B">QTY: 1 ea per unit</text>
+<rect x="375" y="54" width="22" height="16" rx="3" fill="#1B4F72"/>
+<text x="386" y="66" text-anchor="middle" font-size="8" font-weight="700" fill="white">1</text>
+
+<!-- Material label — Cover -->
+<ellipse cx="455" cy="135" rx="85" ry="20" fill="#D5F5E3" stroke="#1E8449" stroke-width="1.5"/>
+<text x="455" y="131" text-anchor="middle" font-size="9" font-weight="700" fill="#1E8449">Urea Cover Black</text>
+<text x="455" y="144" text-anchor="middle" font-size="8.5" fill="#1E8449">SKU-1234 | QTY: 1 ea</text>
+<line x1="455" y1="102" x2="455" y2="115" stroke="#1E8449" stroke-width="1.2" stroke-dasharray="3 2"/>
+<line x1="455" y1="155" x2="455" y2="172" stroke="#1E8449" stroke-width="1.2" stroke-dasharray="3 2"/>
+
+<!-- ═══════════════════════════════════════
+     ROW 2 — Rivet supply from WH
+═══════════════════════════════════════ -->
+
+<!-- WH Storage — Rivets (below cover WH) -->
+<polygon points="20,190 148,190 158,208 148,226 20,226" fill="#EDE7F6" stroke="#7D3C98" stroke-width="1.5"/>
+<text x="84" y="205" text-anchor="middle" font-size="9" font-weight="700" fill="#7D3C98">Bin at station</text>
+<text x="84" y="218" text-anchor="middle" font-size="8.5" fill="#7D3C98">Rivet #4 Gold</text>
+
+<!-- Arrow WH rivets → op 2 -->
+<line x1="158" y1="208" x2="375" y2="208" stroke="#1B4F72" stroke-width="1.5" marker-end="url(#arr)"/>
+<text x="266" y="202" text-anchor="middle" font-size="8" fill="#1B4F72">PUSH</text>
+
+<!-- OP 2 — Inspect nubs + seat -->
+<rect x="375" y="172" width="160" height="52" rx="4" fill="#EBF5FB" stroke="#1B4F72" stroke-width="1.5"/>
+<text x="455" y="191" text-anchor="middle" font-size="10" font-weight="700" fill="#1B4F72">OP 2 — Inspect + seat</text>
+<text x="455" y="205" text-anchor="middle" font-size="9" fill="#2E4057">Check nubs, gap 0.3mm</text>
+<text x="455" y="218" text-anchor="middle" font-size="8.5" fill="#2E4057">Seat in fixture — click</text>
+<rect x="375" y="172" width="22" height="16" rx="3" fill="#1B4F72"/>
+<text x="386" y="184" text-anchor="middle" font-size="8" font-weight="700" fill="white">2</text>
+
+<!-- Material ellipse for rivets -->
+<ellipse cx="455" cy="260" rx="85" ry="20" fill="#D5F5E3" stroke="#1E8449" stroke-width="1.5"/>
+<text x="455" y="256" text-anchor="middle" font-size="9" font-weight="700" fill="#1E8449">Rivet #4 Gold</text>
+<text x="455" y="269" text-anchor="middle" font-size="8.5" fill="#1E8449">SKU-5678 | QTY: 4 ea per unit</text>
+<line x1="455" y1="224" x2="455" y2="240" stroke="#1E8449" stroke-width="1.2" stroke-dasharray="3 2"/>
+<line x1="455" y1="280" x2="455" y2="298" stroke="#1E8449" stroke-width="1.2" stroke-dasharray="3 2"/>
+
+<!-- ═══════════════════════════════════════
+     ROW 3 — Riveting operation
+═══════════════════════════════════════ -->
+
+<!-- Tool — Fixture (comes from tool store, dashed) -->
+<rect x="20" y="312" width="140" height="36" rx="4" fill="#FEF9F0" stroke="#E67E22" stroke-width="1.2" stroke-dasharray="4 2"/>
+<text x="90" y="328" text-anchor="middle" font-size="9" fill="#E67E22">Assembly fixture</text>
+<text x="90" y="341" text-anchor="middle" font-size="8.5" fill="#E67E22">EQ-003-F | Tool</text>
+<line x1="160" y1="330" x2="375" y2="330" stroke="#E67E22" stroke-width="1.2" stroke-dasharray="4 2" marker-end="url(#arr-o)"/>
+<text x="265" y="324" text-anchor="middle" font-size="8" fill="#E67E22" font-style="italic">tool (not consumed)</text>
+
+<!-- OP 3 — Riveting -->
+<rect x="375" y="298" width="160" height="66" rx="4" fill="#EBF5FB" stroke="#1B4F72" stroke-width="2"/>
+<text x="455" y="319" text-anchor="middle" font-size="10" font-weight="700" fill="#1B4F72">OP 3 — RIVETING</text>
+<text x="455" y="334" text-anchor="middle" font-size="9" fill="#2E4057">Die check + force 450N ±20</text>
+<text x="455" y="348" text-anchor="middle" font-size="9" fill="#2E4057">Apply 4 rivets 1→2→3→4</text>
+<text x="455" y="362" text-anchor="middle" font-size="8.5" fill="#C0392B">SPEC: Flush 0.0mm ±0.2</text>
+<rect x="375" y="298" width="22" height="16" rx="3" fill="#1B4F72"/>
+<text x="386" y="310" text-anchor="middle" font-size="8" font-weight="700" fill="white">3</text>
+<!-- QC badge -->
+<rect x="513" y="298" width="22" height="16" rx="3" fill="#1E8449"/>
+<text x="524" y="310" text-anchor="middle" font-size="8" font-weight="700" fill="white">QC</text>
+
+<!-- Arrow OP3→ inspection decision -->
+<line x1="535" y1="331" x2="590" y2="331" stroke="#1B4F72" stroke-width="1.5" marker-end="url(#arr)"/>
+
+<!-- DECISION — flush OK? -->
+<polygon points="655,306 720,331 655,356 590,331" fill="#FEF5E7" stroke="#E67E22" stroke-width="2"/>
+<text x="655" y="327" text-anchor="middle" font-size="9" font-weight="700" fill="#E67E22">Flush</text>
+<text x="655" y="340" text-anchor="middle" font-size="9" font-weight="700" fill="#E67E22">OK?</text>
+
+<!-- YES → next op -->
+<line x1="720" y1="331" x2="760" y2="331" stroke="#1E8449" stroke-width="1.5" marker-end="url(#arr-g)"/>
+<text x="740" y="325" text-anchor="middle" font-size="9" fill="#1E8449" font-weight="700">YES</text>
+
+<!-- NO → reject (below decision) -->
+<line x1="655" y1="356" x2="655" y2="400" stroke="#C0392B" stroke-width="1.5" stroke-dasharray="4 2" marker-end="url(#arr-r)"/>
+<text x="668" y="380" font-size="9" fill="#C0392B" font-weight="700">NO</text>
+<rect x="590" y="400" width="132" height="40" rx="4" fill="#FADBD8" stroke="#C0392B" stroke-width="1.5"/>
+<text x="656" y="417" text-anchor="middle" font-size="9" font-weight="700" fill="#C0392B">REJECT — NC</text>
+<text x="656" y="430" text-anchor="middle" font-size="8.5" fill="#922B21">Tag, red tray, supervisor</text>
+
+<!-- ═══════════════════════════════════════
+     ROW 4 — Final inspection + output
+═══════════════════════════════════════ -->
+
+<!-- OP 4 — Final inspection -->
+<rect x="760" y="298" width="160" height="66" rx="4" fill="#D5F5E3" stroke="#1E8449" stroke-width="1.5"/>
+<text x="840" y="319" text-anchor="middle" font-size="10" font-weight="700" fill="#1E8449">OP 4 — Final inspection</text>
+<text x="840" y="334" text-anchor="middle" font-size="9" fill="#2E4057">Visual check all 4 rivets</text>
+<text x="840" y="348" text-anchor="middle" font-size="9" fill="#2E4057">Sign quality log</text>
+<text x="840" y="362" text-anchor="middle" font-size="8.5" fill="#2E4057">Green tray if PASS</text>
+<rect x="760" y="298" width="22" height="16" rx="3" fill="#1E8449"/>
+<text x="771" y="310" text-anchor="middle" font-size="8" font-weight="700" fill="white">4</text>
+
+<!-- Arrow OP4 → output material -->
+<line x1="840" y1="364" x2="840" y2="400" stroke="#148F77" stroke-width="1.5" marker-end="url(#arr-t)"/>
+
+<!-- Output material -->
+<ellipse cx="840" cy="430" rx="110" ry="24" fill="#1ABC9C" stroke="#0F6E56" stroke-width="1.5"/>
+<text x="840" y="426" text-anchor="middle" font-size="10" font-weight="700" fill="white">Riveted Cover Sub-Assy</text>
+<text x="840" y="439" text-anchor="middle" font-size="9" fill="white">ASM-X200-001 | QTY: 1 ea</text>
+<text x="840" y="451" text-anchor="middle" font-size="8.5" fill="#D5F5E3">Inspected + approved</text>
+
+<!-- Arrow output → End/Start node -->
+<line x1="840" y1="454" x2="840" y2="490" stroke="#148F77" stroke-width="1.5" marker-end="url(#arr-t)"/>
+
+<!-- END / START connector — sequential to Node B -->
+<rect x="760" y="490" width="160" height="50" rx="25" fill="#0D1F3C" stroke="#1ABC9C" stroke-width="2"/>
+<text x="840" y="511" text-anchor="middle" font-size="11" font-weight="700" fill="white">END — A-01</text>
+<text x="840" y="526" text-anchor="middle" font-size="9" fill="#1ABC9C">= START of Node B-01</text>
+<text x="840" y="539" text-anchor="middle" font-size="8.5" fill="#A8D8EA">Frame Assembly</text>
+
+<!-- Arrow to Node B (going right, out of frame — showing continuation) -->
+<line x1="920" y1="515" x2="980" y2="515" stroke="#1ABC9C" stroke-width="2" marker-end="url(#arr-t)" stroke-dasharray="6 3"/>
+<text x="990" y="511" font-size="10" font-weight="700" fill="#148F77">→ B-01</text>
+<text x="990" y="524" font-size="8.5" fill="#148F77" font-style="italic">Sequential</text>
+
+<!-- ═══════════════════════════════════════
+     TOOLS (bottom — not consumed)
+═══════════════════════════════════════ -->
+<text x="390" y="490" font-size="9" font-weight="700" fill="#E67E22">TOOLS — Not consumed (track for calibration):</text>
+
+<rect x="375" y="500" width="130" height="34" rx="4" fill="#FEF9F0" stroke="#E67E22" stroke-width="1.2" stroke-dasharray="4 2"/>
+<text x="440" y="515" text-anchor="middle" font-size="9" fill="#E67E22">Depth gauge</text>
+<text x="440" y="528" text-anchor="middle" font-size="8" fill="#E67E22">GAU-012 | Cal. required</text>
+
+<rect x="520" y="500" width="130" height="34" rx="4" fill="#FEF9F0" stroke="#E67E22" stroke-width="1.2" stroke-dasharray="4 2"/>
+<text x="585" y="515" text-anchor="middle" font-size="9" fill="#E67E22">Feeler gauge set</text>
+<text x="585" y="528" text-anchor="middle" font-size="8" fill="#E67E22">GAU-008 | Cal. required</text>
+
+<rect x="665" y="500" width="130" height="34" rx="4" fill="#FEF9F0" stroke="#E67E22" stroke-width="1.2" stroke-dasharray="4 2"/>
+<text x="730" y="515" text-anchor="middle" font-size="9" fill="#E67E22">Riveter machine</text>
+<text x="730" y="528" text-anchor="middle" font-size="8" fill="#E67E22">EQ-003 | Cal. required</text>
+
+<!-- ═══════════════════════════════════════
+     QUANTITY SUMMARY BOX
+═══════════════════════════════════════ -->
+<rect x="375" y="555" width="340" height="100" rx="5" fill="#F4F6F8" stroke="#D5D8DC" stroke-width="1"/>
+<text x="545" y="573" text-anchor="middle" font-size="10" font-weight="700" fill="#0D1F3C">MATERIAL SUMMARY PER UNIT PRODUCED</text>
+<line x1="385" y1="578" x2="705" y2="578" stroke="#1ABC9C" stroke-width="1.5"/>
+<text x="395" y="595" font-size="9" font-weight="700" fill="#1B4F72">Material</text>
+<text x="540" y="595" font-size="9" font-weight="700" fill="#1B4F72">SKU</text>
+<text x="620" y="595" font-size="9" font-weight="700" fill="#1B4F72">Qty/Op</text>
+<text x="680" y="595" font-size="9" font-weight="700" fill="#1B4F72">Total</text>
+<text x="395" y="612" font-size="9" fill="#2E4057">Urea Cover Black</text>
+<text x="540" y="612" font-size="9" fill="#5D6D7E">SKU-1234</text>
+<text x="635" y="612" text-anchor="middle" font-size="9" fill="#0D1F3C">1 ea</text>
+<text x="690" y="612" text-anchor="middle" font-size="9" font-weight="700" fill="#0D1F3C">1 ea</text>
+<text x="395" y="628" font-size="9" fill="#2E4057">Rivet #4 Gold</text>
+<text x="540" y="628" font-size="9" fill="#5D6D7E">SKU-5678</text>
+<text x="635" y="628" text-anchor="middle" font-size="9" fill="#0D1F3C">4 ea</text>
+<text x="690" y="628" text-anchor="middle" font-size="9" font-weight="700" fill="#0D1F3C">4 ea</text>
+<text x="395" y="644" font-size="9" fill="#5D6D7E" font-style="italic">Tools (not consumed)</text>
+<text x="540" y="644" font-size="9" fill="#5D6D7E" font-style="italic">GAU-012, GAU-008, EQ-003</text>
+<text x="635" y="644" text-anchor="middle" font-size="9" fill="#5D6D7E">—</text>
+<text x="690" y="644" text-anchor="middle" font-size="9" fill="#5D6D7E">—</text>
+
+</svg>
+</div>
+</div>
+
+<div class="doc-footer">
+  <span>Rev. 00 &nbsp;|&nbsp; Eff. [DD-MMM-YYYY] &nbsp;|&nbsp; Review due: <strong style="color:#C0392B">[DD-MMM-YYYY]</strong></span>
+  <span>Printed by: [Name] &nbsp;|&nbsp; Copy [#] of [#] &nbsp;|&nbsp; [Date]</span>
+</div>
+<div class="draft">DRAFT — PENDING APPROVAL — NOT FOR PRODUCTION USE</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ManualCore — Multi-Department Swimlane Flowchart</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: Arial, sans-serif; background:#f4f6f8; }
+.page { width:1200px; margin:20px auto; background:white; box-shadow:0 2px 12px rgba(0,0,0,.12); }
+.doc-header { display:grid; grid-template-columns:1fr auto; background:#0D1F3C; }
+.doc-header-left { padding:14px 20px; }
+.doc-header-left h1 { color:#fff; font-size:14px; font-weight:700; margin-bottom:3px; }
+.doc-header-left p { color:#A8D8EA; font-size:10px; font-style:italic; }
+.doc-header-right { background:#f4f6f8; border-left:2px solid #1ABC9C; padding:8px 14px; display:flex; flex-direction:column; justify-content:center; align-items:center; min-width:140px; }
+.doc-header-right span { font-size:9px; color:#5D6D7E; font-weight:700; }
+.doc-header-right strong { font-size:12px; color:#0D1F3C; }
+.meta-row { display:grid; grid-template-columns:repeat(4,1fr); border-bottom:3px solid #1ABC9C; }
+.meta-cell { padding:5px 10px; border-right:1px solid #D5D8DC; font-size:9px; }
+.meta-cell:last-child { border-right:none; }
+.meta-cell .lbl { color:#5D6D7E; font-weight:700; display:block; margin-bottom:2px; }
+.meta-cell:nth-child(odd) { background:#F4F6F8; }
+.diagram-area { padding:16px 20px 24px; }
+.doc-footer { border-top:2px solid #1ABC9C; padding:7px 20px; display:flex; justify-content:space-between; background:#F4F6F8; font-size:9px; color:#5D6D7E; }
+.draft { background:#F39C12; text-align:center; padding:6px; color:white; font-size:10px; font-weight:700; }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="doc-header">
+  <div class="doc-header-left">
+    <h1>[COMPANY NAME] &nbsp;|&nbsp; MULTI-DEPARTMENT SWIMLANE FLOWCHART</h1>
+    <p>Cover Assembly Process — From order receipt to finished goods &nbsp;|&nbsp; Cross-functional view &nbsp;|&nbsp; Ref SOP: SOP-A01-001</p>
+  </div>
+  <div class="doc-header-right">
+    <span>DOC NO.</span><strong>SWL-A01-001</strong>
+    <span style="margin-top:5px">REVISION</span><strong>Rev. 00</strong>
+  </div>
+</div>
+<div class="meta-row">
+  <div class="meta-cell"><span class="lbl">PROCESS SCOPE</span>Order receipt → Finished goods</div>
+  <div class="meta-cell"><span class="lbl">DEPARTMENTS</span>Planning, Warehouse, Production, QA</div>
+  <div class="meta-cell"><span class="lbl">REF SOP</span>SOP-A01-001 Rev.00</div>
+  <div class="meta-cell"><span class="lbl">REVIEW DUE</span><span style="color:#C0392B;font-weight:700">[DD-MMM-YYYY]</span></div>
+</div>
+
+<div class="diagram-area">
+<div style="display:flex;justify-content:center;">
+<svg width="1155" height="720" viewBox="0 0 1155 720" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1L9,5L0,9Z" fill="#1B4F72"/></marker>
+  <marker id="arr-r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1L9,5L0,9Z" fill="#C0392B"/></marker>
+  <marker id="arr-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1L9,5L0,9Z" fill="#1E8449"/></marker>
+  <marker id="arr-t" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,1L9,5L0,9Z" fill="#148F77"/></marker>
+</defs>
+
+<!-- ══════════════════════════
+     LANE STRUCTURE
+     Lane height: 155px each
+     4 lanes + header col
+     Header col: 110px wide
+     Content area: 1045px wide
+     Flow is LEFT to RIGHT
+══════════════════════════ -->
+
+<!-- Lane labels column background -->
+<rect x="0" y="0" width="110" height="680" fill="#0D1F3C"/>
+
+<!-- Lane 1: Production Planning — y 0-155 -->
+<rect x="110" y="0" width="1045" height="155" fill="#EBF5FB" stroke="#D5D8DC" stroke-width="1"/>
+<rect x="0" y="0" width="110" height="155" fill="#1B4F72"/>
+<text transform="translate(55,120) rotate(-90)" text-anchor="middle" font-size="10" font-weight="700" fill="white">PRODUCTION PLANNING</text>
+
+<!-- Lane 2: Warehouse — y 155-310 -->
+<rect x="110" y="155" width="1045" height="155" fill="#F8F0FF" stroke="#D5D8DC" stroke-width="1"/>
+<rect x="0" y="155" width="110" height="155" fill="#7D3C98"/>
+<text transform="translate(55,270) rotate(-90)" text-anchor="middle" font-size="10" font-weight="700" fill="white">WAREHOUSE</text>
+
+<!-- Lane 3: Production (Operator) — y 310-465 -->
+<rect x="110" y="310" width="1045" height="155" fill="#D5F5E3" stroke="#D5D8DC" stroke-width="1"/>
+<rect x="0" y="310" width="110" height="155" fill="#1E8449"/>
+<text transform="translate(55,425) rotate(-90)" text-anchor="middle" font-size="10" font-weight="700" fill="white">PRODUCTION — OPERATOR</text>
+
+<!-- Lane 4: Quality Assurance — y 465-620 -->
+<rect x="110" y="465" width="1045" height="155" fill="#FADBD8" stroke="#D5D8DC" stroke-width="1"/>
+<rect x="0" y="465" width="110" height="155" fill="#C0392B"/>
+<text transform="translate(55,575) rotate(-90)" text-anchor="middle" font-size="10" font-weight="700" fill="white">QUALITY ASSURANCE</text>
+
+<!-- Bottom footer bar -->
+<rect x="0" y="620" width="1155" height="100" fill="#F4F6F8" stroke="#D5D8DC" stroke-width="1"/>
+
+<!-- Column dividers (light) -->
+<g stroke="#C8D6DF" stroke-width="0.5" stroke-dasharray="4 3">
+  <line x1="280" y1="0" x2="280" y2="620"/>
+  <line x1="450" y1="0" x2="450" y2="620"/>
+  <line x1="620" y1="0" x2="620" y2="620"/>
+  <line x1="790" y1="0" x2="790" y2="620"/>
+  <line x1="960" y1="0" x2="960" y2="620"/>
+</g>
+
+<!-- ══════════════════════════════════════════════════════
+     STEP 1 — START (x≈130-250, all lanes visible)
+══════════════════════════════════════════════════════ -->
+
+<!-- START oval (Lane 1 — Planning) -->
+<rect x="140" y="60" width="110" height="36" rx="18" fill="#0D1F3C" stroke="#0D1F3C"/>
+<text x="195" y="78" text-anchor="middle" font-size="11" font-weight="700" fill="white">START</text>
+<text x="195" y="91" text-anchor="middle" font-size="8.5" fill="#A8D8EA">Order received</text>
+
+<!-- Arrow DOWN from start to plan step -->
+<line x1="195" y1="96" x2="195" y2="116" stroke="#1B4F72" stroke-width="1.5" marker-end="url(#arr)"/>
+
+<!-- Plan step (Lane 1) -->
+<rect x="130" y="116" width="130" height="26" rx="3" fill="#D6EAF8" stroke="#1B4F72" stroke-width="1.5"/>
+<text x="195" y="133" text-anchor="middle" font-size="9.5" font-weight="700" fill="#1B4F72">Review WO + BOM</text>
+<rect x="130" y="116" width="18" height="14" rx="2" fill="#1B4F72"/>
+<text x="139" y="127" text-anchor="middle" font-size="7" font-weight="700" fill="white">1</text>
+
+<!-- Arrow RIGHT to WH material release -->
+<line x1="260" y1="129" x2="295" y2="129" stroke="#1B4F72" stroke-width="1.5"/>
+<!-- Arrow DOWN to Lane 2 -->
+<line x1="295" y1="129" x2="295" y2="200" stroke="#1B4F72" stroke-width="1.5" marker-end="url(#arr)"/>
+
+<!-- ══════════════════════════════════════════════════════
+     STEP 2 — Warehouse issues materials (Lane 2, x≈295)
+══════════════════════════════════════════════════════ -->
+<rect x="220" y="200" width="150" height="52" rx="3" fill="#EDE7F6" stroke="#7D3C98" stroke-width="1.5"/>
+<text x="295" y="218" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7D3C98">Issue materials</text>
+<text x="295" y="232" text-anchor="middle" font-size="9" fill="#7D3C98">Cover (SKU-1234)</text>
+<text x="295" y="244" text-anchor="middle" font-size="9" fill="#7D3C98">Rivets (SKU-5678)</text>
+<rect x="220" y="200" width="18" height="14" rx="2" fill="#7D3C98"/>
+<text x="229" y="211" text-anchor="middle" font-size="7" font-weight="700" fill="white">2</text>
+
+<!-- Arrow DOWN to Lane 3 (Production) -->
+<line x1="295" y1="252" x2="295" y2="340" stroke="#7D3C98" stroke-width="1.5" marker-end="url(#arr)"/>
+<text x="305" y="298" font-size="8" fill="#7D3C98" font-style="italic">material →</text>
+
+<!-- ══════════════════════════════════════════════════════
+     STEP 3 — Retrieve + inspect (Lane 3, x≈295)
+══════════════════════════════════════════════════════ -->
+<rect x="220" y="340" width="150" height="52" rx="3" fill="#D5F5E3" stroke="#1E8449" stroke-width="1.5"/>
+<text x="295" y="358" text-anchor="middle" font-size="9.5" font-weight="700" fill="#1E8449">Retrieve + inspect</text>
+<text x="295" y="372" text-anchor="middle" font-size="9" fill="#2E4057">Part no. vs WO</text>
+<text x="295" y="384" text-anchor="middle" font-size="8.5" fill="#C0392B">Nubs, tip gap</text>
+<rect x="220" y="340" width="18" height="14" rx="2" fill="#1E8449"/>
+<text x="229" y="351" text-anchor="middle" font-size="7" font-weight="700" fill="white">3</text>
+
+<!-- Arrow RIGHT to Inspect decision -->
+<line x1="370" y1="366" x2="410" y2="366" stroke="#1E8449" stroke-width="1.5" marker-end="url(#arr)"/>
+
+<!-- ══════════════════════════════════════════════════════
+     DECISION — Part OK? (Lane 3/4 boundary, x≈450)
+══════════════════════════════════════════════════════ -->
+<polygon points="450,342 510,366 450,390 390,366" fill="#FEF5E7" stroke="#E67E22" stroke-width="2"/>
+<text x="450" y="362" text-anchor="middle" font-size="9" font-weight="700" fill="#E67E22">Part</text>
+<text x="450" y="375" text-anchor="middle" font-size="9" font-weight="700" fill="#E67E22">OK?</text>
+
+<!-- NO: Arrow DOWN to QA lane (rejection) -->
+<line x1="450" y1="390" x2="450" y2="510" stroke="#C0392B" stroke-width="1.5" stroke-dasharray="4 2" marker-end="url(#arr-r)"/>
+<text x="458" y="452" font-size="8.5" fill="#C0392B" font-weight="700">NO</text>
+
+<!-- YES: Arrow RIGHT continues production -->
+<line x1="510" y1="366" x2="550" y2="366" stroke="#1E8449" stroke-width="1.5" marker-end="url(#arr-g)"/>
+<text x="528" y="358" font-size="8.5" fill="#1E8449" font-weight="700">YES</text>
+
+<!-- ══════════════════════════════════════════════════════
+     STEP 4 — Seat in fixture (Lane 3, x≈620)
+══════════════════════════════════════════════════════ -->
+<rect x="550" y="340" width="150" height="52" rx="3" fill="#D5F5E3" stroke="#1E8449" stroke-width="1.5"/>
+<text x="625" y="358" text-anchor="middle" font-size="9.5" font-weight="700" fill="#1E8449">Seat in fixture</text>
+<text x="625" y="372" text-anchor="middle" font-size="9" fill="#2E4057">Locating pins click</text>
+<text x="625" y="384" text-anchor="middle" font-size="8.5" fill="#2E4057">No rocking allowed</text>
+<rect x="550" y="340" width="18" height="14" rx="2" fill="#1E8449"/>
+<text x="559" y="351" text-anchor="middle" font-size="7" font-weight="700" fill="white">4</text>
+
+<!-- Arrow RIGHT to riveting -->
+<line x1="700" y1="366" x2="740" y2="366" stroke="#1E8449" stroke-width="1.5" marker-end="url(#arr-g)"/>
+
+<!-- ══════════════════════════════════════════════════════
+     STEP 5 — Riveting (Lane 3, x≈790) — cross-lane: setup confirm goes up to Planning
+══════════════════════════════════════════════════════ -->
+<rect x="740" y="330" width="160" height="72" rx="3" fill="#D5F5E3" stroke="#1E8449" stroke-width="2"/>
+<text x="820" y="350" text-anchor="middle" font-size="9.5" font-weight="700" fill="#1E8449">Confirm setup</text>
+<text x="820" y="363" text-anchor="middle" font-size="9.5" font-weight="700" fill="#1E8449">+ rivet 1→2→3→4</text>
+<text x="820" y="377" text-anchor="middle" font-size="8.5" fill="#C0392B">Force: 450N ±20</text>
+<text x="820" y="389" text-anchor="middle" font-size="8.5" fill="#C0392B">Flush: 0.0 ±0.2mm</text>
+<rect x="740" y="330" width="18" height="14" rx="2" fill="#1E8449"/>
+<text x="749" y="341" text-anchor="middle" font-size="7" font-weight="700" fill="white">5</text>
+<!-- QC badge -->
+<rect x="882" y="330" width="18" height="14" rx="2" fill="#C0392B"/>
+<text x="891" y="341" text-anchor="middle" font-size="6.5" font-weight="700" fill="white">QC</text>
+
+<!-- Arrow UP from riveting to QA lane (QC check concurrent) -->
+<line x1="860" y1="330" x2="860" y2="510" stroke="#C0392B" stroke-width="1.2" stroke-dasharray="3 2"/>
+<text x="868" y="430" font-size="7.5" fill="#C0392B" font-style="italic" transform="rotate(90,868,430)">concurrent QC →</text>
+
+<!-- Arrow RIGHT after riveting -->
+<line x1="900" y1="366" x2="940" y2="366" stroke="#1E8449" stroke-width="1.5" marker-end="url(#arr-g)"/>
+
+<!-- ══════════════════════════════════════════════════════
+     STEP 6 — Final inspection (Lane 3→4, x≈960)
+══════════════════════════════════════════════════════ -->
+<rect x="940" y="340" width="150" height="52" rx="3" fill="#D5F5E3" stroke="#1E8449" stroke-width="1.5"/>
+<text x="1015" y="358" text-anchor="middle" font-size="9.5" font-weight="700" fill="#1E8449">Final inspect + log</text>
+<text x="1015" y="372" text-anchor="middle" font-size="9" fill="#2E4057">Sign quality log</text>
+<text x="1015" y="384" text-anchor="middle" font-size="8.5" fill="#2E4057">Green tray if PASS</text>
+<rect x="940" y="340" width="18" height="14" rx="2" fill="#1E8449"/>
+<text x="949" y="351" text-anchor="middle" font-size="7" font-weight="700" fill="white">6</text>
+<rect x="1072" y="340" width="18" height="14" rx="2" fill="#C0392B"/>
+<text x="1081" y="351" text-anchor="middle" font-size="6.5" font-weight="700" fill="white">QC</text>
+
+<!-- ══════════════════════════════════════════════════════
+     QA LANE — parallel actions
+══════════════════════════════════════════════════════ -->
+
+<!-- NC Reject box (QA lane, left side — triggered by NO decision) -->
+<rect x="390" y="506" width="160" height="52" rx="3" fill="#FADBD8" stroke="#C0392B" stroke-width="2"/>
+<text x="470" y="524" text-anchor="middle" font-size="9.5" font-weight="700" fill="#C0392B">NC — Reject handling</text>
+<text x="470" y="538" text-anchor="middle" font-size="9" fill="#922B21">Tag, red tray, NCR form</text>
+<text x="470" y="550" text-anchor="middle" font-size="8.5" fill="#922B21">Notify production supervisor</text>
+
+<!-- QC inspection concurrent (QA lane, center-right) -->
+<rect x="740" y="502" width="160" height="52" rx="3" fill="#FADBD8" stroke="#C0392B" stroke-width="1.5" stroke-dasharray="4 2"/>
+<text x="820" y="520" text-anchor="middle" font-size="9.5" font-weight="700" fill="#C0392B">In-process QC</text>
+<text x="820" y="534" text-anchor="middle" font-size="9" fill="#922B21">100% flush check</text>
+<text x="820" y="546" text-anchor="middle" font-size="8.5" fill="#922B21">Depth gauge per rivet</text>
+
+<!-- QA sign-off (QA lane, right) -->
+<rect x="940" y="502" width="160" height="52" rx="3" fill="#FADBD8" stroke="#C0392B" stroke-width="1.5"/>
+<text x="1020" y="520" text-anchor="middle" font-size="9.5" font-weight="700" fill="#C0392B">QA sign-off</text>
+<text x="1020" y="534" text-anchor="middle" font-size="9" fill="#922B21">Quality log review</text>
+<text x="1020" y="546" text-anchor="middle" font-size="8.5" fill="#922B21">Release to next node</text>
+
+<!-- Arrow from final inspect DOWN to QA sign-off -->
+<line x1="1015" y1="392" x2="1015" y2="502" stroke="#C0392B" stroke-width="1.5" marker-end="url(#arr-r)"/>
+
+<!-- Arrow QA sign-off → END -->
+<line x1="1100" y1="528" x2="1130" y2="528" stroke="#1E8449" stroke-width="1.5" marker-end="url(#arr-g)"/>
+
+<!-- END NODE — spans both production and QA lanes -->
+<rect x="1095" y="356" width="50" height="36" rx="18" fill="#148F77" stroke="#0F6E56" stroke-width="2"/>
+<text x="1120" y="372" text-anchor="middle" font-size="9" font-weight="700" fill="white">END</text>
+<text x="1120" y="385" text-anchor="middle" font-size="8" fill="#A8D8EA">→ B-01</text>
+
+<!-- Arrow from final inspect RIGHT to END -->
+<line x1="1090" y1="366" x2="1095" y2="366" stroke="#148F77" stroke-width="1.5" marker-end="url(#arr-t)"/>
+
+<!-- ══════════════════════════════════════════════════════
+     PLANNING LANE — concurrent doc approval
+══════════════════════════════════════════════════════ -->
+<rect x="550" y="66" width="150" height="52" rx="3" fill="#D6EAF8" stroke="#1B4F72" stroke-width="1.5" stroke-dasharray="5 2"/>
+<text x="625" y="84" text-anchor="middle" font-size="9.5" font-weight="700" fill="#1B4F72">Document approval</text>
+<text x="625" y="98" text-anchor="middle" font-size="9" fill="#2E4057">SOP + WI + TWI</text>
+<text x="625" y="110" text-anchor="middle" font-size="8.5" fill="#2E4057">Parallel — days 1-3</text>
+
+<rect x="740" y="66" width="150" height="52" rx="3" fill="#D6EAF8" stroke="#1B4F72" stroke-width="1.5" stroke-dasharray="5 2"/>
+<text x="815" y="84" text-anchor="middle" font-size="9.5" font-weight="700" fill="#1B4F72">Operator training</text>
+<text x="815" y="98" text-anchor="middle" font-size="9" fill="#2E4057">TWI + SOP review</text>
+<text x="815" y="110" text-anchor="middle" font-size="8.5" fill="#2E4057">Before production start</text>
+
+<!-- Parallel flow arrows in planning lane -->
+<line x1="260" y1="92" x2="295" y2="92" stroke="#1B4F72" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#arr)"/>
+<line x1="295" y1="92" x2="550" y2="92" stroke="#1B4F72" stroke-width="1" stroke-dasharray="3 2"/>
+<line x1="700" y1="92" x2="740" y2="92" stroke="#1B4F72" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#arr)"/>
+
+<!-- ══════════════════════════════════════════════════════
+     SUMMARY FOOTER
+══════════════════════════════════════════════════════ -->
+<text x="20" y="642" font-size="10" font-weight="700" fill="#0D1F3C">SWIMLANE KEY — WHO DOES WHAT</text>
+<line x1="20" y1="648" x2="600" y2="648" stroke="#1ABC9C" stroke-width="1.5"/>
+
+<rect x="20" y="655" width="12" height="12" fill="#1B4F72"/>
+<text x="38" y="665" font-size="9" fill="#2E4057">Production Planning: Reviews WO, releases materials to WH, approves documents, schedules production</text>
+<rect x="20" y="670" width="12" height="12" fill="#7D3C98"/>
+<text x="38" y="680" font-size="9" fill="#2E4057">Warehouse: Issues cover and rivets to production station per work order. Tools tracked at station.</text>
+<rect x="20" y="685" width="12" height="12" fill="#1E8449"/>
+<text x="38" y="695" font-size="9" fill="#2E4057">Production Operator: All physical assembly steps — retrieve, inspect, seat, rivet, inspect, log, place in tray</text>
+<rect x="20" y="700" width="12" height="12" fill="#C0392B"/>
+<text x="38" y="710" font-size="9" fill="#2E4057">QA: In-process QC concurrent with production, NC handling, final sign-off, release to Node B-01</text>
+<text x="650" y="665" font-size="9" fill="#2E4057">Cross-lane arrows show handoffs between departments.</text>
+<text x="650" y="678" font-size="9" fill="#2E4057">Dashed borders = parallel activities (not on main critical path).</text>
+<text x="650" y="691" font-size="9" fill="#C0392B" font-weight="700">Red dashed path = non-conforming exception route (NC handling).</text>
+<text x="650" y="704" font-size="9" fill="#148F77" font-weight="700">END node links sequentially to Node B-01 Frame Assembly.</text>
+
+</svg>
+</div>
+</div>
+
+<div class="doc-footer">
+  <span>Rev. 00 &nbsp;|&nbsp; Eff. [DD-MMM-YYYY] &nbsp;|&nbsp; Review due: <strong style="color:#C0392B">[DD-MMM-YYYY]</strong></span>
+  <span>Printed by: [Name] &nbsp;|&nbsp; Copy [#] of [#] &nbsp;|&nbsp; [Date]</span>
+</div>
+<div class="draft">DRAFT — PENDING APPROVAL — NOT FOR PRODUCTION USE</div>
+</div>
+</body>
+</html>
