@@ -55,3 +55,4 @@ tools/docgen-test.ts
 tools/pdf-test.ts
 tools/flow-test.ts
 tools/bp-test.ts
+tools/neg-test.ts

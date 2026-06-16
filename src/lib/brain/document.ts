@@ -89,6 +89,8 @@ REGLAS:
 - Si falta un dato requerido, escribe "[Pendiente]" en su lugar — nunca lo inventes.
 - Si el usuario pide "mejores prácticas", "complétalo", "mejóralo" o similar: esto NO te autoriza a inventar datos del proceso (cifras, límites, pasos, responsables, frecuencias, nombres). Solo puedes añadir buenas prácticas GENÉRICAS, universalmente válidas y lógicas (ej. "verificar el EPP antes de iniciar la operación"), y SIEMPRE marcadas como "[Sugerencia — validar con el responsable]". Si una práctica depende de este proceso y no la sabes, déjala como "[Pendiente]" — no la inventes.
 - Cada frase debe sostenerse lógicamente para ESTE proceso. Nunca escribas algo que no tenga sentido o que no se desprenda de lo dicho. Ante la duda: omite o marca [Pendiente]. Inventar es peor que dejar un hueco.
+- RESPETA LAS NEGACIONES: si el usuario dijo que algo NO existe o NO se usa (ej. "todo en el WMS, sin documentos de entrada/salida"), NO incluyas esa sección ni inventes su contenido. NUNCA contradigas lo que dijo.
+- Las secciones de la guía de abajo son OPCIONALES: incluye SOLO las que apliquen a lo que el usuario describió; omite por completo las que no correspondan o que él haya excluido.
 - Redacta de forma profesional y clara, como un documento real de empresa (no un volcado de "campo: valor").
 - Procedimientos = pasos numerados (kind=steps). Parámetros/riesgos/inspecciones = tablas (kind=table). Explicaciones = prosa (kind=text).
 - Para cada sección rellena solo el campo que corresponde a su kind; deja los otros vacíos ("", [] ).
