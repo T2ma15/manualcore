@@ -26,9 +26,13 @@ export default function DocsTable({ active, trashed }: { active: Doc[]; trashed:
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
   const [showTrash, setShowTrash] = useState(false);
   const [sel, setSel] = useState<Set<string>>(new Set());
   const [selTrash, setSelTrash] = useState<Set<string>>(new Set());
+  const [editMode, setEditMode] = useState(false);
+  const [editDate, setEditDate] = useState("");
+  const [editStatus, setEditStatus] = useState("");
 
   function toggle(set: Set<string>, id: string): Set<string> {
     const next = new Set(set);
@@ -68,6 +72,43 @@ export default function DocsTable({ active, trashed }: { active: Doc[]; trashed:
     }
   }
 
+  async function runEdit() {
+    if (busy) return;
+    const review_due = editDate || null;
+    const status = editStatus || null;
+    if (!review_due && !status) {
+      setError("Elige una fecha de próxima revisión y/o un estado.");
+      return;
+    }
+    setBusy(true);
+    setError(null);
+    setInfo(null);
+    try {
+      const res = await fetch("/api/document/bulk-update", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ documentIds: [...sel], review_due, status }),
+      });
+      const d = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error((d as { error?: string }).error ?? "No se pudo actualizar.");
+      const failedN = (d.failed as unknown[] | undefined)?.length ?? 0;
+      setInfo(
+        `${d.updated ?? 0} actualizado${(d.updated ?? 0) === 1 ? "" : "s"}` +
+          (failedN ? ` · ${failedN} sin cambiar (transición no permitida o falta la fecha)` : "") +
+          ".",
+      );
+      setSel(new Set());
+      setEditMode(false);
+      setEditDate("");
+      setEditStatus("");
+      router.refresh();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "No se pudo actualizar.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   const today = new Date().toISOString().slice(0, 10);
   const allSelected = active.length > 0 && sel.size === active.length;
 
@@ -79,27 +120,87 @@ export default function DocsTable({ active, trashed }: { active: Doc[]; trashed:
         </p>
       )}
 
+      {info && (
+        <p className="mb-3 text-[12.5px] text-[#0F6E56] bg-[color:var(--mc-teal-soft)] border border-[color:var(--mc-teal-soft)] rounded-[10px] px-3.5 py-2.5">
+          {info}
+        </p>
+      )}
+
       {/* Barra de acciones de multiselección */}
       {sel.size > 0 && (
-        <div className="mb-3 flex items-center justify-between gap-3 flex-wrap rounded-[10px] border border-[color:var(--mc-border)] bg-[color:var(--mc-muted)] px-4 py-2.5">
-          <span className="text-[13px] text-[color:var(--mc-ink)]">
-            <span className="font-semibold">{sel.size}</span> seleccionado{sel.size === 1 ? "" : "s"}
-          </span>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setSel(new Set())}
-              className="text-[13px] text-[color:var(--mc-steel)] hover:underline"
-            >
-              Cancelar
-            </button>
-            <button
-              onClick={() => run([...sel], "delete")}
-              disabled={busy}
-              className="rounded-[8px] bg-[color:var(--mc-navy)] text-white px-4 py-1.5 text-[13px] font-medium hover:opacity-90 disabled:opacity-50"
-            >
-              {busy ? "Borrando…" : "Borrar seleccionados"}
-            </button>
+        <div className="mb-3 rounded-[10px] border border-[color:var(--mc-border)] bg-[color:var(--mc-muted)] px-4 py-2.5">
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <span className="text-[13px] text-[color:var(--mc-ink)]">
+              <span className="font-semibold">{sel.size}</span> seleccionado{sel.size === 1 ? "" : "s"}
+            </span>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  setSel(new Set());
+                  setEditMode(false);
+                }}
+                className="text-[13px] text-[color:var(--mc-steel)] hover:underline"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => setEditMode((v) => !v)}
+                disabled={busy}
+                className="rounded-[8px] border border-[color:var(--mc-border)] text-[color:var(--mc-navy)] px-4 py-1.5 text-[13px] font-medium hover:border-[color:var(--mc-navy)] disabled:opacity-50"
+              >
+                Editar seleccionados
+              </button>
+              <button
+                onClick={() => run([...sel], "delete")}
+                disabled={busy}
+                className="rounded-[8px] bg-[color:var(--mc-navy)] text-white px-4 py-1.5 text-[13px] font-medium hover:opacity-90 disabled:opacity-50"
+              >
+                {busy ? "Borrando…" : "Borrar seleccionados"}
+              </button>
+            </div>
           </div>
+
+          {editMode && (
+            <div className="mt-3 border-t border-[color:var(--mc-border)] pt-3 grid sm:grid-cols-[1fr_1fr_auto] gap-2.5 items-end">
+              <label className="block">
+                <span className="text-[11px] tracking-[0.03em] text-[color:var(--mc-steel)]">
+                  Próxima revisión
+                </span>
+                <input
+                  type="date"
+                  value={editDate}
+                  onChange={(e) => setEditDate(e.target.value)}
+                  className="mt-1 w-full rounded-[8px] border border-[color:var(--mc-border)] bg-white px-3 py-2 text-[13px] focus:outline-none focus:border-[color:var(--mc-teal)]"
+                />
+              </label>
+              <label className="block">
+                <span className="text-[11px] tracking-[0.03em] text-[color:var(--mc-steel)]">Estado</span>
+                <select
+                  value={editStatus}
+                  onChange={(e) => setEditStatus(e.target.value)}
+                  className="mt-1 w-full rounded-[8px] border border-[color:var(--mc-border)] bg-white px-3 py-2 text-[13px] focus:outline-none focus:border-[color:var(--mc-teal)]"
+                >
+                  <option value="">— Sin cambiar —</option>
+                  <option value="under_review">En revisión</option>
+                  <option value="approved">Bloqueado (Aprobado)</option>
+                  <option value="released">Publicado</option>
+                  <option value="obsolete">Obsoleto</option>
+                  <option value="draft">Borrador</option>
+                </select>
+              </label>
+              <button
+                onClick={runEdit}
+                disabled={busy}
+                className="rounded-[8px] bg-[color:var(--mc-navy)] text-white px-4 py-2 text-[13px] font-medium hover:opacity-90 disabled:opacity-50"
+              >
+                {busy ? "Aplicando…" : "Aplicar"}
+              </button>
+              <p className="sm:col-span-3 text-[11.5px] text-[color:var(--mc-steel)]">
+                "En revisión" y "Bloqueado (Aprobado)" exigen una fecha de próxima revisión. Si algún
+                documento no puede cambiar de estado, te digo cuáles.
+              </p>
+            </div>
+          )}
         </div>
       )}
 
