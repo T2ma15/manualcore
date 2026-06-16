@@ -220,7 +220,9 @@ export async function POST(req: Request) {
     messages.push({
       role: "brain",
       msg_type: "question",
-      content: q.is_critical ? `⚠️ ${q.question}\n${q.why}` : `${q.question}\n${q.why}`,
+      content: q.is_critical
+        ? `Punto de control — ${q.question}\n${q.why}`
+        : `${q.question}\n${q.why}`,
     });
   }
 
@@ -229,7 +231,7 @@ export async function POST(req: Request) {
     messages.push({
       role: "brain",
       msg_type: "system",
-      content: "✅ Tengo todo lo necesario. Ya puedes generar tu documento.",
+      content: "Tengo todo lo necesario. Ya puedes generar tu documento.",
     });
   }
 
